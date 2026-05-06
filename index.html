@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOUR HOPE — Mental Health Support Phnom Penh</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── TOP BAR ─────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5A5.5 5.5 0 0 1 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3A5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name"    id="brand-name">YOUR HOPE</div>
+        <div class="brand-tagline" id="brand-tagline">Phnom Penh Mental Health</div>
+      </div>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('eng')">ENG</button>
+      <button class="lang-btn"        onclick="setLang('kh')">ខ្មែរ</button>
+    </div>
+  </header>
+
+  <!-- ── BOTTOM NAV ──────────────────────────────────────────── -->
+  <nav class="nav">
+    <button class="nav-btn active" onclick="goTab('home')">
+      <span class="nav-icon">🏠</span><span id="nav-home">Home</span>
+    </button>
+    <button class="nav-btn" onclick="goTab('test')">
+      <span class="nav-icon">📋</span><span id="nav-test">DASS-21</span>
+    </button>
+    <button class="nav-btn" onclick="goTab('services')">
+      <span class="nav-icon">🏥</span><span id="nav-services">Services</span>
+    </button>
+    <button class="nav-btn" onclick="goTab('chat')">
+      <span class="nav-icon">💬</span><span id="nav-chat">AI Support</span>
+    </button>
+  </nav>
+
+  <!-- ════════════════════════════════════════════
+       HOME SCREEN
+       ════════════════════════════════════════════ -->
+  <section id="tab-home" class="screen active">
+
+    <!-- Hero banner -->
+    <div class="hero-banner">
+      <div class="hero-eyebrow" id="h-eye">Mental Health · Phnom Penh</div>
+      <div class="hero-title"   id="h-title">Your mental health <em>matters.</em></div>
+      <div class="hero-sub"     id="h-sub">Take a validated DASS-21 screening and discover trusted mental health services across Phnom Penh.</div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">100</div>
+          <div class="hero-stat-lbl" id="h-stat1">Services</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">21</div>
+          <div class="hero-stat-lbl" id="h-stat2">Questions</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">3</div>
+          <div class="hero-stat-lbl" id="h-stat3">Scales</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick-action cards -->
+    <div class="home-grid">
+      <div class="home-card green" onclick="goTab('test')">
+        <div class="home-card-icon">📋</div>
+        <div class="home-card-label" id="hc1l">Screening</div>
+        <div class="home-card-title" id="hc1t">DASS-21 Test</div>
+        <div class="home-card-desc"  id="hc1d">21 questions · ~5 min<br>Depression, Anxiety &amp; Stress</div>
+        <div class="home-card-btn"   id="hc1b">Start assessment →</div>
+      </div>
+      <div class="home-card clay" onclick="goTab('services')">
+        <div class="home-card-icon">🏥</div>
+        <div class="home-card-label" id="hc2l">Directory</div>
+        <div class="home-card-title" id="hc2t">Find Services From Professionals</div>
+        <div class="home-card-desc"  id="hc2d">100 locations across all districts of Phnom Penh</div>
+        <div class="home-card-btn"   id="hc2b">Browse clinics →</div>
+      </div>
+      <div class="home-card purple" onclick="goTab('chat')">
+        <div class="home-card-icon">💬</div>
+        <div class="home-card-label" id="hc3l">AI Chat</div>
+        <div class="home-card-title" id="hc3t">AI Support</div>
+        <div class="home-card-desc"  id="hc3d">Ask questions, understand your results, find help</div>
+        <div class="home-card-btn"   id="hc3b">Chat now →</div>
+      </div>
+      <div class="home-card dark" onclick="printResults()">
+        <div class="home-card-icon">📄</div>
+        <div class="home-card-label" id="hc4l">Export</div>
+        <div class="home-card-title" id="hc4t">Print Results</div>
+        <div class="home-card-desc"  id="hc4d">Save your DASS-21 PDF to share with your doctor</div>
+        <div class="home-card-btn"   id="hc4b">Export PDF →</div>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer-box" id="h-disc">
+      This app is for informational purposes only. The DASS-21 is a validated screening tool, not a clinical diagnosis. If you are in crisis, please contact a healthcare professional immediately.
+    </div>
+
+  </section><!-- /tab-home -->
+
+  <!-- ════════════════════════════════════════════
+       DASS-21 TEST SCREEN
+       ════════════════════════════════════════════ -->
+  <section id="tab-test" class="screen">
+
+    <!-- Section header -->
+    <div class="sec-header">
+      <div class="sec-eyebrow" id="t-eye">Mental Health Screening</div>
+      <div class="sec-title"   id="t-title">DASS-21 Assessment</div>
+      <div class="sec-sub"     id="t-sub">21 items measuring Depression, Anxiety and Stress over the past week. Takes about 5 minutes.</div>
+    </div>
+
+    <!-- Intro pane -->
+    <div id="pane-intro">
+      <div class="scale-card">
+        <strong id="t-scaletitle">Rating scale</strong>
+        <div class="scale-grid">
+          <div class="scale-item"><div class="scale-num">0</div><span id="rl0">Did not apply at all</span></div>
+          <div class="scale-item"><div class="scale-num">1</div><span id="rl1">Some of the time</span></div>
+          <div class="scale-item"><div class="scale-num">2</div><span id="rl2">A good part of time</span></div>
+          <div class="scale-item"><div class="scale-num">3</div><span id="rl3">Most of the time</span></div>
+        </div>
+      </div>
+      <button class="start-btn" onclick="startTest()" id="t-startbtn">Begin assessment →</button>
+      <p class="privacy-note" id="t-privacy">Your answers are private and never stored.</p>
+    </div>
+
+    <!-- Questions pane -->
+    <div id="pane-questions" style="display:none">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span class="progress-label" id="prog-label">1–7 / 21</span>
+          <span class="progress-pct"   id="prog-pct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div id="q-container"></div>
+      <p class="note-text" id="t-note">All questions on this page must be answered before continuing.</p>
+      <div class="page-nav">
+        <button class="btn-secondary" id="btn-prev" onclick="prevPage()" style="display:none">← Back</button>
+        <button class="btn-primary"   id="btn-next" onclick="nextPage()">Next →</button>
+      </div>
+    </div>
+
+    <!-- Results pane -->
+    <div id="pane-results" style="display:none">
+      <div class="results-hero">
+        <h2 id="r-heading">Assessment Complete</h2>
+        <p  id="r-subhead">Scores × 2 per official DASS-21 scoring guidelines</p>
+      </div>
+      <div class="result-grid" id="result-grid"></div>
+      <div id="interp-area"></div>
+      <div class="result-actions">
+        <button class="ra-btn secondary" onclick="resetTest()"   id="r-retake">Retake</button>
+        <button class="ra-btn secondary" onclick="goRecommended()" id="r-find">Find services →</button>
+        <button class="ra-btn primary"   onclick="printResults()" id="r-pdf">Export PDF</button>
+      </div>
+      <p class="result-disc" id="r-disc">Screening results are not a clinical diagnosis. Please consult a qualified mental health professional.</p>
+    </div>
+
+  </section><!-- /tab-test -->
+
+  <!-- ════════════════════════════════════════════
+       SERVICES SCREEN
+       ════════════════════════════════════════════ -->
+  <section id="tab-services" class="screen">
+
+    <div class="sec-header">
+      <div class="sec-eyebrow" id="s-eye">Phnom Penh</div>
+      <div class="sec-title"   id="s-title">Mental Health Services</div>
+      <div class="sec-sub"     id="s-sub">Filter and explore mental health services across Phnom Penh by type and location.</div>
+    </div>
+
+    <!-- Recommendation strip (shown after test) -->
+    <div class="recommendation-strip" id="recommendation-strip"></div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <input  class="search-input" id="search-inp" type="text" placeholder="Search name or district…" oninput="filterAll()">
+      <select class="filter-sel" id="type-sel" onchange="filterAll()">
+        <option value="">All types</option>
+        <option value="Hospital">Hospital</option>
+        <option value="Clinic">Clinic</option>
+        <option value="NGO">NGO</option>
+        <option value="Service">Service</option>
+      </select>
+      <select class="filter-sel" id="nssf-sel" onchange="filterAll()">
+        <option value="">NSSF: All</option>
+        <option value="Yes">NSSF: Yes</option>
+        <option value="No">NSSF: No</option>
+      </select>
+    </div>
+
+    <!-- View toggle -->
+    <div class="view-toggle">
+      <button class="vp-btn active" id="vplist" onclick="setView('list')" id="vplist">List</button>
+      <button class="vp-btn"        id="vpmap"  onclick="setView('map')"  id="vpmap">Map</button>
+    </div>
+
+    <!-- Count -->
+    <div class="count-badge" id="count-badge">100 / 100</div>
+
+    <!-- List view -->
+    <div id="list-view">
+      <div id="clinic-list"></div>
+    </div>
+
+    <!-- Map view -->
+    <div id="map-view" style="display:none">
+      <div class="map-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#4A7C6F"></div>Clinic</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3A6AC8"></div>Hospital</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6A40C8"></div>NGO</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--clay)"></div>Service</div>
+      </div>
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d62601.73!2d104.921!3d11.5625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2skh!4v1"
+          allowfullscreen loading="lazy" title="Phnom Penh map">
+        </iframe>
+      </div>
+      <div class="map-note" id="map-note-area"></div>
+    </div>
+
+  </section><!-- /tab-services -->
+
+  <!-- ════════════════════════════════════════════
+       AI CHAT SCREEN
+       ════════════════════════════════════════════ -->
+  <section id="tab-chat" class="screen">
+
+    <div class="sec-header">
+      <div class="sec-eyebrow" id="c-eye">Powered by Claude AI</div>
+      <div class="sec-title"   id="c-title">AI Mental Health Support</div>
+      <div class="sec-sub"     id="c-sub">Ask anything about mental health, your DASS-21 results, or finding the right clinic.</div>
+    </div>
+
+    <div class="chat-wrapper">
+      <!-- Quick-prompt chips -->
+      <div class="chip-scroll" id="chip-row"></div>
+
+      <!-- Message area -->
+      <div class="chat-messages" id="chat-msgs">
+        <div class="msg msg-ai" id="ai-greeting">Hello! I'm here to support you. You can ask me about mental health, your DASS-21 results, or how to find the right clinic in Phnom Penh. What would you like to know?</div>
+      </div>
+
+      <!-- Input bar -->
+      <div class="chat-input-bar">
+        <input class="chat-input" id="chat-inp" type="text" placeholder="Type your question…"
+               onkeydown="if(event.key==='Enter') sendChat()">
+        <button class="chat-send" id="send-btn" onclick="sendChat()">Send</button>
+      </div>
+
+      <p class="chat-disclaimer" id="c-disc">AI responses are for general information only. Always consult a qualified professional for medical advice.</p>
+    </div>
+
+  </section><!-- /tab-chat -->
+
+</div><!-- /app -->
+
+<!-- ── PRINT ZONE (hidden, shown only on print) ─────────────────── -->
+<div id="print-zone">
+  <div class="print-logo">MindCare PP</div>
+  <div class="print-meta" id="pm-meta">DASS-21 Screening Results</div>
+  <div id="print-content"></div>
+  <div class="print-footer">
+    This is a validated screening tool only — it does not constitute a clinical diagnosis.<br>
+    Please consult a qualified mental health professional for assessment and treatment.<br>
+    Reference: Lovibond, S.H. &amp; Lovibond, P.F. (1995). Manual for the Depression Anxiety &amp; Stress Scales. (2nd Ed.) Sydney: Psychology Foundation.
+  </div>
+</div>
+
+<!-- ── SCRIPTS ───────────────────────────────────────────────────── -->
+<!-- Load data first (QUESTIONS, CLINICS, T, getLevel), then app logic -->
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
