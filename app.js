@@ -200,7 +200,23 @@ function renderResultsUI(res) {
         <div class="interp-text">${interp.b}</div>
       </div>
     </div>`;
+
+    // ── RECOMMENDATIONS ──────────────────────────────────────────
+  const levelOrder = ['Normal','Mild','Moderate','Severe','Extremely Severe'];
+  const worstLevel = [res.dL, res.aL, res.sL]
+    .sort((a, b) => levelOrder.indexOf(b) - levelOrder.indexOf(a))[0];
+  const rec = RECOMMENDATIONS[worstLevel];
+  if (rec) {
+    const tips = rec.tips[curLang].map(tip => `<li>${tip}</li>`).join('');
+    document.getElementById('interp-area').innerHTML += `
+      <div class="rec-box">
+        <div class="rec-title">${rec.title[curLang]}</div>
+        <div class="rec-summary">${rec.summary[curLang]}</div>
+        <ul class="rec-tips">${tips}</ul>
+      </div>`;
+  }
 }
+
 
 function resetTest() {
   Object.keys(ANS).forEach(k => delete ANS[k]);

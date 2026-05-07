@@ -470,3 +470,108 @@ body::before {
   .print-table td { padding: 12px; text-align: center; border: 1px solid #ddd; }
   .print-footer { font-size: 11px; color: #888; border-top: 1px solid #eee; padding-top: 12px; line-height: 1.7; }
 }
+
+/* ── RECOMMENDATIONS SECTION ── */
+.rec-box {
+  position: relative;
+  background: linear-gradient(135deg, #f4faf7 0%, #fdf9f5 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.4rem 1.2rem;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+/* Decorative top accent line */
+.rec-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sage), var(--clay), var(--sage-light));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* Soft background circle decoration */
+.rec-box::after {
+  content: '';
+  position: absolute;
+  right: -30px; bottom: -30px;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, rgba(74,124,111,0.07) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.rec-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.65rem;
+}
+
+.rec-icon {
+  width: 34px; height: 34px;
+  background: var(--sage);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.rec-title {
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--sage-deep);
+  line-height: 1.2;
+}
+
+.rec-summary {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  padding-left: 44px; /* aligns under the title, past the icon */
+}
+
+.rec-divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+  margin-bottom: 0.9rem;
+}
+
+.rec-tips-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 0.6rem;
+}
+
+.rec-tips {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.rec-tips li {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+
+.rec-tips li::before {
+  content: '';
+  width: 6px; height: 6px;
+  min-width: 6px;
+  background: var(--sage);
+  border-radius: 50%;
+  margin-top: 5px;
+}

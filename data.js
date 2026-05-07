@@ -89,6 +89,160 @@ const QUESTIONS = [
    kh:"ខ្ញុំមានអារម្មណ៍ថាជីវិតគ្មានន័យទាល់តែសោះ។"}
 ];
 
+/* ── RECOMMENDATIONS ───────────────────────── */
+const RECOMMENDATIONS = {
+  Normal: {
+    title: {
+      eng: "Normal Level",
+      kh: "កម្រិតធម្មតា"
+    },
+
+    summary: {
+      eng: "Your scores are in a healthy range. Keep maintaining good mental habits.",
+      kh: "ពិន្ទុរបស់អ្នកស្ថិតក្នុងកម្រិតល្អ។ សូមបន្តរក្សាទម្លាប់ល្អសម្រាប់សុខភាពផ្លូវចិត្ត។"
+    },
+
+    tips: {
+      eng: [
+        "Keep a regular sleep schedule and get 7–9 hours of sleep.",
+        "Set goals, but do not be too hard on yourself.",
+        "Practice mindfulness such as deep breathing or mindful walking.",
+        "Exercise regularly.",
+        "Try journaling or gratitude practice."
+      ],
+
+      kh: [
+        "រក្សាកាលវិភាគគេងឱ្យបានទៀងទាត់ និងគេងឱ្យបាន ៧-៩ ម៉ោងក្នុងមួយយប់។",
+        "កំណត់គោលដៅខ្ពស់ ប៉ុន្តែកុំតឹងរ៉ឹងជាមួយខ្លួនឯងខ្លាំងពេក។",
+        "អនុវត្តការហាត់ចិត្ត ដូចជាការដកដង្ហើមវែងៗ ឬការដើរដោយផ្ដោតអារម្មណ៍។",
+        "ហាត់ប្រាណឱ្យបានទៀងទាត់។",
+        "សាកល្បងសរសេរកំណត់ហេតុ ឬអរគុណចំពោះអ្វីដែលអ្នកមាន។"
+      ]
+    }
+  },
+
+  Mild: {
+    title: {
+      eng: "Mild Level",
+      kh: "កម្រិតស្រាល"
+    },
+
+    summary: {
+      eng: "Some symptoms are present. Small daily habits may help improve your mental wellness.",
+      kh: "មានរោគសញ្ញាមួយចំនួន។ ទម្លាប់ល្អប្រចាំថ្ងៃអាចជួយឱ្យសុខភាពផ្លូវចិត្តប្រសើរឡើង។"
+    },
+
+    tips: {
+      eng: [
+        "Avoid screens before sleeping.",
+        "Be kinder to yourself and focus on effort, not perfection.",
+        "Practice short mindfulness exercises.",
+        "Exercise regularly to reduce anxiety.",
+        "Write your feelings in a journal."
+      ],
+
+      kh: [
+        "ចៀសវាងការប្រើទូរស័ព្ទមុនពេលចូលគេង។",
+        "រៀនផ្ដល់ក្ដីស្រឡាញ់ដល់ខ្លួនឯង និងផ្ដោតលើការខិតខំប្រឹងប្រែង។",
+        "សាកល្បងលំហាត់ហាត់ចិត្តខ្លីៗ។",
+        "ហាត់ប្រាណដើម្បីកាត់បន្ថយការថប់បារម្ភ។",
+        "សាកល្បងសរសេរអារម្មណ៍របស់អ្នកក្នុងកំណត់ហេតុ។"
+      ]
+    }
+  },
+
+  Moderate: {
+    title: {
+      eng: "Moderate Level",
+      kh: "កម្រិតមធ្យម"
+    },
+
+    summary: {
+      eng: "Your symptoms are more noticeable. Consider getting support early.",
+      kh: "រោគសញ្ញារបស់អ្នកចាប់ផ្ដើមមានឥទ្ធិពលខ្លាំង។ សូមពិចារណាស្វែងរកជំនួយឱ្យបានឆាប់។"
+    },
+
+    tips: {
+      eng: [
+        "Follow a bedtime routine to improve sleep.",
+        "Talk to a counselor or therapist if needed.",
+        "Join mindfulness groups or classes.",
+        "Try yoga or gentle exercise.",
+        "Use relaxation techniques before bed."
+      ],
+
+      kh: [
+        "បង្កើតទម្លាប់មុនពេលចូលគេង ដើម្បីជួយឱ្យគេងបានលក់ស្រួល។",
+        "ពិគ្រោះជាមួយអ្នកប្រឹក្សា ឬអ្នកជំនាញផ្លូវចិត្ត ប្រសិនបើចាំបាច់។",
+        "ចូលរួមក្រុម ឬថ្នាក់ហាត់ចិត្ត។",
+        "សាកល្បងហាត់យោគៈ ឬលំហាត់ប្រាណស្រាលៗ។",
+        "ប្រើបច្ចេកទេសសម្រាកកាយមុនពេលចូលគេង។"
+      ]
+    }
+  },
+
+  Severe: {
+    title: {
+      eng: "Severe Level",
+      kh: "កម្រិតធ្ងន់"
+    },
+
+    summary: {
+      eng: "Your symptoms are high. Professional support is strongly recommended.",
+      kh: "រោគសញ្ញារបស់អ្នកមានកម្រិតខ្ពស់។ សូមស្វែងរកជំនួយពីអ្នកជំនាញ។"
+    },
+
+    tips: {
+      eng: [
+        "Seek professional mental health support.",
+        "Consult a sleep specialist if sleep problems continue.",
+        "Therapy such as CBT may help reduce anxiety.",
+        "Join support groups if available.",
+        "Visit a clinic or hospital if symptoms affect daily life."
+      ],
+
+      kh: [
+        "ស្វែងរកជំនួយពីអ្នកជំនាញសុខភាពផ្លូវចិត្ត។",
+        "ពិគ្រោះជាមួយអ្នកជំនាញការគេង ប្រសិនបើមានបញ្ហាគេងមិនលក់។",
+        "ការព្យាបាលតាមបែប CBT អាចជួយកាត់បន្ថយការថប់បារម្ភ។",
+        "ចូលរួមក្រុមគាំទ្រ ប្រសិនបើអាចធ្វើបាន។",
+        "ទៅកាន់គ្លីនិក ឬមន្ទីរពេទ្យ ប្រសិនបើរោគសញ្ញាប៉ះពាល់ដល់ជីវិតប្រចាំថ្ងៃ។"
+      ]
+    }
+  },
+
+  "Extremely Severe": {
+    title: {
+      eng: "Extremely Severe Level",
+      kh: "កម្រិតធ្ងន់ធ្ងរបំផុត"
+    },
+
+    summary: {
+      eng: "Your symptoms are very severe. Please seek professional help as soon as possible.",
+      kh: "រោគសញ្ញារបស់អ្នកស្ថិតក្នុងកម្រិតធ្ងន់ធ្ងរ។ សូមស្វែងរកជំនួយពីអ្នកជំនាញឱ្យបានឆាប់តាមដែលអាចធ្វើទៅបាន។"
+    },
+
+    tips: {
+      eng: [
+        "Contact a mental health professional immediately.",
+        "Medication may be needed together with therapy.",
+        "Consider intensive therapy such as CBT or MBCT.",
+        "Get regular support from mental health professionals.",
+        "Visit emergency support services if necessary."
+      ],
+
+      kh: [
+        "ទាក់ទងអ្នកជំនាញសុខភាពផ្លូវចិត្តភ្លាមៗ។",
+        "ការប្រើប្រាស់ថ្នាំអាចចាំបាច់ រួមជាមួយការព្យាបាល។",
+        "ពិចារណាការព្យាបាលយ៉ាងយកចិត្តទុកដាក់ ដូចជា CBT ឬ MBCT។",
+        "ទទួលការគាំទ្រជាប្រចាំពីអ្នកជំនាញសុខភាពផ្លូវចិត្ត។",
+        "ទៅកាន់សេវាជំនួយបន្ទាន់ ប្រសិនបើចាំបាច់។"
+      ]
+    }
+  }
+};
+
+
 /* ── DASS-21 SCORING THRESHOLDS ─────────────────────────────────── */
 function getLevel(scale, score) {
   if (scale === 'd') {
