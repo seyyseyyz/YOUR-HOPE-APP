@@ -29,6 +29,9 @@ function sid(id, v) {
 
 function applyLang() {
   const t = T[curLang];
+  sid('nssf-all', curLang === 'kh' ? 'NSSF: ទាំងអស់' : 'NSSF: All');
+  sid('nssf-yes', curLang === 'kh' ? 'NSSF: មាន' : 'NSSF: Yes');
+  sid('nssf-no',  curLang === 'kh' ? 'NSSF: គ្មាន' : 'NSSF: No');
   // Brand
   sid('brand-name',    t.brandName);
   sid('brand-tagline', t.brandTag);
