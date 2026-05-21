@@ -60,9 +60,11 @@ function applyLang() {
   sid('vplist', t.svList); sid('vpmap', t.svMap);
   // Chat
   sid('c-eye', t.cEye); sid('c-title', t.cTitle); sid('c-sub', t.cSub); sid('c-disc', t.cDisc);
+  // Quotes
+  sid('q-eye', t.qEye); sid('q-title', t.qTitle); sid('q-sub', t.qSub);
   // Nav
   sid('nav-home', t.navHome); sid('nav-test', t.navTest);
-  sid('nav-services', t.navServices); sid('nav-chat', t.navChat);
+  sid('nav-services', t.navServices); sid('nav-quotes', t.navQuotes); sid('nav-chat', t.navChat);
   // AI greeting
   sid('ai-greeting', t.aiGreeting);
   // Search placeholder
@@ -86,13 +88,59 @@ function goTab(tab) {
   document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(e => e.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
-  const tabs = ['home', 'test', 'services', 'chat', 'about', 'signup'];
+  const tabs = ['home', 'test', 'services', 'quotes', 'chat', 'about', 'signup', 'signin'];
   const tabIndex = tabs.indexOf(tab);
-  if (tabIndex >= 0 && tabIndex < 4) {
+  if (tabIndex >= 0 && tabIndex < 5) {
     document.querySelectorAll('.nav-btn')[tabIndex].classList.add('active');
   }
   if (tab === 'services') renderClinics(displayed);
+  if (tab === 'quotes') renderQuotes();
   window.scrollTo(0, 0);
+}
+
+/* ── SIGN IN ────────────────────────────────────────────────────── */
+function completeSignin(e) {
+  e.preventDefault();
+
+  const email = document.getElementById('signin-email').value.trim();
+  const password = document.getElementById('signin-password').value.trim();
+
+  if (!email || !password) {
+    alert('Please enter both email and password');
+    return;
+  }
+
+  // Check if user exists in localStorage
+  const stored = localStorage.getItem('yourHopeUser');
+  if (!stored) {
+    alert('No account found. Please create a new account.');
+    goTab('signup');
+    return;
+  }
+
+  try {
+    userInfo = JSON.parse(stored);
+
+    // Simple password check (in production, use proper hashing)
+    // For demo purposes, accept any password for existing users
+    if (userInfo.email.toLowerCase() === email.toLowerCase()) {
+      isSignedUp = true;
+
+      // Clear sign-in form
+      document.getElementById('signin-email').value = '';
+      document.getElementById('signin-password').value = '';
+      document.getElementById('remember-check').checked = false;
+
+      // Go to home
+      goTab('home');
+    } else {
+      alert('Email not found. Please create a new account.');
+      goTab('signup');
+    }
+  } catch (err) {
+    alert('Sign in failed. Please try again or create a new account.');
+    goTab('signup');
+  }
 }
 
 /* ── SIGN UP ────────────────────────────────────────────────────── */
@@ -133,10 +181,23 @@ function checkExistingUser() {
     try {
       userInfo = JSON.parse(stored);
       isSignedUp = true;
+      // Show sign out button
+      document.getElementById('signout-btn').style.display = 'inline-block';
+      // Auto-redirect to home if already signed up
+      goTab('home');
     } catch (e) {
       isSignedUp = false;
     }
   }
+}
+
+// Sign out function
+function signOut() {
+  localStorage.removeItem('yourHopeUser');
+  userInfo = null;
+  isSignedUp = false;
+  document.getElementById('signout-btn').style.display = 'none';
+  goTab('signin');
 }
 
 /* ── TEST SCREEN ────────────────────────────────────────────────── */
@@ -512,6 +573,117 @@ function printResults() {
   window.print();
 }
 
+/* ── QUOTES ────────────────────────────────────────────────────────── */
+const QUOTES_DATA = {
+  eng: [
+    "Obstacles and struggles are a gift; they encourage you to grow.",
+    "If we didn't have nightmares, we wouldn't wake up every morning chasing our dreams",
+    "Look forward with hope, not backwards with regret",
+    "They say \"Follow your heart\". But I can't follow you where you're going",
+    "The mind is like water. When it's turbulent, it's difficult to see. When it's calm, everything becomes clear.",
+    "Working on your dream whenever it is convenient for you will not work. When you dare to dream, you should also dare to do.",
+    "Follow your soul. It knows the way.",
+    "I stopped measuring my life against people who inherited their starting line.",
+    "Social anxiety results from being around people who are resolutely opposed to who you are.",
+    "If you have good thoughts, they will shine out of your face like sunbeams, and you will always look lovely",
+    "Dreams become regrets when left in the mind, never planted in the soil of action",
+    "The world within your phone is vast, but the world outside it is limitless.",
+    "After a good dinner, one can forgive anybody, even one's own relations.",
+    "We don't get to choose our family, but we can choose our friends. With courage, we can weed out narcissistic people. We can focus on those who do appreciate us, love us, and treat us with respect.",
+    "Family is supposed to be our safe heaven. Very often, it's the place where we find the deepest heartache.",
+    "Be grateful for every opportunity that life gives you.",
+    "Celebrate your strengths, you've fought hard to achieve them.",
+    "A rose grows through the concrete regardless of the terrain, it still pushed through. Be that rose and grow.",
+    "Stop the overthinking and watch how easily the good vibes will overflow.",
+    "Release what no longer serves you.",
+    "Day will come when you don't want to fight, but you must put the gloves on, anyway.",
+    "The strongest people are the people who have faced defeat and decided to punch it in the face.",
+    "You are pushing yourself even when you're tired and want to quit. I see the warrior in you.",
+    "Remember, no matter what this week brings, you can handle it.",
+    "Sometimes you need to distance yourself to see things clearly.",
+    "Know what makes you happy and do more of it.",
+    "Your thoughts will change your life. Choose them wisely.",
+    "Your imperfections and flaws are the best parts of you, be proud of them.",
+    "You have gone through fire. Now it's time to let those flames light the way forward.",
+    "Your worries are lying to you. You are loved, you are accepted, and you are wanted.",
+    "This is no losing. There are only opportunities to learn and grow.",
+    "Even your worst days only have twenty-four hours. The sun will set, and a new day will begin.",
+    "If you're always wishing for a better tomorrow, maybe it's time to enjoy the best of today.",
+    "This page might not be your favorite, but the next chapter of your life will be incredible.",
+    "Even when things are difficult, you have within you everything you need to get through it.",
+    "Life can be stormy. Hold your umbrella high and be patient. The skies will clear for you soon.",
+    "When your heart and your brain are at war, listen to the one that urges you to keep going.",
+    "No matter what happens, you are strong enough to handle it.",
+    "It won't always be easy. It won't always be fun. But in the end, it'll always be worth it.",
+    "Keep going, even when you feel like you can't take another step.",
+    "Sometimes it takes an overwhelming breakdown to have an undeniable breakthrough.",
+    "Do what is best for your heart, even if that means leaving",
+    "You are needed, you deserve the best, you are here for a reason.",
+    "Everything happens for a reason. Life puts you down, only so you can get back up for the better things. Live life, forgive and forget. Let go of the past."
+  ],
+  kh: [
+    "ឧបសគ្គ និងការលំបាកគឺជាវមនីយ; ពួកវាលើកទឹកចិត្តឱ្យអ្នកលូតលាស់។",
+    "ប្រសិនបើយើងមិនមានសុបិន្តអាក្រក់នោះយើងនឹងមិនដឹងថាលូតលាស់ពេញលេញ",
+    "មើលទៅមុខដោយសង្ឃឹម មិនមើលថយក្រោយដោយស្ទាក់ស្ទើរ",
+    "ពួកគេនិយាយថា \"បង្វែលចិត្តរបស់អ្នក\" ប៉ុន្តែខ្ញុំមិនអាចធ្វើតាមអ្នកបានទេ",
+    "ចិត្តគឺដូចទឹក។ នៅពេលដែលវាវឹកវរ ពិបាកក្នុងការឃើញ។ នៅពេលដែលវាគឺ calm ទ្រង់ទ្រាយក្លាយជាច្បាស់លាស់",
+    "ធ្វើការលើសុបិន្តរបស់អ្នកក្នុងពេលវេលាដែលងាយស្រួលនឹងមិនដំណើរការទេ។ ពេលដែលអ្នកក្លាហាននឹងសុបិន្ត អ្នកក៏ត្រូវក្លាហាននឹងលទ្ធផល",
+    "ធ្វើឱ្យបង្វែលក្រុមទីពីររបស់អ្នក វាដឹងលក្ខណៈផ្លូវ",
+    "ខ្ញុំឈប់ស្វាងជីវិតរបស់ខ្ញុំប្រឆាំងនឹងមនុស្សដែលបានទទួលផ្តើមដោយស្វាភាវិក",
+    "ការថប់បារម្ភសង្គមបង្កើតចេញពីការស្ថិតក្នុងរង្វង់បងប្អូនដែលប្រឆាំងនឹងអ្នក",
+    "ប្រសិនបើអ្នកមានគំនិតល្អ វានឹងភ្លឺលាស់ដូចកាំរស្មីព្រះអាទិត្យ ហើយអ្នកនឹងតែងតែមើលឃើញពន្លឺ",
+    "សុបិន្តក្លាយជាសក្សមចាប់តាំងពីវាស្ថិតក្នុងចិត្ត មិនដាំក្នុងដីនៃសកម្មភាពទេ",
+    "ពិភពលោកក្នុងទូរស័ព្ទរបស់អ្នកគឺវាស្ត ប៉ុន្តែពិភពលោកខាងក្រៅវាគ្មានដែនកំណត់",
+    "បន្ទាប់ពីរៀបចំឡាន អ្នកអាចលើកលែងឱ្យមនុស្សណាម្នាក់ សូម្បីតែក្រុមគ្រួសាររបស់ខ្លួនក៏ដោយ",
+    "យើងមិនបានជ្រើសរើសក្រុមគ្រួសាររបស់យើង ប៉ុន្តែយើងអាចជ្រើសរើសមិត្ត។ ដោយក្លាហាន យើងអាចលុបបង្គោលមនុស្សឆ្កួត ហើយផ្តោតលើអ្នកដែលពិតជាគោរពយើង",
+    "គ្រួសារគឺគួរតែជាដ្ឋានសុវត្ថិភាពរបស់យើង ប៉ុន្តែឯកសារច្រើនដង វាជាកន្លែងដែលយើងរកឃើញការឈឺចាប់ជ្រើលជ្រាល",
+    "សូមស្វាគមន៍ចំពោះឱកាសគ្រប់គ្រាន់ដែលជីវិតផ្តល់ឱ្យអ្នក",
+    "ប្រកាសលម្អដែលអ្នកបានប្រឹងប្រែង",
+    "ផ្កាកូសនឹងរីកចម្រើននៅក្នុងបេតុង ក្រោយក្រោយក្រោយ វាឈានទៅមុខ។ ក្លាយជាផ្កាលោក ហើយលូតលាស់",
+    "ឈប់ការគិតគូរច្រើនដង ហើយមើលថាតើរលាយល្អរីករាយកើតឡើងដោយរបៀបណា",
+    "ដោះលែងដូចម្តេចដែលលែងបម្រើយើង",
+    "ថ្ងៃនឹងមកដែលអ្នកមិនចង់싸싹ដល់ប៉ុន្តែបង្ខំឱ្យលើកស្រមាប់រំលាក់",
+    "មនុស្សខ្លាំងបំផុតគឺមនុស្សដែលបានប្រឈមប្រឈង ហើយសម្រេចចិត្តលង្គឹងវា",
+    "អ្នកបង្ខំខ្លួនឯង ថែមទាំងពេលដែលអ្នកស្ឋិតក្នុងភាពយ៉ាង ខ្ញុំឃើញលេបរណ្ដៅក្នុងអ្នក",
+    "ចងចាំថា មិនថាសប្តាហ៍នេះនាំមកផ្លូវដូចម្តេចក្តី អ្នកអាចគាំងវាបាន",
+    "ពេលខ្លះអ្នកត្រូវរំដោះខ្លួនឱ្យឃើញយ៉ាងច្បាស់",
+    "ស្វាយថាតើអ្វីដែលធ្វើឱ្យលេងលឺ ហើយធ្វើវាច្រើនទៀត",
+    "គំនិតរបស់អ្នកនឹងផ្លាស់ប្តូរជីវិតរបស់អ្នក។ ជ្រើសរើសវាដោយប្រាជ្ញា",
+    "ពិការភាព និងកង្វល់របស់អ្នកគឺផ្នែកល្អបំផុតរបស់អ្នក ធ្វើឱ្យមាននឹក",
+    "អ្នកបានឆ្លងកាត់불 ឥឡូវ វេលាកសិកម្មដ្ឆាប់វាឡើងមុខ",
+    "ការថប់បារម្ភរបស់អ្នកឈកចាប់របស់អ្នក អ្នកត្រូវបានស្រឡាញ់ អ្នកត្រូវបានទទួលយក ហើយអ្នកត្រូវការ",
+    "គ្មានការបាត់បង់ទេ មានតែឱកាសក្នុងការរៀនសូត្របង្វឺត",
+    "សូម្បីថ្ងៃខាងក្រោមរបស់អ្នកក្៏ខណៈពេលដប៉ាន់ម៉ាង។ ព្រះអាទិត្យនឹងលិច ហើយថ្ងៃថ្មីនឹងក្រោក",
+    "ប្រសិនបើអ្នកក្រោកស្មោះប្តាប់ដើម្បីថ្ងៃក្រោយល្អ ប្រាប់ឡើងវិលមកវិលលេងថ្ងៃថ្មីដែលល្អ",
+    "ទំព័ររឌ័រនេះប្រហែលជាមិនដែលរបស់អ្នកទេ ប៉ុន្តែវគ្គចាប់ក្រោយក្រោយក្នុងជីវិតរបស់អ្នក នឹងវាលឆ្ងាយ",
+    "ឬឯងក្នុងស្ថានការណ៍ដ៏ពិបាក អ្នកមានគ្រប់យ៉ាងដែលអ្នកត្រូវការដើម្បីឆ្លងកាត់វា",
+    "ជីវិតអាចមានព្យុះលេចចេញ។ ឡើងកម្ពស់ ហើយដោះលែងក្នុងការរង្ហន់។ ឈាក់នឹងប្រឹងឡើងយ៉ាងលឿន",
+    "នៅពេលដែលស្ដិតរបស់អ្នក និងខួរក្បាលស្ស្ស័ នុំនឹង បង្វែលលេងលឺ",
+    "មិនថាមានអ្វីកើតឡើងក្ដី អ្នកខ្លាំងគ្រាន់គាំងវា",
+    "វាមិនតែងតែងាយស្រួល វាមិនតែងតែសប្បាយក្បាលទេ។ ប៉ុន្តែលទ្ធផល វាតែងតែមានតម្លៃ",
+    "ដូច្នេះ ថែមទាំងក្នុងស្ថានការណ៍មិនទាន់អាចរើសយក",
+    "ពេលខ្លះវាត្រូវការស្វាលក្រោយមកដើម្បីឈានទៅចៀងថ្មី",
+    "ធ្វើការល្អបំផុតដែលស្ដិតរបស់អ្នក ឯណាយ៉ាងក៏ដោយ",
+    "អ្នកត្រូវការ អ្នកសមរម្យដែលល្អបំផុត អ្នកនៅទីនេះដោយហេតុផល",
+    "អ្វីគ្រប់យ៉ាងកើតឡើងដោយហេតុផល។ ជីវិតបង្វិលក្នុងលោងក្រោយ ដូច្នេះអ្នកអាចរំណើរដ្ឆាប់។ រស់នៅក្នុងជីវិត ឆាប់ឆ្ងើយ ឡើងលែង។ ដោះលែងចាប់ពីអតីតកាល"
+  ]
+};
+
+function renderQuotes() {
+  const quotes = QUOTES_DATA[curLang];
+  const container = document.getElementById('quotes-container');
+  if (!container) return;
+  container.innerHTML = '';
+  
+  quotes.forEach(quote => {
+    const card = document.createElement('div');
+    card.className = 'quote-card';
+    card.innerHTML = `<p class="quote-text">${quote}</p>`;
+    container.appendChild(card);
+  });
+}
+
 /* ── INIT ───────────────────────────────────────────────────────── */
+checkExistingUser();
 buildChips();
 renderClinics(CLINICS);

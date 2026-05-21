@@ -27,6 +27,7 @@
     <div class="lang-toggle">
       <button class="lang-btn active" onclick="setLang('eng')">ENG</button>
       <button class="lang-btn"        onclick="setLang('kh')">ខ្មែរ</button>
+      <button class="lang-btn" id="signout-btn" onclick="signOut()" style="display:none">Sign Out</button>
     </div>
   </header>
 
@@ -41,6 +42,9 @@
     <button class="nav-btn" onclick="goTab('services')">
       <span class="nav-icon">🏥</span><span id="nav-services">Services</span>
     </button>
+    <button class="nav-btn" onclick="goTab('quotes')">
+      <span class="nav-icon">✨</span><span id="nav-quotes">Quotes</span>
+    </button>
     <button class="nav-btn" onclick="goTab('chat')">
       <span class="nav-icon">💬</span><span id="nav-chat">AI Support</span>
     </button>
@@ -50,9 +54,54 @@
   </nav>
 
   <!-- ════════════════════════════════════════════
+       SIGN IN SCREEN
+       ════════════════════════════════════════════ -->
+  <section id="tab-signin" class="screen active">
+
+    <div class="signin-container">
+      <div class="signin-hero">
+        <div class="signin-icon">👤</div>
+        <div class="signin-title" id="si-title">Welcome Back</div>
+        <div class="signin-subtitle" id="si-subtitle">Sign in to access your mental health screening and support</div>
+      </div>
+
+      <form class="signin-form" onsubmit="completeSignin(event)">
+        <!-- Email -->
+        <div class="form-group">
+          <label for="signin-email" id="si-email-label">Email Address</label>
+          <input type="email" id="signin-email" placeholder="your@email.com" required>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="signin-password" id="si-password-label">Password</label>
+          <input type="password" id="signin-password" placeholder="Enter your password" required>
+        </div>
+
+        <!-- Remember Me -->
+        <div class="form-group checkbox">
+          <input type="checkbox" id="remember-check">
+          <label for="remember-check" id="si-remember">Remember me</label>
+        </div>
+
+        <button type="submit" class="signin-btn" id="si-submit">Sign In</button>
+
+        <p class="signin-divider" id="si-divider">or</p>
+
+        <button type="button" class="signin-btn-secondary" id="si-signup-btn" onclick="goTab('signup')">Create New Account</button>
+
+        <p class="signin-footer" id="si-footer">
+          <a href="#" id="si-forgot" onclick="event.preventDefault(); alert('Password reset would be implemented here.')">Forgot password?</a>
+        </p>
+      </form>
+    </div>
+
+  </section><!-- /tab-signin -->
+
+  <!-- ════════════════════════════════════════════
        SIGN UP SCREEN
        ════════════════════════════════════════════ -->
-  <section id="tab-signup" class="screen active">
+  <section id="tab-signup" class="screen">
 
     <div class="signup-container">
       <div class="signup-hero">
@@ -234,6 +283,13 @@
         <div class="home-card-desc"  id="hc3d">Ask questions, understand your results, find help</div>
         <div class="home-card-btn"   id="hc3b">Chat now →</div>
       </div>
+      <div class="home-card blue" onclick="scrollToQuotes()">
+        <div class="home-card-icon">✨</div>
+        <div class="home-card-label" id="hc5l">Quotes</div>
+        <div class="home-card-title" id="hc5t">Daily Inspiration</div>
+        <div class="home-card-desc"  id="hc5d">Browse categorized quotes for hope, strength, and calm.</div>
+        <div class="home-card-btn"   id="hc5b">View quotes →</div>
+      </div>
       <div class="home-card dark" onclick="printResults()">
         <div class="home-card-icon">📄</div>
         <div class="home-card-label" id="hc4l">Export</div>
@@ -242,6 +298,16 @@
         <div class="home-card-btn"   id="hc4b">Export PDF →</div>
       </div>
     </div>
+
+    <section id="quotes-section" class="quotes-panel">
+      <div class="sec-header">
+        <div class="sec-eyebrow" id="q-eye">Daily Inspiration</div>
+        <div class="sec-title"   id="quotes-title">Motivational Quotes</div>
+        <div class="sec-sub"     id="quotes-sub">Browse encouraging quotes by category.</div>
+      </div>
+      <div class="quotes-actions" id="quotes-filters"></div>
+      <div class="quotes-grid" id="quotes-grid"></div>
+    </section>
 
     <!-- Disclaimer -->
     <div class="disclaimer-box" id="h-disc">
@@ -421,6 +487,23 @@
     </div>
 
   </section><!-- /tab-chat -->
+
+  <!-- ════════════════════════════════════════════
+       QUOTES SCREEN
+       ════════════════════════════════════════════ -->
+  <section id="tab-quotes" class="screen">
+
+    <div class="sec-header">
+      <div class="sec-eyebrow" id="q-eye">Daily Inspiration</div>
+      <div class="sec-title"   id="q-title">Words of Hope</div>
+      <div class="sec-sub"     id="q-sub">Take a moment to find your daily dose of motivation and encouragement</div>
+    </div>
+
+    <div class="quotes-container" id="quotes-container">
+      <!-- Quotes will be loaded here -->
+    </div>
+
+  </section><!-- /tab-quotes -->
 
   <!-- ════════════════════════════════════════════
        ABOUT US SCREEN
