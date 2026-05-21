@@ -181,10 +181,12 @@ function checkExistingUser() {
     try {
       userInfo = JSON.parse(stored);
       isSignedUp = true;
-      // Show sign out button
+      // Show sign out button (user is logged in)
       document.getElementById('signout-btn').style.display = 'inline-block';
-      // Auto-redirect to home if already signed up
-      goTab('home');
+      // Pre-fill the email field so they just need to enter password
+      document.getElementById('signin-email').value = userInfo.email;
+      // Stay on sign-in screen - user needs to confirm by signing in
+      // goTab('signin'); // Already on signin by default
     } catch (e) {
       isSignedUp = false;
     }
