@@ -8,6 +8,8 @@
 let curLang = 'eng';   // 'eng' | 'kh'
 let curPage = 0;      // current question page (0–2, 7 questions each)
 let curView = 'list'; // 'list' | 'map'
+let isSignedUp = false; // track sign-up status
+let userInfo = null;  // store user data
 const ANS      = {};  // { questionId: 0|1|2|3 }
 const chatHist = [];  // Anthropic messages array
 let lastRes    = null;   // last computed DASS-21 result
@@ -75,13 +77,66 @@ function applyLang() {
 
 /* ── TABS ───────────────────────────────────────────────────────── */
 function goTab(tab) {
+  // Check if user needs to sign up before accessing test or services
+  if ((tab === 'test' || tab === 'services') && !isSignedUp) {
+    goTab('signup');
+    return;
+  }
+  
   document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(e => e.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
-  const tabs = ['home', 'test', 'services', 'chat'];
-  document.querySelectorAll('.nav-btn')[tabs.indexOf(tab)].classList.add('active');
+  const tabs = ['home', 'test', 'services', 'chat', 'about', 'signup'];
+  const tabIndex = tabs.indexOf(tab);
+  if (tabIndex >= 0 && tabIndex < 4) {
+    document.querySelectorAll('.nav-btn')[tabIndex].classList.add('active');
+  }
   if (tab === 'services') renderClinics(displayed);
   window.scrollTo(0, 0);
+}
+
+/* ── SIGN UP ────────────────────────────────────────────────────── */
+function completeSignup(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('name-input').value.trim();
+  const email = document.getElementById('email-input').value.trim();
+  const age = document.getElementById('age-input').value;
+  const gender = document.getElementById('gender-input').value;
+  const district = document.getElementById('district-input').value;
+  
+  if (!name || !email || !age || !gender || !district) {
+    alert('Please fill in all fields');
+    return;
+  }
+  
+  // Store user info in localStorage
+  userInfo = { name, email, age, gender, district, signupTime: new Date().toISOString() };
+  localStorage.setItem('yourHopeUser', JSON.stringify(userInfo));
+  isSignedUp = true;
+  
+  // Clear signup form and redirect to home
+  document.getElementById('name-input').value = '';
+  document.getElementById('email-input').value = '';
+  document.getElementById('age-input').value = '';
+  document.getElementById('gender-input').value = '';
+  document.getElementById('district-input').value = '';
+  document.getElementById('terms-check').checked = false;
+  
+  goTab('home');
+}
+
+// Check for existing user session on page load
+function checkExistingUser() {
+  const stored = localStorage.getItem('yourHopeUser');
+  if (stored) {
+    try {
+      userInfo = JSON.parse(stored);
+      isSignedUp = true;
+    } catch (e) {
+      isSignedUp = false;
+    }
+  }
 }
 
 /* ── TEST SCREEN ────────────────────────────────────────────────── */

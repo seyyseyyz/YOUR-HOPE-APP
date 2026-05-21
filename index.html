@@ -44,16 +44,155 @@
     <button class="nav-btn" onclick="goTab('chat')">
       <span class="nav-icon">💬</span><span id="nav-chat">AI Support</span>
     </button>
+    <button class="nav-btn" onclick="goTab('about')">
+      <span class="nav-icon">ℹ️</span><span id="nav-about">About</span>
+    </button>
   </nav>
+
+  <!-- ════════════════════════════════════════════
+       SIGN UP SCREEN
+       ════════════════════════════════════════════ -->
+  <section id="tab-signup" class="screen active">
+
+    <div class="signup-container">
+      <div class="signup-hero">
+        <div class="signup-icon">👋</div>
+        <div class="signup-title" id="s-title">Welcome to Your HOPE</div>
+        <div class="signup-subtitle" id="s-subtitle">Get started with mental health screening and find support services</div>
+      </div>
+
+      <form class="signup-form" onsubmit="completeSignup(event)">
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="name-input" id="s-name-label">Full Name</label>
+          <input type="text" id="name-input" placeholder="Enter your full name" required>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email-input" id="s-email-label">Email Address</label>
+          <input type="email" id="email-input" placeholder="your@email.com" required>
+        </div>
+
+        <!-- Age -->
+        <div class="form-group">
+          <label for="age-input" id="s-age-label">Age</label>
+          <input type="number" id="age-input" placeholder="Enter your age" min="13" max="120" required>
+        </div>
+
+        <!-- Gender -->
+        <div class="form-group">
+          <label for="gender-input" id="s-gender-label">Gender</label>
+          <select id="gender-input" required>
+            <option value="">Select gender</option>
+            <option value="Male" id="opt-male">Male</option>
+            <option value="Female" id="opt-female">Female</option>
+            <option value="Non-binary" id="opt-nonbinary">Non-binary</option>
+            <option value="Prefer not to say" id="opt-notsay">Prefer not to say</option>
+          </select>
+        </div>
+
+        <!-- District -->
+        <div class="form-group">
+          <label for="district-input" id="s-district-label">District (Phnom Penh)</label>
+          <select id="district-input" required>
+            <option value="">Select district</option>
+            <option value="Chamkar Mon">Chamkar Mon</option>
+            <option value="Daun Penh">Daun Penh</option>
+            <option value="Preak Phnov">Preak Phnov</option>
+            <option value="Russei Keo">Russei Keo</option>
+            <option value="Saensokh">Saensokh</option>
+            <option value="Sensok">Sensok</option>
+            <option value="Toul Kork">Toul Kork</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Terms & Privacy -->
+        <div class="form-group checkbox">
+          <input type="checkbox" id="terms-check" required>
+          <label for="terms-check" id="s-terms">I agree to the privacy policy and terms of service</label>
+        </div>
+
+        <button type="submit" class="signup-btn" id="s-submit">Create Account & Continue</button>
+        
+        <p class="signup-note" id="s-note">Your information is secure and will never be shared.</p>
+      </form>
+    </div>
+
+  </section><!-- /tab-signup -->
 
   <!-- ════════════════════════════════════════════
        HOME SCREEN
        ════════════════════════════════════════════ -->
-  <section id="tab-home" class="screen active">
+  <section id="tab-home" class="screen">
 
     <!-- Hero banner -->
     <div class="hero-banner">
       <div class="hero-eyebrow" id="h-eye">Mental Health · Phnom Penh</div>
+      <div class="hero-illustration">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Left hand -->
+          <g id="left-hand">
+            <path d="M 45 120 Q 35 100 40 80 Q 42 70 50 72 Q 48 90 55 110 Q 50 115 45 120 Z" fill="#D4A99B"/>
+            <path d="M 50 72 Q 55 65 62 68 Q 60 85 68 105 Q 62 110 55 110 Q 48 90 50 72 Z" fill="#E8C4B8"/>
+            <path d="M 62 68 Q 68 62 75 65 Q 72 80 78 100 Q 72 105 68 105 Q 60 85 62 68 Z" fill="#D4A99B"/>
+            <path d="M 75 65 Q 82 62 88 67 Q 85 82 90 105 Q 83 108 78 100 Q 72 80 75 65 Z" fill="#E8C4B8"/>
+            <!-- Palm -->
+            <ellipse cx="65" cy="100" rx="25" ry="30" fill="#E8C4B8" opacity="0.9"/>
+          </g>
+          
+          <!-- Right hand -->
+          <g id="right-hand" transform="translate(200, 0) scale(-1, 1)">
+            <path d="M 45 120 Q 35 100 40 80 Q 42 70 50 72 Q 48 90 55 110 Q 50 115 45 120 Z" fill="#D4A99B"/>
+            <path d="M 50 72 Q 55 65 62 68 Q 60 85 68 105 Q 62 110 55 110 Q 48 90 50 72 Z" fill="#E8C4B8"/>
+            <path d="M 62 68 Q 68 62 75 65 Q 72 80 78 100 Q 72 105 68 105 Q 60 85 62 68 Z" fill="#D4A99B"/>
+            <path d="M 75 65 Q 82 62 88 67 Q 85 82 90 105 Q 83 108 78 100 Q 72 80 75 65 Z" fill="#E8C4B8"/>
+            <!-- Palm -->
+            <ellipse cx="65" cy="100" rx="25" ry="30" fill="#E8C4B8" opacity="0.9"/>
+          </g>
+
+          <!-- Plant pot / holding circle -->
+          <circle cx="100" cy="110" r="35" fill="#F0E9E1" opacity="0.8" stroke="#D4A99B" stroke-width="1"/>
+          
+          <!-- Plant stem -->
+          <path d="M 100 110 Q 98 80 100 50" stroke="#5B8E6B" stroke-width="3" fill="none" stroke-linecap="round"/>
+          
+          <!-- Left leaf -->
+          <ellipse cx="85" cy="70" rx="12" ry="18" fill="#6BA581" transform="rotate(-35 85 70)"/>
+          <path d="M 85 52 Q 88 62 85 72" stroke="#5B8E6B" stroke-width="1" fill="none" opacity="0.6"/>
+          
+          <!-- Right leaf -->
+          <ellipse cx="115" cy="65" rx="12" ry="18" fill="#7CB896" transform="rotate(35 115 65)"/>
+          <path d="M 115 47 Q 112 57 115 67" stroke="#5B8E6B" stroke-width="1" fill="none" opacity="0.6"/>
+          
+          <!-- Center left leaf -->
+          <ellipse cx="90" cy="55" rx="11" ry="20" fill="#5B8E6B" transform="rotate(-15 90 55)"/>
+          <path d="M 90 35 Q 92 45 90 55" stroke="#4A6F59" stroke-width="1" fill="none" opacity="0.5"/>
+          
+          <!-- Center right leaf -->
+          <ellipse cx="110" cy="55" rx="11" ry="20" fill="#6BA581" transform="rotate(15 110 55)"/>
+          <path d="M 110 35 Q 108 45 110 55" stroke="#4A6F59" stroke-width="1" fill="none" opacity="0.5"/>
+          
+          <!-- Top flower - left -->
+          <circle cx="85" cy="35" r="4" fill="#E8A89A"/>
+          <circle cx="82" cy="32" r="4" fill="#F0C4B8"/>
+          <circle cx="88" cy="32" r="4" fill="#E8A89A"/>
+          <circle cx="85" cy="30" r="3" fill="#FFD9C9"/>
+          
+          <!-- Top flower - right -->
+          <circle cx="115" cy="35" r="4" fill="#E8A89A"/>
+          <circle cx="112" cy="32" r="4" fill="#F0C4B8"/>
+          <circle cx="118" cy="32" r="4" fill="#E8A89A"/>
+          <circle cx="115" cy="30" r="3" fill="#FFD9C9"/>
+          
+          <!-- Top flower - center -->
+          <circle cx="100" cy="28" r="4" fill="#F0C4B8"/>
+          <circle cx="97" cy="25" r="4" fill="#E8A89A"/>
+          <circle cx="103" cy="25" r="4" fill="#F0C4B8"/>
+          <circle cx="100" cy="23" r="3" fill="#FFD9C9"/>
+        </svg>
+      </div>
       <div class="hero-title"   id="h-title">Your mental health <em>matters.</em></div>
       <div class="hero-sub"     id="h-sub">Take a validated DASS-21 screening and discover trusted mental health services across Phnom Penh.</div>
       <div class="hero-stats">
@@ -127,11 +266,23 @@
     <div id="pane-intro">
       <div class="scale-card">
         <strong id="t-scaletitle">Rating scale</strong>
-        <div class="scale-grid">
-          <div class="scale-item"><div class="scale-num">0</div><span id="rl0">Did not apply at all</span></div>
-          <div class="scale-item"><div class="scale-num">1</div><span id="rl1">Some of the time</span></div>
-          <div class="scale-item"><div class="scale-num">2</div><span id="rl2">A good part of time</span></div>
-          <div class="scale-item"><div class="scale-num">3</div><span id="rl3">Most of the time</span></div>
+        <div class="scale-list">
+          <div class="scale-item-vertical">
+            <div class="scale-num-large">0</div>
+            <span id="rl0">Did not apply at all</span>
+          </div>
+          <div class="scale-item-vertical">
+            <div class="scale-num-large">1</div>
+            <span id="rl1">Some of the time</span>
+          </div>
+          <div class="scale-item-vertical">
+            <div class="scale-num-large">2</div>
+            <span id="rl2">A good part of time</span>
+          </div>
+          <div class="scale-item-vertical">
+            <div class="scale-num-large">3</div>
+            <span id="rl3">Most of the time</span>
+          </div>
         </div>
       </div>
       <button class="start-btn" onclick="startTest()" id="t-startbtn">Begin assessment →</button>
@@ -270,6 +421,66 @@
     </div>
 
   </section><!-- /tab-chat -->
+
+  <!-- ════════════════════════════════════════════
+       ABOUT US SCREEN
+       ════════════════════════════════════════════ -->
+  <section id="tab-about" class="screen">
+
+    <div class="sec-header">
+      <div class="sec-eyebrow" id="a-eye">About Us</div>
+      <div class="sec-title"   id="a-title">Your HOPE</div>
+      <div class="sec-sub"     id="a-sub">Dedicated to making mental health support accessible to everyone in Phnom Penh</div>
+    </div>
+
+    <!-- Mission section -->
+    <div class="about-section">
+      <div class="about-section-icon">🎯</div>
+      <div class="about-section-title" id="a-mission-title">Our Mission</div>
+      <p class="about-section-text" id="a-mission-text">
+        To empower individuals in Phnom Penh with accessible mental health screening and support. We believe that mental wellness is a fundamental right, and everyone deserves access to validated assessment tools and trusted professional services.
+      </p>
+    </div>
+
+    <!-- Vision section -->
+    <div class="about-section">
+      <div class="about-section-icon">🌟</div>
+      <div class="about-section-title" id="a-vision-title">Our Vision</div>
+      <p class="about-section-text" id="a-vision-text">
+        A Phnom Penh where mental health is understood, normalized, and supported. We envision a community where individuals can easily assess their mental wellbeing, find the right professional help, and access AI-powered guidance whenever they need it.
+      </p>
+    </div>
+
+    <!-- Values section -->
+    <div class="about-section">
+      <div class="about-section-icon">💚</div>
+      <div class="about-section-title" id="a-values-title">Our Values</div>
+      <div class="about-values-list">
+        <div class="about-value">
+          <div class="about-value-icon">🔒</div>
+          <div class="about-value-content">
+            <div class="about-value-name" id="av1-name">Privacy First</div>
+            <div class="about-value-desc" id="av1-desc">Your data is sacred. We never store or share your personal information.</div>
+          </div>
+        </div>
+        <div class="about-value">
+          <div class="about-value-icon">✅</div>
+          <div class="about-value-content">
+            <div class="about-value-name" id="av2-name">Evidence-Based</div>
+            <div class="about-value-desc" id="av2-desc">We use validated screening tools like DASS-21 trusted by professionals worldwide.</div>
+          </div>
+        </div>
+        <div class="about-value">
+          <div class="about-value-icon">🤝</div>
+          <div class="about-value-content">
+            <div class="about-value-name" id="av3-name">Community-Focused</div>
+            <div class="about-value-desc" id="av3-desc">We partner with local clinics and services to support your mental health journey.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section><!-- /tab-about -->
 
 </div><!-- /app -->
 
