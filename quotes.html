@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quotes — YOUR HOPE</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .quotes-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .quotes-hero {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px 0;
+    }
+
+    .quotes-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #2d3748;
+    }
+
+    .quotes-subtitle {
+      font-size: 14px;
+      color: #718096;
+      font-weight: 400;
+    }
+
+    .quotes-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .quote-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      padding: 24px;
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .quote-card::before {
+      content: '"';
+      position: absolute;
+      top: 10px;
+      left: 16px;
+      font-size: 48px;
+      opacity: 0.2;
+      font-weight: bold;
+    }
+
+    .quote-text {
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 400;
+      margin: 0;
+      padding: 0 0 0 0;
+    }
+
+    /* Alternate gradient colors */
+    .quote-card:nth-child(2) {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      box-shadow: 0 4px 15px rgba(245, 87, 108, 0.2);
+    }
+
+    .quote-card:nth-child(2):hover {
+      box-shadow: 0 8px 25px rgba(245, 87, 108, 0.3);
+    }
+
+    .quote-card:nth-child(3) {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.2);
+    }
+
+    .quote-card:nth-child(3):hover {
+      box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+    }
+
+    .quote-card:nth-child(4) {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      box-shadow: 0 4px 15px rgba(67, 233, 123, 0.2);
+    }
+
+    .quote-card:nth-child(4):hover {
+      box-shadow: 0 8px 25px rgba(67, 233, 123, 0.3);
+    }
+
+    .quote-card:nth-child(5) {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      box-shadow: 0 4px 15px rgba(250, 112, 154, 0.2);
+    }
+
+    .quote-card:nth-child(5):hover {
+      box-shadow: 0 8px 25px rgba(250, 112, 154, 0.3);
+    }
+
+    /* Cycle through gradients */
+    .quote-card:nth-child(6n+1) {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .quote-card:nth-child(6n+2) {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .quote-card:nth-child(6n+3) {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .quote-card:nth-child(6n+4) {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .quote-card:nth-child(6n+5) {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .quote-card:nth-child(6n+6) {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+
+    @media (max-width: 768px) {
+      .quotes-title {
+        font-size: 24px;
+      }
+
+      .quote-text {
+        font-size: 14px;
+      }
+
+      .quote-card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── TOP BAR ─────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5A5.5 5.5 0 0 1 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3A5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">YOUR HOPE</div>
+        <div class="brand-tagline">Phnom Penh Mental Health</div>
+      </div>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLangQuote('eng')">ENG</button>
+      <button class="lang-btn" onclick="setLangQuote('kh')">ខ្មែរ</button>
+    </div>
+  </header>
+
+  <!-- ── QUOTES SECTION ──────────────────────────────────────── -->
+  <section class="quotes-container">
+    <div class="quotes-hero">
+      <div class="quotes-title" id="quotes-title">Daily Inspiration</div>
+      <div class="quotes-subtitle" id="quotes-subtitle">Take a moment to find your daily dose of motivation and hope</div>
+    </div>
+
+    <div class="quotes-grid" id="quotes-grid">
+      <!-- Quotes will be populated by JavaScript -->
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const QUOTES_ENG = [
+    "Obstacles and struggles are a gift; they encourage you to grow.",
+    "If we didn't have nightmares, we wouldn't wake up every morning chasing our dreams",
+    "Look forward with hope, not backwards with regret",
+    "They say \"Follow your heart\". But I can't follow you where you're going",
+    "The mind is like water. When it's turbulent, it's difficult to see. When it's calm, everything becomes clear.",
+    "Working on your dream whenever it is convenient for you will not work. When you dare to dream, you should also dare to do.",
+    "Follow your soul. It knows the way.",
+    "I stopped measuring my life against people who inherited their starting line.",
+    "Social anxiety results from being around people who are resolutely opposed to who you are.",
+    "If you have good thoughts, they will shine out of your face like sunbeams, and you will always look lovely",
+    "Dreams become regrets when left in the mind, never planted in the soil of action",
+    "The world within your phone is vast, but the world outside it is limitless.",
+    "After a good dinner, one can forgive anybody, even one's own relations.",
+    "We don't get to choose our family, but we can choose our friends. With courage, we can weed out narcissistic people. We can focus on those who do appreciate us, love us, and treat us with respect.",
+    "Family is supposed to be our safe heaven. Very often, it's the place where we find the deepest heartache.",
+    "Be grateful for every opportunity that life gives you.",
+    "Celebrate your strengths, you've fought hard to achieve them.",
+    "A rose grows through the concrete regardless of the terrain, it still pushed through. Be that rose and grow.",
+    "Stop the overthinking and watch how easily the good vibes will overflow.",
+    "Release what no longer serves you.",
+    "Day will come when you don't want to fight, but you must put the gloves on, anyway.",
+    "The strongest people are the people who have faced defeat and decided to punch it in the face.",
+    "You are pushing yourself even when you're tired and want to quit. I see the warrior in you.",
+    "Remember, no matter what this week brings, you can handle it.",
+    "Sometimes you need to distance yourself to see things clearly.",
+    "Know what makes you happy and do more of it.",
+    "Your thoughts will change your life. Choose them wisely.",
+    "Your imperfections and flaws are the best parts of you, be proud of them.",
+    "You have gone through fire. Now it's time to let those flames light the way forward.",
+    "Your worries are lying to you. You are loved, you are accepted, and you are wanted.",
+    "This is no losing. There are only opportunities to learn and grow.",
+    "Even your worst days only have twenty-four hours. The sun will set, and a new day will begin.",
+    "If you're always wishing for a better tomorrow, maybe it's time to enjoy the best of today.",
+    "This page might not be your favorite, but the next chapter of your life will be incredible.",
+    "Even when things are difficult, you have within you everything you need to get through it.",
+    "Life can be stormy. Hold your umbrella high and be patient. The skies will clear for you soon.",
+    "When your heart and your brain are at war, listen to the one that urges you to keep going.",
+    "No matter what happens, you are strong enough to handle it.",
+    "It won't always be easy. It won't always be fun. But in the end, it'll always be worth it.",
+    "Keep going, even when you feel like you can't take another step.",
+    "Sometimes it takes an overwhelming breakdown to have an undeniable breakthrough.",
+    "Do what is best for your heart, even if that means leaving",
+    "You are needed, you deserve the best, you are here for a reason.",
+    "Everything happens for a reason. Life puts you down, only so you can get back up for the better things. Live life, forgive and forget. Let go of the past."
+  ];
+
+  const QUOTES_KH = [
+    "ឧបសគ្គ និងការលំបាកគឺជាវមនីយ; ពួកវាលើកទឹកចិត្តឱ្យអ្នកលូតលាស់។",
+    "ប្រសិនបើយើងមិនមានសុបិន្តអាក្រក់នោះយើងនឹងមិនដឹងថាលូតលាស់ពេញលេញ",
+    "មើលទៅមុខដោយសង្ឃឹម មិនមើលថយក្រោយដោយស្ទាក់ស្ទើរ",
+    "ពួកគេនិយាយថា \"បង្វែលចិត្តរបស់អ្នក\" ប៉ុន្តែខ្ញុំមិនអាចធ្វើតាមអ្នកបានទេ",
+    "ចិត្តគឺដូចទឹក។ នៅពេលដែលវាវឹកវរ ពិបាកក្នុងការឃើញ។ នៅពេលដែលវាशांត ទ្រង់ទ្រាយក្លាយជាច្បាស់លាស់",
+    "ធ្វើការលើសុបិន្តរបស់អ្នកក្នុងពេលវេលាដែលងាយស្រួលនឹងមិនដំណើរការទេ។ ពេលដែលអ្នកក្លាហាននឹងសុបិន្ត អ្នកក៏ត្រូវក្លាហាននឹងលទ្ធផល",
+    "ធ្វើឱ្យបង្វែលក្រុមទីពីររបស់អ្នក វាដឹងលក្ខណៈផ្លូវ",
+    "ខ្ញុំឈប់ស្វាងជីវិតរបស់ខ្ញុំប្រឆាំងនឹងមនុស្សដែលបានទទួលផ្តើមដោយស្វាភាវិក",
+    "ការថប់បារម្ភសង្គមបង្កើតចេញពីការស្ថិតក្នុងរង្វង់បងប្អូនដែលប្រឆាំងនឹងអ្នក",
+    "ប្រសិនបើអ្នកមានគំនិតល្អ វានឹងភ្លឺលាស់ដូចកាំរស្មីព្រះអាទិត្យ ហើយអ្នកនឹងតែងតែមើលឃើញពន្លឺ",
+    "សុបិន្តក្លាយជាសក្សមចាប់តាំងពីវាស្ថិតក្នុងចិត្ត មិនដាំក្នុងដីនៃសកម្មភាពទេ",
+    "ពិភពលោកក្នុងទូរស័ព្ទរបស់អ្នកគឺវាស្ត ប៉ុន្តែពិភពលោកខាងក្រៅវាគ្មានដែនកំណត់",
+    "បន្ទាប់ពីរៀបចំឡាន អ្នកអាចលើកលែងឱ្យមនុស្សណាម្នាក់ សូម្បីតែក្រុមគ្រួសាររបស់ខ្លួនក៏ដោយ",
+    "យើងមិនបានជ្រើសរើសក្រុមគ្រួសាររបស់យើង ប៉ុន្តែយើងអាចជ្រើសរើសមិត្ត។ ដោយក្លាហាន យើងអាចលុបបង្គោលមនុស្សឆ្កួត ហើយផ្តោតលើអ្នកដែលពិតជាគោរពយើង",
+    "គ្រួសារគឺគួរតែជាដ្ឋានសុវត្ថិភាពរបស់យើង ប៉ុន្តែឯកសារច្រើនដង វាជាកន្លែងដែលយើងរកឃើញការឈឺចាប់ជ្រើលជ្រាល",
+    "សូមស្វាគមន៍ចំពោះឱកាសគ្រប់គ្រាន់ដែលជីវិតផ្តល់ឱ្យអ្នក",
+    "ប្រកាសលម្អដែលអ្នកបានប្រឹងប្រែង",
+    "ផ្កាកូសនឹងរីកចម្រើននៅក្នុងបេតុង ក្រោយក្រោយក្រោយ វាឈានទៅមុខ។ ក្លាយជាផ្កាលោក ហើយលូតលាស់",
+    "ឈប់ការគិតគូរច្រើនដង ហើយមើលថាតើរលាយល្អរីករាយកើតឡើងដោយរបៀបណា",
+    "ដោះលែងដូចម្តេចដែលលែងបម្រើយើង",
+    "ថ្ងៃនឹងមកដែលអ្នកមិនចង់싸싹ដល់ប៉ុន្តែបង្ខំឱ្យលើកស្រមាប់រំលាក់",
+    "មនុស្សខ្លាំងបំផុតគឺមនុស្សដែលបានប្រឈមប្រឈង ហើយសម្រេចចិត្តលង្គឹងវា",
+    "អ្នកបង្ខំខ្លួនឯង ថែមទាំងពេលដែលអ្នកស្ឋិតក្នុងភាពយ៉ាង ខ្ញុំឃើញលេបរណ្ដៅក្នុងអ្នក",
+    "ចងចាំថា មិនថាសប្តាហ៍នេះនាំមកផ្លូវដូចម្តេចក្តី អ្នកអាចគាំងវាបាន",
+    "ពេលខ្លះអ្នកត្រូវរំដោះខ្លួនឱ្យឃើញយ៉ាងច្បាស់",
+    "ស្វាយថាតើអ្វីដែលធ្វើឱ្យលេងលឺ ហើយធ្វើវាច្រើនទៀត",
+    "គំនិតរបស់អ្នកនឹងផ្លាស់ប្តូរជីវិតរបស់អ្នក។ ជ្រើសរើសវាដោយប្រាជ្ঞា",
+    "ពិការភាព និងកង្វល់របស់អ្នកគឺផ្នែកល្អបំផុតរបស់អ្នក ធ្វើឱ្យមាននឹក",
+    "អ្នកបានឆ្លងកាត់불 ឥឡូវ វេលាកសិកម្មដ្ឆាប់វាឡើងមុខ",
+    "ការថប់បារម្ភរបស់អ្នកឈកចាប់របស់អ្នក អ្នកត្រូវបានស្រឡាញ់ អ្នកត្រូវបានទទួលយក ហើយអ្នកត្រូវការ",
+    "គ្មានការបាត់បង់ទេ មានតែឱកាសក្នុងការរៀនសូត្របង្វឺត",
+    "សូម្បីថ្ងៃខាងក្រោមរបស់អ្នកក្៏ខណៈពេលដប៉ាន់ម៉ាង។ ព្រះអាទិត្យនឹងលិច ហើយថ្ងៃថ្មីនឹងក្រោក",
+    "ប្រសិនបើអ្នកក្រោកស្មោះប្តាប់ដើម្បីថ្ងៃក្រោយល្អ ប្រាប់ឡើងវិលមកវិលលេងថ្ងៃថ្មីដែលល្អ",
+    "ទំព័ររឌ័រនេះប្រហែលជាមិនដែលរបស់អ្នកទេ ប៉ុន្តែវគ្គចាប់ក្រោយក្រោយក្នុងជីវិតរបស់អ្នក នឹងវាលឆ្ងាយ",
+    "ឬឯងក្នុងស្ថានការណ៍ដ៏ពិបាក អ្នកមានគ្រប់យ៉ាងដែលអ្នកត្រូវការដើម្បីឆ្លងកាត់វា",
+    "ជីវិតអាចមានព្យុះលេចចេញ។ ឡើងកម្ពស់ ហើយដោះលែងក្នុងការរង្ហន់។ ឈាក់នឹងប្រឹងឡើងយ៉ាងលឿន",
+    "នៅពេលដែលស្ដិតរបស់អ្នក និងខួរក្បាលស្ស្ស័ नుំនឹង បង្វែលលេងលឺ",
+    "មិនថាមានអ្វីកើតឡើងក្ដី អ្នកខ្លាំងគ្រាន់គាំងវា",
+    "វាមិនតែងតែងាយស្រួល វាមិនតែងតែសប្បាយក្បាលទេ។ ប៉ុន្តែលទ្ធផល វាតែងតែមានតម្លៃ",
+    "ដូច្នេះ ថែមទាំងក្នុងស្ថានការណ៍មិនទាន់អាចរើសយក",
+    "ពេលខ្លះវាត្រូវការស្វាលក្រោយមកដើម្បីឈានទៅចៀងថ្មី",
+    "ធ្វើការល្អបំផុតដែលស្ដិតរបស់អ្នក ឯណាយ៉ាងក៏ដោយ",
+    "អ្នកត្រូវការ អ្នកសមរម្យដែលល្អបំផុត អ្នកនៅទីនេះដោយហេតុផល",
+    "អ្វីគ្រប់យ៉ាងកើតឡើងដោយហេតុផល។ ជីវិតបង្វិលក្នុងលោងក្រោយ ដូច្នេះអ្នកអាចរំណើរដ្ឆាប់។ រស់នៅក្នុងជីវិត ឆាប់ឆ្ងើយ ឡើងលែង។ ដោះលែងចាប់ពីអតីតកាល"
+  ];
+
+  let curLang = 'eng';
+
+  function setLangQuote(lang) {
+    curLang = lang;
+    document.querySelectorAll('.lang-btn').forEach((b, i) => {
+      b.classList.toggle('active', (i === 0 && lang === 'eng') || (i === 1 && lang === 'kh'));
+    });
+    renderQuotes();
+  }
+
+  function renderQuotes() {
+    const quotes = curLang === 'eng' ? QUOTES_ENG : QUOTES_KH;
+    const grid = document.getElementById('quotes-grid');
+    grid.innerHTML = '';
+    
+    quotes.forEach(quote => {
+      const card = document.createElement('div');
+      card.className = 'quote-card';
+      card.innerHTML = `<p class="quote-text">${quote}</p>`;
+      grid.appendChild(card);
+    });
+  }
+
+  function updateLabels() {
+    if (curLang === 'eng') {
+      document.getElementById('quotes-title').textContent = 'Daily Inspiration';
+      document.getElementById('quotes-subtitle').textContent = 'Take a moment to find your daily dose of motivation and hope';
+    } else {
+      document.getElementById('quotes-title').textContent = 'ការលើកទឹកចិត្តប្រចាំថ្ងៃ';
+      document.getElementById('quotes-subtitle').textContent = 'ចំណាយពេលដើម្បីស្វាយមើលការលើកទឹកចិត្តប្រចាំថ្ងៃ';
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    renderQuotes();
+    updateLabels();
+  });
+</script>
+
+</body>
+</html>
