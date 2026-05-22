@@ -78,9 +78,11 @@ function applyLang() {
 }
 
 /* ── TABS ───────────────────────────────────────────────────────── */
+
 function goTab(tab) {
   // Check if user needs to sign up before accessing test or services
   if ((tab === 'test' || tab === 'services') && !isSignedUp) {
+    alert('Please sign up first to access this feature.');
     goTab('signup');
     return;
   }
@@ -575,60 +577,176 @@ function printResults() {
   window.print();
 }
 
-/* ── QUOTES ────────────────────────────────────────────────────────── */
-const QUOTES_DATA = {
-  eng: [
-    "Obstacles and struggles are a gift; they encourage you to grow.",
-    "If we didn't have nightmares, we wouldn't wake up every morning chasing our dreams",
-    "Look forward with hope, not backwards with regret",
-    "They say \"Follow your heart\". But I can't follow you where you're going",
-    "The mind is like water. When it's turbulent, it's difficult to see. When it's calm, everything becomes clear.",
-    "Working on your dream whenever it is convenient for you will not work. When you dare to dream, you should also dare to do.",
-    "Follow your soul. It knows the way.",
-    "I stopped measuring my life against people who inherited their starting line.",
-    "Social anxiety results from being around people who are resolutely opposed to who you are.",
-    "If you have good thoughts, they will shine out of your face like sunbeams, and you will always look lovely",
-    "Dreams become regrets when left in the mind, never planted in the soil of action",
-    "The world within your phone is vast, but the world outside it is limitless.",
-    "After a good dinner, one can forgive anybody, even one's own relations.",
-    "We don't get to choose our family, but we can choose our friends. With courage, we can weed out narcissistic people. We can focus on those who do appreciate us, love us, and treat us with respect.",
-    "Family is supposed to be our safe heaven. Very often, it's the place where we find the deepest heartache.",
-    "Be grateful for every opportunity that life gives you.",
-    "Celebrate your strengths, you've fought hard to achieve them.",
-    "A rose grows through the concrete regardless of the terrain, it still pushed through. Be that rose and grow.",
-    "Stop the overthinking and watch how easily the good vibes will overflow.",
-    "Release what no longer serves you.",
-    "Day will come when you don't want to fight, but you must put the gloves on, anyway.",
-    "The strongest people are the people who have faced defeat and decided to punch it in the face.",
-    "You are pushing yourself even when you're tired and want to quit. I see the warrior in you.",
-    "Remember, no matter what this week brings, you can handle it.",
-    "Sometimes you need to distance yourself to see things clearly.",
-    "Know what makes you happy and do more of it.",
-    "Your thoughts will change your life. Choose them wisely.",
-    "Your imperfections and flaws are the best parts of you, be proud of them.",
-    "You have gone through fire. Now it's time to let those flames light the way forward.",
-    "Your worries are lying to you. You are loved, you are accepted, and you are wanted.",
-    "This is no losing. There are only opportunities to learn and grow.",
-    "Even your worst days only have twenty-four hours. The sun will set, and a new day will begin.",
-    "If you're always wishing for a better tomorrow, maybe it's time to enjoy the best of today.",
-    "This page might not be your favorite, but the next chapter of your life will be incredible.",
-    "Even when things are difficult, you have within you everything you need to get through it.",
-    "Life can be stormy. Hold your umbrella high and be patient. The skies will clear for you soon.",
-    "When your heart and your brain are at war, listen to the one that urges you to keep going.",
-    "No matter what happens, you are strong enough to handle it.",
-    "It won't always be easy. It won't always be fun. But in the end, it'll always be worth it.",
-    "Keep going, even when you feel like you can't take another step.",
-    "Sometimes it takes an overwhelming breakdown to have an undeniable breakthrough.",
-    "Do what is best for your heart, even if that means leaving",
-    "You are needed, you deserve the best, you are here for a reason.",
-    "Everything happens for a reason. Life puts you down, only so you can get back up for the better things. Live life, forgive and forget. Let go of the past."
-  ],
-  kh: [
-    "ឧបសគ្គ និងការលំបាកគឺជាវមនីយ; ពួកវាលើកទឹកចិត្តឱ្យអ្នកលូតលាស់។",
-    "ប្រសិនបើយើងមិនមានសុបិន្តអាក្រក់នោះយើងនឹងមិនដឹងថាលូតលាស់ពេញលេញ",
-    "មើលទៅមុខដោយសង្ឃឹម មិនមើលថយក្រោយដោយស្ទាក់ស្ទើរ",
-    "ពួកគេនិយាយថា \"បង្វែលចិត្តរបស់អ្នក\" ប៉ុន្តែខ្ញុំមិនអាចធ្វើតាមអ្នកបានទេ",
-    "ចិត្តគឺដូចទឹក។ នៅពេលដែលវាវឹកវរ ពិបាកក្នុងការឃើញ។ នៅពេលដែលវាគឺ calm ទ្រង់ទ្រាយក្លាយជាច្បាស់លាស់",
+/* ── AUTHENTICATION ───────────────────────────────────────────── */
+function initAuth() {
+  const stored = localStorage.getItem('yourHopeUser');
+  if (stored) {
+    try {
+      userInfo = JSON.parse(stored);
+      isSignedUp = true;
+      showMainApp();
+      applyLang();
+    } catch (e) {
+      console.error('Auth init error:', e);
+      isSignedUp = false;
+    }
+  }
+}
+
+function toggleAuthMode() {
+  const signupForm = document.getElementById('signup-form');
+  const signinForm = document.getElementById('signin-form');
+  const title = document.getElementById('auth-title');
+  const subtitle = document.getElementById('auth-subtitle');
+  
+  if (signupForm.style.display === 'none') {
+    signupForm.style.display = 'block';
+    signinForm.style.display = 'none';
+    title.textContent = 'Create Account';
+    subtitle.textContent = 'Welcome to YOUR HOPE';
+  } else {
+    signupForm.style.display = 'none';
+    signinForm.style.display = 'block';
+    title.textContent = 'Sign In';
+    subtitle.textContent = 'Welcome back to YOUR HOPE';
+  }
+  clearAuthErrors();
+}
+
+function clearAuthErrors() {
+  document.querySelectorAll('.error').forEach(e => e.textContent = '');
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function handleSignup() {
+  clearAuthErrors();
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const confirm = document.getElementById('signup-confirm').value;
+  
+  let valid = true;
+  
+  if (!name) {
+    document.getElementById('error-name').textContent = 'Name is required';
+    valid = false;
+  }
+  
+  if (!email) {
+    document.getElementById('error-email').textContent = 'Email is required';
+    valid = false;
+  } else if (!validateEmail(email)) {
+    document.getElementById('error-email').textContent = 'Invalid email format';
+    valid = false;
+  }
+  
+  if (!password) {
+    document.getElementById('error-password').textContent = 'Password is required';
+    valid = false;
+  } else if (password.length < 6) {
+    document.getElementById('error-password').textContent = 'Password must be at least 6 characters';
+    valid = false;
+  }
+  
+  if (password !== confirm) {
+    document.getElementById('error-confirm').textContent = 'Passwords do not match';
+    valid = false;
+  }
+  
+  if (!valid) return;
+  
+  const users = JSON.parse(localStorage.getItem('yourHopeUsers') || '[]');
+  if (users.some(u => u.email === email)) {
+    document.getElementById('error-email').textContent = 'Email already registered';
+    return;
+  }
+  
+  const user = { id: Date.now(), name, email, password, createdAt: new Date().toISOString() };
+  users.push(user);
+  localStorage.setItem('yourHopeUsers', JSON.stringify(users));
+  localStorage.setItem('yourHopeUser', JSON.stringify({ id: user.id, name: user.name, email: user.email }));
+  
+  userInfo = { id: user.id, name: user.name, email: user.email };
+  isSignedUp = true;
+  showMainApp();
+  applyLang();
+}
+
+function handleSignin() {
+  clearAuthErrors();
+  const email = document.getElementById('signin-email').value.trim();
+  const password = document.getElementById('signin-password').value;
+  
+  let valid = true;
+  
+  if (!email) {
+    document.getElementById('error-email-login').textContent = 'Email is required';
+    valid = false;
+  }
+  
+  if (!password) {
+    document.getElementById('error-password-login').textContent = 'Password is required';
+    valid = false;
+  }
+  
+  if (!valid) return;
+  
+  const users = JSON.parse(localStorage.getItem('yourHopeUsers') || '[]');
+  const user = users.find(u => u.email === email && u.password === password);
+  
+  if (!user) {
+    document.getElementById('error-email-login').textContent = 'Invalid email or password';
+    return;
+  }
+  
+  localStorage.setItem('yourHopeUser', JSON.stringify({ id: user.id, name: user.name, email: user.email }));
+  userInfo = { id: user.id, name: user.name, email: user.email };
+  isSignedUp = true;
+  showMainApp();
+  applyLang();
+}
+
+function handleLogout() {
+  if (confirm('Are you sure you want to sign out?')) {
+    localStorage.removeItem('yourHopeUser');
+    userInfo = null;
+    isSignedUp = false;
+    ANS = {};
+    chatHist.length = 0;
+    lastRes = null;
+    curPage = 0;
+    showAuthScreen();
+  }
+}
+
+function showMainApp() {
+  document.getElementById('tab-signup').classList.remove('active');
+  document.getElementById('app-main').style.display = '';
+  document.querySelectorAll('.screen').forEach((s, i) => {
+    s.classList.toggle('active', i === 1);
+  });
+}
+
+function showAuthScreen() {
+  document.getElementById('app-main').style.display = 'none';
+  document.getElementById('tab-signup').classList.add('active');
+  document.getElementById('signup-form').style.display = 'block';
+  document.getElementById('signin-form').style.display = 'none';
+  document.getElementById('auth-title').textContent = 'Create Account';
+  document.getElementById('auth-subtitle').textContent = 'Welcome to YOUR HOPE';
+  clearAuthErrors();
+  document.getElementById('signup-name').value = '';
+  document.getElementById('signup-email').value = '';
+  document.getElementById('signup-password').value = '';
+  document.getElementById('signup-confirm').value = '';
+  document.getElementById('signin-email').value = '';
+  document.getElementById('signin-password').value = '';
+}
+
+window.addEventListener('DOMContentLoaded', initAuth);
     "ធ្វើការលើសុបិន្តរបស់អ្នកក្នុងពេលវេលាដែលងាយស្រួលនឹងមិនដំណើរការទេ។ ពេលដែលអ្នកក្លាហាននឹងសុបិន្ត អ្នកក៏ត្រូវក្លាហាននឹងលទ្ធផល",
     "ធ្វើឱ្យបង្វែលក្រុមទីពីររបស់អ្នក វាដឹងលក្ខណៈផ្លូវ",
     "ខ្ញុំឈប់ស្វាងជីវិតរបស់ខ្ញុំប្រឆាំងនឹងមនុស្សដែលបានទទួលផ្តើមដោយស្វាភាវិក",
@@ -672,7 +790,7 @@ const QUOTES_DATA = {
 };
 
 function renderQuotes() {
-  const quotes = QUOTES_DATA[curLang];
+  const quotes = QUOTES[curLang];
   const container = document.getElementById('quotes-container');
   if (!container) return;
   container.innerHTML = '';

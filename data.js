@@ -544,6 +544,24 @@ const T = {
     websiteBtn:'Website', callBtn:'Call', mapBtn:'Map', noTel:'No phone',
     recTitle:'Recommended services for your result',
     recSevere:'Your result includes a severe or extremely severe level. Hospitals and psychiatric services are highlighted first.',
+    // Auth translations
+    authTitle:'Create Account', authSubtitle:'Welcome to YOUR HOPE', authLabelName:'Full Name',
+    authLabelEmail:'Email', authLabelPassword:'Password', authLabelConfirm:'Confirm Password',
+    signupBtn:'Sign Up', signinBtn:'Sign In', toggleLogin:'Sign In', toggleSignup:'Sign Up',
+    alreadyAccount:'Already have an account?', noAccount:'Don\'t have an account?',
+    authDisclaimer:'YOUR HOPE is for informational purposes only. Always seek professional help if needed.',
+    logoutBtn:'Sign Out',
+    // Auth prompt modal
+    authPromptTitle:'Sign Up Required',
+    authPromptTestMsg:'Please sign up to access the DASS-21 assessment and save your results.',
+    authPromptServicesMsg:'Please sign up to browse mental health services and get personalized recommendations.',
+    authPromptSignin:'Sign In',
+    authPromptSignup:'Create Account',
+    // Validation messages
+    nameRequired:'Name is required', emailRequired:'Email is required', invalidEmail:'Invalid email format',
+    passwordRequired:'Password is required', passwordMin:'Password must be at least 6 characters',
+    passwordMismatch:'Passwords do not match', emailExists:'Email already registered',
+    invalidEmailPassword:'Invalid email or password',
     recModerate:'Your result includes a moderate level. Mental health clinics and counseling services are highlighted first.',
     recNormal:'Your result is in the normal range. NGOs, wellness support, and optional counseling services are highlighted.',
     pmMeta:'DASS-21 Screening Results', pScore:'Score', pLevel:'Level', pDep:'Depression', pAnx:'Anxiety', pStr:'Stress',
@@ -589,5 +607,20 @@ const T = {
     recModerate:'លទ្ធផលរបស់អ្នកមានកម្រិតមធ្យម។ គ្លីនិកសុខភាពផ្លូវចិត្ត និងសេវាប្រឹក្សាត្រូវបានបង្ហាញមុន។',
     recNormal:'លទ្ធផលរបស់អ្នកស្ថិតក្នុងជួរធម្មតា។ NGO សេវាសុខុមាលភាព និងការប្រឹក្សាជាជម្រើសត្រូវបានណែនាំ។',
     pmMeta:'លទ្ធផល DASS-21', pScore:'ពិន្ទុ', pLevel:'កម្រិត', pDep:'ធ្លាក់ទឹកចិត្ត', pAnx:'ការថប់បារម្ភ', pStr:'ភាពតានតឹង',
+    // Auth translations
+    authTitle:'បង្កើតគណនី', authSubtitle:'សូមស្វាគមន៍មក', authLabelName:'ឈ្មោះពេញលេញ',
+    authLabelEmail:'អ៊ីមែល', authLabelPassword:'ពាក្យសម្ងាត់', authLabelConfirm:'បញ្ជាក់ពាក្យសម្ងាត់',
+    signupBtn:'ចុះឈ្មោះ', signinBtn:'ចូលក្នុង', toggleLogin:'ចូលក្នុង', toggleSignup:'ចុះឈ្មោះ',
+    // Auth prompt modal
+    authPromptTitle:'តម្រូវឱ្យចុះឈ្មោះ',
+    authPromptTestMsg:'សូមចុះឈ្មោះ ដើម្បីចូលប្រើការវាយតម្លៃ DASS-21 និងរក្សាទុកលទ្ធផលរបស់អ្នក។',
+    authPromptServicesMsg:'សូមចុះឈ្មោះ ដើម្បីរកមើល សេវាកម្មសុខភាពផ្លូវចិត្ត និងទទួលបានការណែនាំផ្ទាល់ខ្លួន។',
+    authPromptSignin:'ចូល',
+    authPromptSignup:'បង្កើតគណនី',
+    alreadyAccount:'មានគណនីរួចហើយ?', noAccount:'គ្មានគណនីឬ?', logoutBtn:'ចាកចេញ',
+    nameRequired:'ត្រូវការឈ្មោះ', emailRequired:'ត្រូវការអ៊ីមែល', invalidEmail:'អ៊ីមែលមិនត្រឹមត្រូវ',
+    passwordRequired:'ត្រូវការពាក្យសម្ងាត់', passwordMin:'ពាក្យសម្ងាត់ត្រូវមាន ៦ ឬច្រើន',
+    passwordMismatch:'ពាក្យសម្ងាត់មិនដូច', emailExists:'អ៊ីមែលបានចុះឈ្មោះ',
+    invalidEmailPassword:'អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ',
   }
 };
