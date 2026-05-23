@@ -15,6 +15,13 @@ const chatHist = [];  // Anthropic messages array
 let lastRes    = null;   // last computed DASS-21 result
 let displayed  = [...CLINICS]; // currently visible clinics
 
+// Check if user is logged in via auth system
+if (typeof getSession === 'function' && getSession()) {
+  isSignedUp = true;
+  const session = getSession();
+  userInfo = session;
+}
+
 /* ── LANGUAGE ───────────────────────────────────────────────────── */
 function setLang(l) {
   curLang = l;
@@ -80,6 +87,11 @@ function applyLang() {
 /* ── TABS ───────────────────────────────────────────────────────── */
 
 function goTab(tab) {
+  // If already signed in, redirect to home instead of signin/signup
+  if (isSignedUp && (tab === 'signin' || tab === 'signup')) {
+    tab = 'home';
+  }
+
   // Check if user needs to sign up before accessing test or services
   if ((tab === 'test' || tab === 'services') && !isSignedUp) {
     alert('Please sign up first to access this feature.');
@@ -104,11 +116,23 @@ function goTab(tab) {
 function completeSignin(e) {
   e.preventDefault();
 
-  const email = document.getElementById('signin-email').value.trim();
-  const password = document.getElementById('signin-password').value.trim();
+  const email = document.getElementById('signin-email');
+  const password = document.getElementById('signin-password');
+  const emailVal = email.value.trim();
+  const passVal = password.value.trim();
 
-  if (!email || !password) {
-    alert('Please enter both email and password');
+  // Clear previous errors
+  email.style.borderColor = '';
+  password.style.borderColor = '';
+
+  if (!emailVal || !passVal) {
+    // Show custom error message with shake animation
+    if (!emailVal) email.classList.add('error');
+    if (!passVal) password.classList.add('error');
+    setTimeout(() => {
+      email.classList.remove('error');
+      password.classList.remove('error');
+    }, 3000);
     return;
   }
 
@@ -125,8 +149,9 @@ function completeSignin(e) {
 
     // Simple password check (in production, use proper hashing)
     // For demo purposes, accept any password for existing users
-    if (userInfo.email.toLowerCase() === email.toLowerCase()) {
+    if (userInfo.email.toLowerCase() === emailVal.toLowerCase()) {
       isSignedUp = true;
+      document.getElementById('signout-btn').style.display = 'inline-block';
 
       // Clear sign-in form
       document.getElementById('signin-email').value = '';
@@ -164,7 +189,8 @@ function completeSignup(e) {
   userInfo = { name, email, age, gender, district, signupTime: new Date().toISOString() };
   localStorage.setItem('yourHopeUser', JSON.stringify(userInfo));
   isSignedUp = true;
-  
+  document.getElementById('signout-btn').style.display = 'inline-block';
+
   // Clear signup form and redirect to home
   document.getElementById('name-input').value = '';
   document.getElementById('email-input').value = '';
@@ -176,32 +202,15 @@ function completeSignup(e) {
   goTab('home');
 }
 
-// Check for existing user session on page load
-function checkExistingUser() {
-  const stored = localStorage.getItem('yourHopeUser');
-  if (stored) {
-    try {
-      userInfo = JSON.parse(stored);
-      isSignedUp = true;
-      // Show sign out button (user is logged in)
-      document.getElementById('signout-btn').style.display = 'inline-block';
-      // Pre-fill the email field so they just need to enter password
-      document.getElementById('signin-email').value = userInfo.email;
-      // Stay on sign-in screen - user needs to confirm by signing in
-      // goTab('signin'); // Already on signin by default
-    } catch (e) {
-      isSignedUp = false;
-    }
-  }
-}
-
 // Sign out function
 function signOut() {
-  localStorage.removeItem('yourHopeUser');
-  userInfo = null;
-  isSignedUp = false;
-  document.getElementById('signout-btn').style.display = 'none';
-  goTab('signin');
+  if (confirm('Are you sure you want to sign out?')) {
+    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem('yourHopeUser');
+    userInfo = null;
+    isSignedUp = false;
+    location.reload();
+  }
 }
 
 /* ── TEST SCREEN ────────────────────────────────────────────────── */
@@ -584,13 +593,17 @@ function initAuth() {
     try {
       userInfo = JSON.parse(stored);
       isSignedUp = true;
-      showMainApp();
+      // User is signed in - go to home
+      goTab('home');
+      // Show sign out button
+      document.getElementById('signout-btn').style.display = 'inline-block';
       applyLang();
     } catch (e) {
       console.error('Auth init error:', e);
       isSignedUp = false;
     }
   }
+  // If not signed up, stay on sign-in screen (default)
 }
 
 function toggleAuthMode() {
@@ -804,6 +817,5 @@ function renderQuotes() {
 }
 
 /* ── INIT ───────────────────────────────────────────────────────── */
-checkExistingUser();
 buildChips();
 renderClinics(CLINICS);

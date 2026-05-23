@@ -9,6 +9,111 @@
 </head>
 <body>
 
+<!-- ════════════════════════════════════════════════════════════════
+     AUTHENTICATION PAGES
+     ════════════════════════════════════════════════════════════════ -->
+<div id="auth-container">
+  <!-- SIGN IN PAGE -->
+  <div class="auth-page" data-auth-page="signin">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">🔐</div>
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Sign in to your account</p>
+      </div>
+
+      <div id="auth-error"></div>
+      <div id="auth-success"></div>
+
+      <form class="auth-form" onsubmit="event.preventDefault(); logIn();">
+        <div class="auth-input-group">
+          <label for="signin-email">Email Address</label>
+          <input type="email" id="signin-email" placeholder="your@email.com" required>
+        </div>
+
+        <div class="auth-input-group">
+          <label for="signin-password">Password</label>
+          <div style="position: relative;">
+            <input type="password" id="signin-password" placeholder="Enter your password" required>
+            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('signin-password')">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-checkbox-group">
+          <input type="checkbox" id="signin-remember">
+          <label for="signin-remember">Remember me</label>
+        </div>
+
+        <button type="submit" class="auth-submit-btn">Sign In</button>
+      </form>
+
+      <div class="auth-toggle-text">
+        Don't have an account? 
+        <button class="auth-toggle-btn" onclick="goToSignUp()">Sign Up</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGN UP PAGE -->
+  <div class="auth-page" data-auth-page="signup">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">✨</div>
+        <h1 class="auth-title">Create Account</h1>
+        <p class="auth-subtitle">Start your mental health journey</p>
+      </div>
+
+      <div id="auth-error"></div>
+      <div id="auth-success"></div>
+
+      <form class="auth-form" onsubmit="event.preventDefault(); signUp();">
+        <div class="auth-input-group">
+          <label for="signup-name">Full Name</label>
+          <input type="text" id="signup-name" placeholder="John Doe" required>
+        </div>
+
+        <div class="auth-input-group">
+          <label for="signup-email">Email Address</label>
+          <input type="email" id="signup-email" placeholder="your@email.com" required>
+        </div>
+
+        <div class="auth-input-group">
+          <label for="signup-password">Password</label>
+          <div style="position: relative;">
+            <input type="password" id="signup-password" placeholder="At least 6 characters" required>
+            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('signup-password')">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-input-group">
+          <label for="signup-confirm">Confirm Password</label>
+          <div style="position: relative;">
+            <input type="password" id="signup-confirm" placeholder="Confirm your password" required>
+            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('signup-confirm')">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-checkbox-group">
+          <input type="checkbox" id="signup-terms" required>
+          <label for="signup-terms">
+            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+          </label>
+        </div>
+
+        <button type="submit" class="auth-submit-btn">Create Account</button>
+      </form>
+
+      <div class="auth-toggle-text">
+        Already have an account? 
+        <button class="auth-toggle-btn" onclick="goToSignIn()">Sign In</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     MAIN APP (Hidden until logged in)
+     ════════════════════════════════════════════════════════════════ -->
 <div class="app">
 
   <!-- ── TOP BAR ─────────────────────────────────────────────── -->
@@ -25,9 +130,10 @@
       </div>
     </div>
     <div class="lang-toggle">
+      <span id="user-name" style="margin-right: 16px; font-size: 13px; color: #333;"></span>
       <button class="lang-btn active" onclick="setLang('eng')">ENG</button>
       <button class="lang-btn"        onclick="setLang('kh')">ខ្មែរ</button>
-      <button class="lang-btn" id="signout-btn" onclick="signOut()" style="display:none">Sign Out</button>
+      <button class="lang-btn" id="signout-btn" onclick="signOut()">Sign Out</button>
     </div>
   </header>
 
@@ -52,124 +158,6 @@
       <span class="nav-icon">ℹ️</span><span id="nav-about">About</span>
     </button>
   </nav>
-
-  <!-- ════════════════════════════════════════════
-       SIGN IN SCREEN
-       ════════════════════════════════════════════ -->
-  <section id="tab-signin" class="screen active">
-
-    <div class="signin-container">
-      <div class="signin-hero">
-        <div class="signin-icon">👤</div>
-        <div class="signin-title" id="si-title">Welcome Back</div>
-        <div class="signin-subtitle" id="si-subtitle">Sign in to access your mental health screening and support</div>
-      </div>
-
-      <form class="signin-form" onsubmit="completeSignin(event)">
-        <!-- Email -->
-        <div class="form-group">
-          <label for="signin-email" id="si-email-label">Email Address</label>
-          <input type="email" id="signin-email" placeholder="your@email.com" required>
-        </div>
-
-        <!-- Password -->
-        <div class="form-group">
-          <label for="signin-password" id="si-password-label">Password</label>
-          <input type="password" id="signin-password" placeholder="Enter your password" required>
-        </div>
-
-        <!-- Remember Me -->
-        <div class="form-group checkbox">
-          <input type="checkbox" id="remember-check">
-          <label for="remember-check" id="si-remember">Remember me</label>
-        </div>
-
-        <button type="submit" class="signin-btn" id="si-submit">Sign In</button>
-
-        <p class="signin-divider" id="si-divider">or</p>
-
-        <button type="button" class="signin-btn-secondary" id="si-signup-btn" onclick="goTab('signup')">Create New Account</button>
-
-        <p class="signin-footer" id="si-footer">
-          <a href="#" id="si-forgot" onclick="event.preventDefault(); alert('Password reset would be implemented here.')">Forgot password?</a>
-        </p>
-      </form>
-    </div>
-
-  </section><!-- /tab-signin -->
-
-  <!-- ════════════════════════════════════════════
-       SIGN UP SCREEN
-       ════════════════════════════════════════════ -->
-  <section id="tab-signup" class="screen">
-
-    <div class="signup-container">
-      <div class="signup-hero">
-        <div class="signup-icon">👋</div>
-        <div class="signup-title" id="s-title">Welcome to Your HOPE</div>
-        <div class="signup-subtitle" id="s-subtitle">Get started with mental health screening and find support services</div>
-      </div>
-
-      <form class="signup-form" onsubmit="completeSignup(event)">
-        <!-- Full Name -->
-        <div class="form-group">
-          <label for="name-input" id="s-name-label">Full Name</label>
-          <input type="text" id="name-input" placeholder="Enter your full name" required>
-        </div>
-
-        <!-- Email -->
-        <div class="form-group">
-          <label for="email-input" id="s-email-label">Email Address</label>
-          <input type="email" id="email-input" placeholder="your@email.com" required>
-        </div>
-
-        <!-- Age -->
-        <div class="form-group">
-          <label for="age-input" id="s-age-label">Age</label>
-          <input type="number" id="age-input" placeholder="Enter your age" min="13" max="120" required>
-        </div>
-
-        <!-- Gender -->
-        <div class="form-group">
-          <label for="gender-input" id="s-gender-label">Gender</label>
-          <select id="gender-input" required>
-            <option value="">Select gender</option>
-            <option value="Male" id="opt-male">Male</option>
-            <option value="Female" id="opt-female">Female</option>
-            <option value="Non-binary" id="opt-nonbinary">Non-binary</option>
-            <option value="Prefer not to say" id="opt-notsay">Prefer not to say</option>
-          </select>
-        </div>
-
-        <!-- District -->
-        <div class="form-group">
-          <label for="district-input" id="s-district-label">District (Phnom Penh)</label>
-          <select id="district-input" required>
-            <option value="">Select district</option>
-            <option value="Chamkar Mon">Chamkar Mon</option>
-            <option value="Daun Penh">Daun Penh</option>
-            <option value="Preak Phnov">Preak Phnov</option>
-            <option value="Russei Keo">Russei Keo</option>
-            <option value="Saensokh">Saensokh</option>
-            <option value="Sensok">Sensok</option>
-            <option value="Toul Kork">Toul Kork</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        <!-- Terms & Privacy -->
-        <div class="form-group checkbox">
-          <input type="checkbox" id="terms-check" required>
-          <label for="terms-check" id="s-terms">I agree to the privacy policy and terms of service</label>
-        </div>
-
-        <button type="submit" class="signup-btn" id="s-submit">Create Account & Continue</button>
-        
-        <p class="signup-note" id="s-note">Your information is secure and will never be shared.</p>
-      </form>
-    </div>
-
-  </section><!-- /tab-signup -->
 
   <!-- ════════════════════════════════════════════
        HOME SCREEN
@@ -599,6 +587,7 @@
 <!-- ── SCRIPTS ───────────────────────────────────────────────────── -->
 <!-- Load data first (QUESTIONS, CLINICS, T, getLevel), then app logic -->
 <script src="data.js"></script>
+<script src="auth.js"></script>
 <script src="app.js"></script>
 
 </body>
