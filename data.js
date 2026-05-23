@@ -256,7 +256,6 @@ const QUOTES = {
   eng: {
     hope: [
       "Look forward with hope, not backwards with regret.",
-      "Dreams become regrets when left in the mind, never planted in the soil of action.",
       "This page might not be your favorite, but the next chapter of your life will be incredible.",
       "Even when things are difficult, you have within you everything you need to get through it.",
       "Life can be stormy. Hold your umbrella high and be patient. The skies will clear for you soon.",
@@ -270,7 +269,6 @@ const QUOTES = {
       "Remember, no matter what this week brings, you can handle it.",
       "No matter what happens, you are strong enough to handle it.",
       "Keep going, even when you feel like you can't take another step.",
-      "Sometimes it takes an overwhelming breakdown to have an undeniable breakthrough.",
       "You have gone through fire. Now it's time to let those flames light the way forward."
     ],
     selfCare: [
@@ -291,9 +289,8 @@ const QUOTES = {
     growth: [
       "Obstacles and struggles are a gift; they encourage you to grow.",
       "If we didn't have nightmares, we wouldn't wake up every morning chasing our dreams.",
-      "Working on your dream whenever it is convenient for you will not work. When you dare to dream, you should also dare to do.",
+      "When you dare to dream, you should also dare to do.",
       "A rose grows through the concrete regardless of the terrain, it still pushed through. Be that rose and grow.",
-      "I stopped measuring my life against people who inherited their starting line.",
       "There is no losing. There are only opportunities to learn and grow.",
       "It won't always be easy. It won't always be fun. But in the end, it'll always be worth it."
     ],
@@ -308,10 +305,9 @@ const QUOTES = {
   kh: {
     hope: [
       "មើលទៅមុខដោយសង្ឃឹម មិនមើលថយក្រោយដោយស្ទាក់ស្ទើរ។",
-      "សុបិន្តក្លាយជាការស្ដាយក្រោយ នៅពេលដែលវាស្ថិតក្នុងចិត្ត មិនត្រូវបានដាំក្នុងដីនៃសកម្មភាពទេ។",
       "ទំព័រនេះប្រហែលមិនដែលរបស់អ្នក ប៉ុន្តែជំពូកបន្ទាប់នៃជីវិតរបស់អ្នកនឹងអស្ចារ្យ។",
       "ទោះបីអ្វីៗពិបាក អ្នកមានអ្វីគ្រប់យ៉ាងដែលត្រូវការដើម្បីឆ្លងកាត់វា។",
-      "ជីវិតអាចមានព្យុះ។ ពាក់ឆ័ត្រខ្ពស់ ហើយអត់ធ្មត់។ មេឃនឹង맑 សម្រាប់អ្នកឆាប់ៗ។",
+      "ជីវិតអាចមានព្យុះ។ ពាក់ឆ័ត្រខ្ពស់ ហើយអត់ធ្មត់។ មេឃនឹងភ្លឺសម្រាប់អ្នកឆាប់ៗ។",
       "ការថប់បារម្ភរបស់អ្នកកំពុងបោកអ្នក។ អ្នកត្រូវបានស្រឡាញ់ ទទួលយក និងត្រូវការ។",
       "អ្វីៗកើតឡើងដោយហេតុផល។ ជីវិតទម្លាក់អ្នកចុះ ដើម្បីឱ្យអ្នកក្រោកឡើងសម្រាប់រឿងល្អជាង។"
     ],
@@ -333,15 +329,15 @@ const QUOTES = {
     ],
     mindfulness: [
       "ចិត្តគឺដូចទឹក។ នៅពេលដែលវាវឹកវរ ពិបាកក្នុងការឃើញ។ នៅពេលដែលវាស្ងប់ អ្វីៗក្លាយជាច្បាស់លាស់។",
-      "ធ្វើឱ្យបង្វែលក្រុមទីពីររបស់អ្នក វាដឹងផ្លូវ។",
+      "បង្វែលចិត្តរបស់អ្នក វាដឹងផ្លូវ។",
       "គំនិតរបស់អ្នកនឹងផ្លាស់ប្ដូរជីវិតរបស់អ្នក។ ជ្រើសរើសវាដោយប្រាជ្ញា។",
       "នៅពេលចិត្ត និងខួរក្បាលរបស់អ្នកខ្វែងគ្នា សូមស្ដាប់សំឡេងដែលជំរុញអ្នកឱ្យបន្ត។"
     ],
     growth: [
-      "ឧបសគ្គ និងការលំបាកគឺជាmón; ពួកវាលើកទឹកចិត្តឱ្យអ្នកលូតលាស់។",
+      "ឧបសគ្គ និងការលំបាកគឺជាmón ពួកវាលើកទឹកចិត្តឱ្យអ្នកលូតលាស់។",
       "ប្រសិនបើយើងមិនមានសុបិន្តអាក្រក់ យើងនឹងមិនភ្ញាក់ឡើងរៀងរាល់ព្រឹកដើម្បីដេញតាមសុបិន្តរបស់យើងទេ។",
       "ពេលដែលអ្នកក្លាហាននឹងសុបិន្ត អ្នកក៏ត្រូវក្លាហាននឹងការធ្វើ។",
-      "ផ្កាកូនរីកចម្រើននៅក្នុងបេតុង មិនថាដីដូចម្ដេច វានៅតែរុញច្រានមុខ។ ក្លាយជាផ្កានោះ ហើយលូតលាស់។",
+      "ផ្កាកូនរីកចម្រើននៅក្នុងបេតុង វានៅតែរុញច្រានមុខ។ ក្លាយជាផ្កានោះ ហើយលូតលាស់។",
       "គ្មានការបាត់បង់ទេ មានតែឱកាសសម្រាប់រៀនសូត្រ និងលូតលាស់។",
       "វាមិនតែងតែងាយ វាមិនតែងតែសប្បាយ។ ប៉ុន្តែចុងបញ្ចប់ វាតែងតែមានតម្លៃ។"
     ],
