@@ -25,7 +25,10 @@
   --radius-sm:   10px;
   --serif:       'DM Serif Display', Georgia, serif;
   --sans:        'DM Sans', system-ui, sans-serif;
-
+  --bg:           #FFFFFF;
+  --bg-alt:       #F5F0E8;
+  --text:         #2D2622;
+  --font-display: 'DM Serif Display', Georgia, serif;
   /* Severity colours */
   --col-normal:  #2E7D52;
   --col-mild:    #8B6200;
@@ -348,7 +351,8 @@ body::before {
 .home-card.green  { background: #fff; border-color: #E8F2EF; }
 .home-card.clay   { background: #fff; border-color: #F0D5C1; }
 .home-card.purple { background: #fff; border-color: #E8E8FB; }
-.home-card.dark   { background: var(--sage-deep); color: #fff; border-color: var(--sage-deep); }
+.home-card.blue   { background: #fff; border-color: #D1E8F5; }
+
 
 .home-card-icon {
   width: 56px; height: 56px; border-radius: 14px;
@@ -359,6 +363,7 @@ body::before {
 .home-card.clay   .home-card-icon { background: #F5D5C7; }
 .home-card.purple .home-card-icon { background: #E0DFFA; }
 .home-card.dark   .home-card-icon { background: rgba(255,255,255,0.2); }
+.home-card.blue   .home-card-icon { background: #D1E8F5; }
 
 .home-card-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; display: none; }
 .home-card.dark .home-card-label { color: rgba(255,255,255,0.5); }
@@ -371,6 +376,28 @@ body::before {
 .home-card.clay   .home-card-btn { color: #8B4A1E; }
 .home-card.purple .home-card-btn { color: #3A4490; }
 .home-card.dark   .home-card-btn { color: #fff; }
+.home-card.blue   .home-card-btn { color: #1A5F8A; }
+
+.quotes-panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.quotes-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
 
 .disclaimer-box {
   background: #FFF3E8; border: 1px solid #FFD9BA;
@@ -378,7 +405,8 @@ body::before {
   font-size: 13px; color: #5A3A1A; line-height: 1.7;
   display: flex; gap: 12px; align-items: flex-start;
 }
-.disclaimer-box::before { content: '⚠️'; flex-shrink: 0; margin-top: 2px; font-size: 18px; }
+.disclaimer-box::before { content: '⚠️';
+
 
 /* ── SECTION HEADERS ── */
 .sec-header  { margin-bottom: 1.25rem; }
@@ -1680,4 +1708,5 @@ body::before {
 /* Main app hidden initially */
 .app {
   display: none;
+  visibility: hidden;
 }

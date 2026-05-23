@@ -70,7 +70,7 @@ function signUp() {
   users[email] = {
     fullName: fullName,
     email: email,
-    password: password, // In real app, hash this!
+    password: btoa(password),
     createdAt: new Date().toISOString()
   };
 
@@ -95,7 +95,7 @@ function logIn(email, password) {
 
   // Find user
   const users = getAllUsers();
-  if (!users[email] || users[email].password !== password) {
+  if (!users[email] || users[email].password !== btoa(password)) {
     showAuthError('Invalid email or password');
     return;
   }
@@ -119,6 +119,7 @@ function logIn(email, password) {
 function signOut() {
   if (confirm('Are you sure you want to sign out?')) {
     localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem('yourHopeUser');
     location.reload();
   }
 }
@@ -135,24 +136,24 @@ function isLoggedIn() {
 
 /* ── UI HELPERS ────────────────────────────────────────────────────── */
 function showAuthError(message) {
-  const errorEl = document.getElementById('auth-error');
+  const activePage = document.querySelector('[data-auth-page][style*="flex"]');
+  const targetId = activePage?.dataset.authPage === 'signup' ? 'signup-error' : 'signin-error';
+  const errorEl = document.getElementById(targetId);
   if (errorEl) {
     errorEl.textContent = message;
     errorEl.style.display = 'block';
-    setTimeout(() => {
-      errorEl.style.display = 'none';
-    }, 3000);
+    setTimeout(() => { errorEl.style.display = 'none'; }, 3000);
   }
 }
 
 function showAuthSuccess(message) {
-  const successEl = document.getElementById('auth-success');
+  const activePage = document.querySelector('[data-auth-page][style*="flex"]');
+  const targetId = activePage?.dataset.authPage === 'signup' ? 'signup-success' : 'signin-success';
+  const successEl = document.getElementById(targetId);
   if (successEl) {
     successEl.textContent = message;
     successEl.style.display = 'block';
-    setTimeout(() => {
-      successEl.style.display = 'none';
-    }, 2000);
+    setTimeout(() => { successEl.style.display = 'none'; }, 2000);
   }
 }
 
@@ -182,7 +183,7 @@ function showPage(page) {
 }
 
 function goToSignIn() {
-  clearAuthForm();
+  clearAuthForm('signin');
   showPage('signin');
 }
 
@@ -191,12 +192,16 @@ function goToSignUp() {
   showPage('signup');
 }
 
-function clearAuthForm() {
-  document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]').forEach(input => {
+function clearAuthForm(page) {
+  const pageEl = document.querySelector(`[data-auth-page="${page}"]`);
+  if (!pageEl) return;
+  pageEl.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]').forEach(input => {
     input.value = '';
   });
-  const errorEl = document.getElementById('auth-error');
+  const errorEl = document.getElementById(page + '-error');
   if (errorEl) errorEl.style.display = 'none';
+  const successEl = document.getElementById(page + '-success');
+  if (successEl) successEl.style.display = 'none';
 }
 
 function showMainApp() {
@@ -207,7 +212,8 @@ function showMainApp() {
     authContainer.style.display = 'none';
   }
   if (mainApp) {
-    mainApp.style.display = 'flex';
+    mainApp.style.display = 'block';
+    mainApp.style.visibility = 'visible';
   }
 
   // Update UI with user info
@@ -216,12 +222,11 @@ function showMainApp() {
     document.getElementById('user-name').textContent = session.fullName;
   }
 
-  // Initialize the home tab (wait for DOM to be ready)
-  setTimeout(() => {
-    if (typeof goTab === 'function') {
-      goTab('home');
-    }
-  }, 100);
+  if (typeof goTab === 'function') {
+    goTab('home');
+  } else {
+    document.addEventListener('DOMContentLoaded', () => goTab('home'));
+  }
 }
 
 /* ── INIT ────────────────────────────────────────────────────────── */
@@ -229,7 +234,6 @@ function initAuth() {
   initUsers();
 
   if (isLoggedIn()) {
-    // Set app.js flag that user is signed in
     if (typeof window !== 'undefined') {
       window.isSignedUp = true;
       const session = getSession();

@@ -22,8 +22,8 @@
         <p class="auth-subtitle">Sign in to your account</p>
       </div>
 
-      <div id="auth-error"></div>
-      <div id="auth-success"></div>
+      <div id="signin-error"></div>
+      <div id="signin-success"></div>
 
       <form class="auth-form" onsubmit="event.preventDefault(); logIn();">
         <div class="auth-input-group">
@@ -63,8 +63,8 @@
         <p class="auth-subtitle">Start your mental health journey</p>
       </div>
 
-      <div id="auth-error"></div>
-      <div id="auth-success"></div>
+      <div id="signup-error"></div>
+      <div id="signup-success"></div>
 
       <form class="auth-form" onsubmit="event.preventDefault(); signUp();">
         <div class="auth-input-group">
@@ -289,7 +289,7 @@
 
     <section id="quotes-section" class="quotes-panel">
       <div class="sec-header">
-        <div class="sec-eyebrow" id="q-eye">Daily Inspiration</div>
+        <div class="sec-eyebrow" id="home-q-eye">Daily Inspiration</div>
         <div class="sec-title"   id="quotes-title">Motivational Quotes</div>
         <div class="sec-sub"     id="quotes-sub">Browse encouraging quotes by category.</div>
       </div>
@@ -413,8 +413,8 @@
 
     <!-- View toggle -->
     <div class="view-toggle">
-      <button class="vp-btn active" id="vplist" onclick="setView('list')" id="vplist">List</button>
-      <button class="vp-btn"        id="vpmap"  onclick="setView('map')"  id="vpmap">Map</button>
+      <button class="vp-btn active" id="vplist" onclick="setView('list')">List</button>
+      <button class="vp-btn"        id="vpmap"  onclick="setView('map')">Map</button>
     </div>
 
     <!-- Count -->
@@ -574,7 +574,7 @@
 
 <!-- ── PRINT ZONE (hidden, shown only on print) ─────────────────── -->
 <div id="print-zone">
-  <div class="print-logo">MindCare PP</div>
+  <div class="print-logo">YOUR HOPE</div>
   <div class="print-meta" id="pm-meta">DASS-21 Screening Results</div>
   <div id="print-content"></div>
   <div class="print-footer">
