@@ -405,7 +405,7 @@ body::before {
   font-size: 13px; color: #5A3A1A; line-height: 1.7;
   display: flex; gap: 12px; align-items: flex-start;
 }
-.disclaimer-box::before { content: '⚠️';
+.disclaimer-box::before { content: '⚠️'; }
 
 
 /* ── SECTION HEADERS ── */

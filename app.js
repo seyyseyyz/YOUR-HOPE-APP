@@ -492,7 +492,7 @@ async function sendChat() {
 /* ── PDF EXPORT ─────────────────────────────────────────────────── */
 function printResults() {
   if (!lastRes) {
-    alert(curLang === 'km' ? 'សូមធ្វើតេស្តមុន' : 'Please complete the DASS-21 test first.');
+    alert(curLang === 'kh' ? 'សូមធ្វើតេស្តមុន' : 'Please complete the DASS-21 test first.');
     goTab('test');
     return;
   }
