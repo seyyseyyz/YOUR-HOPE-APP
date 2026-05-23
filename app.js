@@ -448,7 +448,10 @@ async function sendChat() {
   btn.disabled = true;
 
   // Render user bubble
-  area.innerHTML += `<div class="msg msg-user">${msg}</div>`;
+  const userBubble = document.createElement('div');
+  userBubble.className = 'msg msg-user';
+  userBubble.textContent = msg;
+  area.appendChild(userBubble);
 
   // Typing indicator
   const typing = document.createElement('div');

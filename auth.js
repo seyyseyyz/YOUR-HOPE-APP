@@ -7,6 +7,14 @@
 const STORAGE_KEY = 'hope_users';
 const SESSION_KEY = 'hope_session';
 
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 // Initialize users database
 function initUsers() {
   if (!localStorage.getItem(STORAGE_KEY)) {
@@ -26,7 +34,7 @@ function saveAllUsers(users) {
 }
 
 /* ── SIGN UP ────────────────────────────────────────────────────── */
-function signUp() {
+async function signUp() {
   const fullName = document.getElementById('signup-name').value.trim();
   const email = document.getElementById('signup-email').value.trim();
   const password = document.getElementById('signup-password').value;
@@ -83,7 +91,7 @@ function signUp() {
 }
 
 /* ── SIGN IN ────────────────────────────────────────────────────── */
-function logIn(email, password) {
+async function logIn(email, password) {
   email = email || document.getElementById('signin-email').value.trim();
   password = password || document.getElementById('signin-password').value;
 
