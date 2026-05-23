@@ -496,7 +496,6 @@ const T = {
     hc3l:'AI Chat', hc3t:'AI Support', hc3d:'Ask questions, understand your results, find help', hc3b:'Chat now →',
     hc4l:'Export', hc4t:'Print Results', hc4d:"Save your DASS-21 PDF to share with your doctor", hc4b:'Export PDF →',
     hc5l:'Quotes', hc5t:'Daily Inspiration', hc5d:'Browse categorized quotes for hope, strength, and calm.', hc5b:'View quotes →',
-    qEye:'Daily Inspiration', qTitle:'Motivational Quotes', qSub:'Browse encouraging quotes by category.',
     hDisc:'This app is for informational purposes only. The DASS-21 is a validated screening tool, not a clinical diagnosis. If you are in crisis, please contact a healthcare professional immediately.',
     tEye:'Mental Health Screening', tTitle:'DASS-21 Assessment', tSub:'21 items measuring Depression, Anxiety and Stress over the past week. Takes about 5 minutes.',
     tScaleTitle:'Rating scale',
@@ -552,7 +551,6 @@ const T = {
     av1Name:'Privacy First', av1Desc:'Your data is sacred. We never store or share your personal information.',
     av2Name:'Evidence-Based', av2Desc:'We use validated screening tools like DASS-21 trusted by professionals worldwide.',
     av3Name:'Community-Focused', av3Desc:'We partner with local clinics and services to support your mental health journey.',
-    pmMeta:'DASS-21 Screening Results', pScore:'Score', pLevel:'Level', pDep:'Depression', pAnx:'Anxiety', pStr:'Stress',
   },
   kh: {
     brandName:'ក្តីសង្ឈឹមរបស់អ្នក', brandTag:'សុខភាពផ្លូវចិត្ត ភ្នំពេញ',
@@ -564,7 +562,6 @@ const T = {
     hc3l:'AI', hc3t:'ជំនួយ AI', hc3d:'សួរអំពីសុខភាពផ្លូវចិត្ត ហើយទទួលបានការគាំទ្រ', hc3b:'ជជែកឥឡូវ →',
     hc4l:'នាំចេញ', hc4t:'បោះពុម្ពលទ្ធផល', hc4d:'រក្សាទុក PDF ដើម្បីចែករំលែកជាមួយវេជ្ជបណ្ឌិត', hc4b:'នាំចេញ PDF →',
     hc5l:'ពាក្យសុបិន្ត', hc5t:'ការលើកទឹកចិត្តប្រចាំថ្ងៃ', hc5d:'ស្វែងរកសមេដ្ឋានតាមប្រភេទសម្រាប់សង្ឃឹម ភាពរឹងមាំ និងការស្ងប់ស្ងាត់។', hc5b:'មើលពាក្យ →',
-    qEye:'ការលើកទឹកចិត្តប្រចាំថ្ងៃ', qTitle:'ពាក្យលើកទឹកចិត្ត', qSub:'ស្វែងរកពាក្យលើកទឹកចិត្តតាមប្រភេទ។',
     hDisc:'កម្មវិធីនេះសម្រាប់ជាព័ត៌មានប៉ុណ្ណោះ។ DASS-21 គឺជាឧបករណ៍ស្ទង់មតិ មិនមែនការធ្វើរោគវិនិច្ឆ័យ។',
     tEye:'ការស្ទង់មតិសុខភាពផ្លូវចិត្ត', tTitle:'ការវាយតម្លៃ DASS-21', tSub:'២១ ចំណុចដែលវាស់ស្ទង់ការធ្លាក់ទឹកចិត្ត ការថប់បារម្ភ និងភាពតានតឹង រយៈពេល ~៥ នាទី។',
     tScaleTitle:'ស្កែលវាយតម្លៃ',
@@ -602,7 +599,6 @@ const T = {
     av1Name:'ភាពឯកជនមុន', av1Desc:'ទិន្នន័យរបស់អ្នកគឺពិសិដ្ឋ។ យើងមិនដែលរក្សាទុក ឬចែករំលែកព័ត៌មានផ្ទាល់ខ្លួនរបស់អ្នកទេ។',
     av2Name:'ផ្អែកលើភស្តុតាង', av2Desc:'យើងប្រើឧបករណ៍ស្ទង់មតិដែលបានផ្ទៀងផ្ទាត់ដូចជា DASS-21 ដែលទុកចិត្តដោយអ្នកជំនាញទូទាំងពិភពលោក។',
     av3Name:'ផ្តោតលើសហគមន៍', av3Desc:'យើងសហការជាមួយគ្លីនិក និងសេវាកម្មក្នុងស្រុកដើម្បីគាំទ្រដំណើរសុខភាពផ្លូវចិត្តរបស់អ្នក។',
-    pmMeta:'លទ្ធផល DASS-21', pScore:'ពិន្ទុ', pLevel:'កម្រិត', pDep:'ធ្លាក់ទឹកចិត្ត', pAnx:'ការថប់បារម្ភ', pStr:'ភាពតានតឹង',
     // Auth translations
     authTitle:'បង្កើតគណនី', authSubtitle:'សូមស្វាគមន៍មក', authLabelName:'ឈ្មោះពេញលេញ',
     authLabelEmail:'អ៊ីមែល', authLabelPassword:'ពាក្យសម្ងាត់', authLabelConfirm:'បញ្ជាក់ពាក្យសម្ងាត់',

@@ -69,8 +69,10 @@ function applyLang() {
   // Chat
   sid('c-eye', t.cEye); sid('c-title', t.cTitle); sid('c-sub', t.cSub); sid('c-disc', t.cDisc);
   // Quotes
-  sid('q-eye',      t.qEye); sid('q-title', t.qTitle); sid('q-sub', t.qSub);
-  sid('home-q-eye', t.qEye);
+  sid('q-eye',           t.qEye);  sid('q-title', t.qTitle); sid('q-sub', t.qSub);
+  sid('home-q-eye',      t.qEye);
+  sid('home-quotes-title', t.qTitle);
+  sid('home-quotes-sub',   t.qSub);
   // Nav
   sid('nav-home', t.navHome); sid('nav-test', t.navTest);
   sid('nav-services', t.navServices); sid('nav-quotes', t.navQuotes); sid('nav-chat', t.navChat);
@@ -533,7 +535,12 @@ function printResults() {
 let activeQuoteCategory = 'all';
 
 function renderQuotes() {
-  const container = document.getElementById('quotes-container');
+  renderQuotesTo('quotes-container');
+  renderQuotesTo('quotes-grid');
+}
+
+function renderQuotesTo(containerId) {
+  const container = document.getElementById(containerId);
   if (!container) return;
   container.innerHTML = '';
   const categories = QUOTES[curLang];
@@ -549,13 +556,15 @@ function renderQuotes() {
 }
 
 function renderQuoteFilters() {
-  const filtersEl = document.getElementById('quotes-filters');
-  if (!filtersEl) return;
-  filtersEl.innerHTML = QUOTE_CATEGORIES.map(cat => `
-    <button class="chip ${activeQuoteCategory === cat.key ? 'active' : ''}"
-      onclick="setQuoteCategory('${cat.key}')">
-      ${curLang === 'kh' ? cat.kh : cat.eng}
-    </button>`).join('');
+  ['quotes-filters', 'home-quotes-filters'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = QUOTE_CATEGORIES.map(cat => `
+      <button class="chip ${activeQuoteCategory === cat.key ? 'active' : ''}"
+        onclick="setQuoteCategory('${cat.key}')">
+        ${curLang === 'kh' ? cat.kh : cat.eng}
+      </button>`).join('');
+  });
 }
 
 function setQuoteCategory(key) {
@@ -567,3 +576,4 @@ function setQuoteCategory(key) {
 /* ── INIT ───────────────────────────────────────────────────────── */
 buildChips();
 renderClinics(CLINICS);
+renderQuotes();
