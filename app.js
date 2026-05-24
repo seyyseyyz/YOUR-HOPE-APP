@@ -467,7 +467,7 @@ async function sendChat() {
     : 'User has not completed the DASS-21 test yet.';
 
   // ── PASTE GEMINI KEY HERE ──
-  const GEMINI_KEY = 'AIzaSyAIdB8rpqL92K0doI9NEQql2gNTJwEpYT4';
+  const GEMINI_KEY = localStorage.getItem('gemini_key') || '';
 
   try {
     const r = await fetch(
@@ -595,6 +595,14 @@ function setQuoteCategory(key) {
 }
 
 /* ── INIT ───────────────────────────────────────────────────────── */
-buildChips();
-renderClinics(CLINICS);
-renderQuotes();
+document.addEventListener('DOMContentLoaded', () => {
+  buildChips();
+  renderClinics(CLINICS);
+  renderQuotes();
+  renderQuoteFilters();
+});
+
+if (!localStorage.getItem('gemini_key')) {
+  const key = prompt('Enter your Gemini API key to enable AI chat:');
+  if (key) localStorage.setItem('gemini_key', key.trim());
+}
