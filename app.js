@@ -466,7 +466,7 @@ async function sendChat() {
     ? `The user completed DASS-21: Depression=${lastRes.dS}(${lastRes.dL}), Anxiety=${lastRes.aS}(${lastRes.aL}), Stress=${lastRes.sS}(${lastRes.sL}).`
     : 'User has not completed the DASS-21 test yet.';
 
-  // ── PASTE YOUR GEMINI KEY HERE ──
+  // ── PASTE GEMINI KEY HERE ──
   const GEMINI_KEY = 'AIzaSyAIdB8rpqL92K0doI9NEQql2gNTJwEpYT4';
 
   try {
