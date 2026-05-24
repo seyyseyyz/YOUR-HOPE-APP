@@ -401,9 +401,9 @@ function buildChips() {
 function scrollToQuotes() {
   goTab('home');
   setTimeout(() => {
-    const section = document.getElementById('quotes-section');
-    if (section) section.scrollIntoView({ behavior: 'smooth' });
-  }, 100);
+  const section = document.getElementById('quotes-section');
+  if (section) section.scrollIntoView({ behavior: 'smooth' });
+  }, 350);
 }
 
 function showAuthPrompt(tab) {
@@ -469,14 +469,15 @@ async function sendChat() {
   typing.textContent = 'Thinking…';
   area.appendChild(typing);
   area.scrollTop = area.scrollHeight;
-
+  
+  if (chatHist.length > 20) chatHist.splice(0, chatHist.length - 20);
   chatHist.push({ role: 'user', content: msg });
 
   const ctx = lastRes
     ? `The user completed DASS-21: Depression=${lastRes.dS}(${lastRes.dL}), Anxiety=${lastRes.aS}(${lastRes.aL}), Stress=${lastRes.sS}(${lastRes.sL}).`
     : 'User has not completed the DASS-21 test yet.';
 
-  const GEMINI_KEY = 'AIzaSyAVDbng0gewI-UUTiF4r5ka4ww1YzQbQZI';
+  const GEMINI_KEY = localStorage.getItem('gemini_key');
 
   try {
     const r = await fetch(
@@ -591,7 +592,7 @@ function renderQuoteFilters() {
     if (!el) return;
     el.innerHTML = QUOTE_CATEGORIES.map(cat => `
       <button class="chip ${activeQuoteCategory === cat.key ? 'active' : ''}"
-        onclick="setQuoteCatego===-ry('${cat.key}')">
+        onclick="setQuoteCategory('${cat.key}')">
         ${curLang === 'kh' ? cat.kh : cat.eng}
       </button>`).join('');
   });

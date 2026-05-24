@@ -143,10 +143,10 @@ function isLoggedIn() {
 }
 
 /* ── UI HELPERS ────────────────────────────────────────────────────── */
+let currentAuthPage = 'signin';
+
 function showAuthError(message) {
-  const activePage = document.querySelector('[data-auth-page][style*="flex"]');
-  const targetId = activePage?.dataset.authPage === 'signup' ? 'signup-error' : 'signin-error';
-  const errorEl = document.getElementById(targetId);
+  const errorEl = document.getElementById(currentAuthPage + '-error');
   if (errorEl) {
     errorEl.textContent = message;
     errorEl.style.display = 'block';
@@ -155,9 +155,7 @@ function showAuthError(message) {
 }
 
 function showAuthSuccess(message) {
-  const activePage = document.querySelector('[data-auth-page][style*="flex"]');
-  const targetId = activePage?.dataset.authPage === 'signup' ? 'signup-success' : 'signin-success';
-  const successEl = document.getElementById(targetId);
+  const successEl = document.getElementById(currentAuthPage + '-success');
   if (successEl) {
     successEl.textContent = message;
     successEl.style.display = 'block';
@@ -181,6 +179,7 @@ function togglePasswordVisibility(inputId) {
 
 /* ── PAGE SWITCHING ────────────────────────────────────────────────── */
 function showPage(page) {
+  currentAuthPage = page;
   document.querySelectorAll('[data-auth-page]').forEach(el => {
     el.style.display = 'none';
   });
@@ -196,7 +195,7 @@ function goToSignIn() {
 }
 
 function goToSignUp() {
-  clearAuthForm();
+  clearAuthForm('signup');
   showPage('signup');
 }
 
