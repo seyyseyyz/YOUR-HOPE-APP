@@ -220,7 +220,6 @@ function showMainApp() {
   }
   if (mainApp) {
     mainApp.style.display = 'block';
-    mainApp.style.visibility = 'visible';
   }
 
   // Update UI with user info

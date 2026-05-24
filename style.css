@@ -1660,5 +1660,4 @@ body::before {
 /* Main app hidden initially */
 .app {
   display: none;
-  visibility: hidden;
 }
