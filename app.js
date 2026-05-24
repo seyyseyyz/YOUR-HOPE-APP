@@ -476,7 +476,7 @@ async function sendChat() {
     ? `The user completed DASS-21: Depression=${lastRes.dS}(${lastRes.dL}), Anxiety=${lastRes.aS}(${lastRes.aL}), Stress=${lastRes.sS}(${lastRes.sL}).`
     : 'User has not completed the DASS-21 test yet.';
 
-  const GEMINI_KEY = localStorage.getItem('gemini_key');
+  const GEMINI_KEY = 'AIzaSyAVDbng0gewI-UUTiF4r5ka4ww1YzQbQZI';
 
   try {
     const r = await fetch(
