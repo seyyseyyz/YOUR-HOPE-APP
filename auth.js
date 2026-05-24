@@ -126,11 +126,18 @@ async function logIn(email, password) {
 
 /* ── SIGN OUT ────────────────────────────────────────────────────── */
 function signOut() {
-  if (confirm('Are you sure you want to sign out?')) {
-    localStorage.removeItem(SESSION_KEY);
-    localStorage.removeItem('yourHopeUser');
-    location.reload();
-  }
+  const modal = document.getElementById('signout-modal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function confirmSignOut() {
+  localStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+function cancelSignOut() {
+  const modal = document.getElementById('signout-modal');
+  if (modal) modal.style.display = 'none';
 }
 
 /* ── SESSION CHECK ────────────────────────────────────────────────── */
