@@ -447,7 +447,7 @@ async function sendChat() {
   const btn  = document.getElementById('send-btn');
   btn.disabled = true;
 
-  // Render user bubble
+  // Render user bubble safely
   const userBubble = document.createElement('div');
   userBubble.className = 'msg msg-user';
   userBubble.textContent = msg;
@@ -466,28 +466,46 @@ async function sendChat() {
     ? `The user completed DASS-21: Depression=${lastRes.dS}(${lastRes.dL}), Anxiety=${lastRes.aS}(${lastRes.aL}), Stress=${lastRes.sS}(${lastRes.sL}).`
     : 'User has not completed the DASS-21 test yet.';
 
+  // ── PASTE YOUR GEMINI KEY HERE ──
+  const GEMINI_KEY = 'AIzaSyAIdB8rpqL92K0doI9NEQql2gNTJwEpYT4';
+
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model:      'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `You are a compassionate mental health support assistant for an app called MindCare PP in Phnom Penh, Cambodia. Help users understand mental health, interpret DASS-21 results, and find local services. Be warm, empathetic, concise (2-4 sentences). Never diagnose. Always recommend professional help for serious concerns. ${ctx} Respond in the same language as the user.`,
-        messages: chatHist,
-      }),
-    });
+    const r = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{
+              text: `You are a compassionate mental health support assistant for an app called YOUR HOPE in Phnom Penh, Cambodia. Help users understand mental health, interpret DASS-21 results, and find local services. Be warm, empathetic, and concise (2-4 sentences). Never diagnose. Always recommend professional help for serious concerns. ${ctx} Respond in the same language as the user.`
+            }]
+          },
+          contents: chatHist.map(m => ({
+            role: m.role === 'assistant' ? 'model' : 'user',
+            parts: [{ text: m.content }]
+          })),
+          generationConfig: {
+            maxOutputTokens: 1000,
+            temperature: 0.7,
+          }
+        }),
+      }
+    );
 
     const d     = await r.json();
-    const reply = d.content?.map(i => i.text || '').join('') || 'Sorry, I could not process that. Please try again.';
+    const reply = d.candidates?.[0]?.content?.parts?.[0]?.text
+      || 'Sorry, I could not process that. Please try again.';
+
     chatHist.push({ role: 'assistant', content: reply });
     typing.className   = 'msg msg-ai';
     typing.textContent = reply;
+
   } catch (err) {
     typing.className   = 'msg msg-ai';
     typing.textContent = curLang === 'kh'
-      ? 'មុខងារ AI ត្រូវការអ៊ីនធឺណិត និង API Key។ នេះជាកំណែបង្ហាញ។'
-      : 'AI feature requires API connection. This is a demo version.';
+      ? 'មុខងារ AI ត្រូវការអ៊ីនធឺណិត។ សូមព្យាយាមម្តងទៀត។'
+      : 'AI feature requires internet connection. Please try again.';
   }
 
   btn.disabled   = false;
