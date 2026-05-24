@@ -78,7 +78,7 @@ async function signUp() {
   users[email] = {
     fullName: fullName,
     email: email,
-    password: btoa(password),
+    password: await hashPassword(password),
     createdAt: new Date().toISOString()
   };
 
@@ -103,7 +103,7 @@ async function logIn(email, password) {
 
   // Find user
   const users = getAllUsers();
-  if (!users[email] || users[email].password !== btoa(password)) {
+  if (!users[email] || users[email].password !== await hashPassword(password)) {
     showAuthError('Invalid email or password');
     return;
   }
