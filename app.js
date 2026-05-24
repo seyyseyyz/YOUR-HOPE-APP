@@ -8,19 +8,19 @@
 let curLang = 'eng';   // 'eng' | 'kh'
 let curPage = 0;      // current question page (0–2, 7 questions each)
 let curView = 'list'; // 'list' | 'map'
-let isSignedUp = false; // track sign-up status
-let userInfo = null;  // store user data
-let ANS      = {};  // { questionId: 0|1|2|3 }
+let isSignedUp = false;
+let userInfo = null;
+let ANS = {};
 const chatHist = [];  // Anthropic messages array
 let lastRes    = null;   // last computed DASS-21 result
 let displayed  = [...CLINICS]; // currently visible clinics
 
-// Check if user is logged in via auth system
-if (typeof getSession === 'function' && getSession()) {
-  isSignedUp = true;
-  const session = getSession();
-  userInfo = session;
-}
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof getSession === 'function' && getSession()) {
+    isSignedUp = true;
+    userInfo = getSession();
+  }
+});
 
 /* ── LANGUAGE ───────────────────────────────────────────────────── */
 function setLang(l) {
