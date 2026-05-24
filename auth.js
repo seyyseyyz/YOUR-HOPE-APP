@@ -35,6 +35,7 @@ function saveAllUsers(users) {
 
 /* ── SIGN UP ────────────────────────────────────────────────────── */
 async function signUp() {
+  currentAuthPage = 'signup';
   const fullName = document.getElementById('signup-name').value.trim();
   const email = document.getElementById('signup-email').value.trim();
   const password = document.getElementById('signup-password').value;
