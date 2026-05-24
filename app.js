@@ -438,15 +438,7 @@ function useChip(t) {
 }
 
 async function sendChat() {
-  // Check for API key first, prompt if missing
-  if (!localStorage.getItem('gemini_key')) {
-    const key = prompt('Enter your Gemini API key to enable AI chat:');
-    if (key) {
-      localStorage.setItem('gemini_key', key.trim());
-    } else {
-      return; // user cancelled, stop here
-    }
-  }
+}
 
   const inp = document.getElementById('chat-inp');
   const msg = inp.value.trim();
@@ -477,7 +469,7 @@ async function sendChat() {
     ? `The user completed DASS-21: Depression=${lastRes.dS}(${lastRes.dL}), Anxiety=${lastRes.aS}(${lastRes.aL}), Stress=${lastRes.sS}(${lastRes.sL}).`
     : 'User has not completed the DASS-21 test yet.';
 
-  const GEMINI_KEY = localStorage.getItem('gemini_key');
+  const GEMINI_KEY = CONFIG.geminiKey;
 
   try {
     const r = await fetch(
