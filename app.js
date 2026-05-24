@@ -582,7 +582,7 @@ function renderQuoteFilters() {
     if (!el) return;
     el.innerHTML = QUOTE_CATEGORIES.map(cat => `
       <button class="chip ${activeQuoteCategory === cat.key ? 'active' : ''}"
-        onclick="setQuoteCategory('${cat.key}')">
+        onclick="setQuoteCatego===-ry('${cat.key}')">
         ${curLang === 'kh' ? cat.kh : cat.eng}
       </button>`).join('');
   });
