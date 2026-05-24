@@ -438,7 +438,6 @@ function useChip(t) {
 }
 
 async function sendChat() {
-}
 
   const inp = document.getElementById('chat-inp');
   const msg = inp.value.trim();
