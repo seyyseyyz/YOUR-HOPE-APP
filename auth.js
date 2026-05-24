@@ -93,6 +93,7 @@ async function signUp() {
 
 /* ── SIGN IN ────────────────────────────────────────────────────── */
 async function logIn(email, password) {
+  currentAuthPage = 'signin';
   email = email || document.getElementById('signin-email').value.trim();
   password = password || document.getElementById('signin-password').value;
 
