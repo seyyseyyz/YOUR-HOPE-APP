@@ -571,41 +571,349 @@ async function sendChat() {
 }
 
 /* ── PDF EXPORT ─────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════
+   YOUR HOPE — printResults() replacement
+   INSTRUCTIONS:
+     1. Open your app.js
+     2. Find the entire printResults() function (lines ~574–607)
+     3. DELETE it completely
+     4. PASTE this entire file content in its place
+   ═══════════════════════════════════════════════════════════════════ */
+
 function printResults() {
   if (!lastRes) {
     alert(curLang === 'kh' ? 'សូមធ្វើតេស្តមុន' : 'Please complete the DASS-21 test first.');
     goTab('test');
     return;
   }
-  const t      = T[curLang];
-  const colors = {
-    Normal: '#2E7D52', Mild: '#8B6200', Moderate: '#864200',
-    Severe: '#8B1A1A', 'Extremely Severe': '#5E0E0E',
+
+  const t   = T[curLang];
+  const isKh = curLang === 'kh';
+
+  /* ── Colour map ───────────────────────────────────────────────── */
+  const COLORS = {
+    Normal:           { text: '#1a6b3a', bg: '#e8f5ee', badge: '#2E7D52' },
+    Mild:             { text: '#7a5400', bg: '#fff8e1', badge: '#8B6200' },
+    Moderate:         { text: '#7a3a00', bg: '#fff3e0', badge: '#864200' },
+    Severe:           { text: '#7a1a1a', bg: '#ffebee', badge: '#8B1A1A' },
+    'Extremely Severe':{ text: '#500000', bg: '#f9e4e4', badge: '#5E0E0E' },
   };
-  sid('pm-meta', `${t.pmMeta} — ${lastRes.date}`);
-  document.getElementById('print-content').innerHTML = `
-    <table class="print-table">
-      <thead>
-        <tr><th></th><th>${t.pDep}</th><th>${t.pAnx}</th><th>${t.pStr}</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="text-align:left;font-weight:600">${t.pScore}</td>
-          <td style="font-size:22px;font-weight:700;color:${colors[lastRes.dL]}">${lastRes.dS}</td>
-          <td style="font-size:22px;font-weight:700;color:${colors[lastRes.aL]}">${lastRes.aS}</td>
-          <td style="font-size:22px;font-weight:700;color:${colors[lastRes.sL]}">${lastRes.sS}</td>
-        </tr>
-        <tr>
-          <td style="text-align:left;font-weight:600">${t.pLevel}</td>
-          <td style="color:${colors[lastRes.dL]};font-weight:600">${t.lvLabels[lastRes.dL]}</td>
-          <td style="color:${colors[lastRes.aL]};font-weight:600">${t.lvLabels[lastRes.aL]}</td>
-          <td style="color:${colors[lastRes.sL]};font-weight:600">${t.lvLabels[lastRes.sL]}</td>
-        </tr>
-      </tbody>
-    </table>
-    <p style="font-size:12px;color:#666;margin-top:8px">
-      DASS-21 Cutoffs: Depression Normal ≤9 · Anxiety Normal ≤7 · Stress Normal ≤14
-    </p>`;
+
+  /* ── User info ───────────────────────────────────────────────── */
+  const session   = (typeof getSession === 'function') ? getSession() : null;
+  const userName  = session?.full_name || session?.fullName || '—';
+  const userEmail = session?.email || '—';
+  const userId    = session?.user_id  || session?.userId   || '—';
+  const testDate  = new Date().toLocaleDateString(
+    isKh ? 'km-KH' : 'en-GB',
+    { year: 'numeric', month: 'long', day: 'numeric' }
+  );
+  const testTime  = new Date().toLocaleTimeString(
+    isKh ? 'km-KH' : 'en-GB',
+    { hour: '2-digit', minute: '2-digit' }
+  );
+
+  /* ── Labels (bilingual) ──────────────────────────────────────── */
+  const LBL = {
+    title:       isKh ? 'លទ្ធផលការវាយតម្លៃ DASS-21'          : 'DASS-21 Assessment Results',
+    subtitle:    isKh ? 'ការវាយតម្លៃសុខភាពផ្លូវចិត្ត'         : 'Mental Health Screening',
+    name:        isKh ? 'ឈ្មោះ'                               : 'Name',
+    email:       isKh ? 'អ៊ីមែល'                              : 'Email',
+    id:          isKh ? 'លេខសម្គាល់អ្នកប្រើ'                  : 'User ID',
+    date:        isKh ? 'កាលបរិច្ឆេទ'                         : 'Date',
+    time:        isKh ? 'ម៉ោង'                                 : 'Time',
+    section1:    isKh ? 'ពិន្ទុការវាយតម្លៃ'                    : 'Assessment Scores',
+    dep:         isKh ? 'ធ្លាក់ទឹកចិត្ត'                       : 'Depression',
+    anx:         isKh ? 'ការថប់បារម្ភ'                         : 'Anxiety',
+    str:         isKh ? 'ភាពតានតឹង'                           : 'Stress',
+    score:       isKh ? 'ពិន្ទុ'                               : 'Score',
+    level:       isKh ? 'កម្រិត'                               : 'Level',
+    section2:    isKh ? 'ព័ត៌មានលម្អិតតាម척度'                  : 'Scale Breakdown',
+    cutoffs:     isKh
+      ? 'ចំណុចកាត់ DASS-21: ធ្លាក់ទឹកចិត្ត ធម្មតា ≤9 · ការថប់បារម្ភ ធម្មតា ≤7 · ភាពតានតឹង ធម្មតា ≤14'
+      : 'DASS-21 Cutoffs: Depression Normal ≤9 · Anxiety Normal ≤7 · Stress Normal ≤14',
+    section3:    isKh ? 'អនុសាសន៍'                             : 'Recommendations',
+    disclaimer:  isKh
+      ? 'នេះគឺជាឧបករណ៍ការស្ទង់មតិប៉ុណ្ណោះ — វាមិនមែនជាការធ្វើរោគវិនិច្ឆ័យតាមគ្លីនិកឡើយ។ សូមពិគ្រោះជាមួយអ្នកជំនាញសុខភាពផ្លូវចិត្ត។'
+      : 'This is a validated screening tool only — it does not constitute a clinical diagnosis. Please consult a qualified mental health professional for assessment and treatment.',
+    ref:         isKh
+      ? 'ឯកសារយោង: Lovibond, S.H. & Lovibond, P.F. (1995). Manual for the Depression Anxiety & Stress Scales. (2nd Ed.) Sydney: Psychology Foundation.'
+      : 'Reference: Lovibond, S.H. & Lovibond, P.F. (1995). Manual for the Depression Anxiety & Stress Scales. (2nd Ed.) Sydney: Psychology Foundation.',
+    normal:      isKh ? 'ធម្មតា'       : 'Normal',
+    mild:        isKh ? 'តិចតួច'      : 'Mild',
+    moderate:    isKh ? 'មធ្យម'        : 'Moderate',
+    severe:      isKh ? 'ធ្ងន់'        : 'Severe',
+    extSevere:   isKh ? 'ធ្ងន់ណាស់'   : 'Extremely Severe',
+    overallTitle:isKh ? 'ការវាយតម្លៃរួម'                     : 'Overall Assessment',
+    worstLabel:  isKh ? 'កម្រិតអាក្រក់បំផុត'                 : 'Worst Level',
+    appName:     'YOUR HOPE',
+    appTag:      isKh ? 'ជំនួយសុខភាពផ្លូវចិត្ត ·ភ្នំពេញ'    : 'Mental Health Support · Phnom Penh',
+    pageOf:      isKh ? 'ទំព័រ'                              : 'Page',
+  };
+
+  /* ── Worst level ─────────────────────────────────────────────── */
+  const ORDER = ['Normal','Mild','Moderate','Severe','Extremely Severe'];
+  const worst = [lastRes.dL, lastRes.aL, lastRes.sL]
+    .sort((a, b) => ORDER.indexOf(b) - ORDER.indexOf(a))[0];
+  const worstCol = COLORS[worst];
+
+  /* ── Recommendation ─────────────────────────────────────────── */
+  const rec = RECOMMENDATIONS[worst];
+
+  /* ── Helper: level badge HTML ───────────────────────────────── */
+  const badge = (level) => {
+    const c = COLORS[level];
+    const labelMap = {
+      Normal: LBL.normal, Mild: LBL.mild, Moderate: LBL.moderate,
+      Severe: LBL.severe, 'Extremely Severe': LBL.extSevere,
+    };
+    return `<span style="
+      display:inline-block;
+      background:${c.bg};
+      color:${c.text};
+      border:1px solid ${c.badge}40;
+      font-size:11px;font-weight:700;
+      padding:3px 10px;border-radius:20px;
+      letter-spacing:.3px;
+    ">${labelMap[level]}</span>`;
+  };
+
+  /* ── Score bar HTML ─────────────────────────────────────────── */
+  const bar = (score, maxScore, level) => {
+    const pct = Math.round((score / maxScore) * 100);
+    const c   = COLORS[level];
+    return `
+      <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+        <div style="flex:1;height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;">
+          <div style="width:${pct}%;height:100%;background:${c.badge};border-radius:4px;"></div>
+        </div>
+        <span style="font-size:11px;color:#888;min-width:32px;text-align:right">${score}/42</span>
+      </div>`;
+  };
+
+  /* ── Tips list ──────────────────────────────────────────────── */
+  const tips = rec
+    ? rec.tips[curLang].map(tip =>
+        `<li style="margin-bottom:5px;line-height:1.5">${tip}</li>`
+      ).join('')
+    : '';
+
+  /* ── Overall status icon ────────────────────────────────────── */
+  const statusIcon = ORDER.indexOf(worst) <= 0 ? '💚'
+                   : ORDER.indexOf(worst) <= 1 ? '💛'
+                   : ORDER.indexOf(worst) <= 2 ? '🟠'
+                   : '🔴';
+
+  /* ── Build full print HTML ───────────────────────────────────── */
+  const html = `
+    <!-- HEADER BAR -->
+    <div style="
+      background: linear-gradient(135deg, #1e4d35 0%, #2c6b4a 50%, #1e4d35 100%);
+      color:#fff; padding:28px 36px 20px; margin-bottom:0;
+      display:flex; justify-content:space-between; align-items:flex-end;
+    ">
+      <div>
+        <div style="font-family:'Georgia',serif;font-size:30px;font-weight:700;letter-spacing:-0.5px;margin-bottom:2px;">
+          ${LBL.appName}
+        </div>
+        <div style="font-size:12px;opacity:.8;letter-spacing:.5px;">${LBL.appTag}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:15px;font-weight:700;margin-bottom:2px;">${LBL.title}</div>
+        <div style="font-size:11px;opacity:.75;">${testDate} · ${testTime}</div>
+      </div>
+    </div>
+
+    <!-- ACCENT LINE -->
+    <div style="height:4px;background:linear-gradient(90deg,#4a9e72,#8bc4a5,#c4a55a,#8bc4a5,#4a9e72);"></div>
+
+    <!-- PATIENT INFO CARD -->
+    <div style="
+      background:#f7fbf8; border:1px solid #d4e8db;
+      border-top:none; padding:16px 36px;
+      display:flex; gap:48px; flex-wrap:wrap;
+    ">
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#6b9e7e;font-weight:600;margin-bottom:2px;">${LBL.name}</div>
+        <div style="font-size:14px;font-weight:700;color:#1a3d2b;">${userName}</div>
+      </div>
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#6b9e7e;font-weight:600;margin-bottom:2px;">${LBL.email}</div>
+        <div style="font-size:14px;color:#1a3d2b;">${userEmail}</div>
+      </div>
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#6b9e7e;font-weight:600;margin-bottom:2px;">${LBL.id}</div>
+        <div style="font-size:14px;color:#1a3d2b;">#${userId}</div>
+      </div>
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#6b9e7e;font-weight:600;margin-bottom:2px;">${LBL.date}</div>
+        <div style="font-size:14px;color:#1a3d2b;">${testDate}</div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <div style="padding:28px 36px; display:flex; gap:24px; flex-wrap:wrap;">
+
+      <!-- LEFT COLUMN -->
+      <div style="flex:1;min-width:260px;">
+
+        <!-- SCORES TABLE -->
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#4a7c6f;font-weight:700;margin-bottom:10px;">
+          ${LBL.section1}
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px;">
+          <thead>
+            <tr style="background:#1e4d35;color:#fff;">
+              <th style="padding:10px 14px;text-align:left;font-weight:600;font-size:12px;border-radius:0;">&nbsp;</th>
+              <th style="padding:10px 14px;text-align:center;font-weight:600;font-size:12px;">${LBL.dep}</th>
+              <th style="padding:10px 14px;text-align:center;font-weight:600;font-size:12px;">${LBL.anx}</th>
+              <th style="padding:10px 14px;text-align:center;font-weight:600;font-size:12px;">${LBL.str}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:#fff;">
+              <td style="padding:12px 14px;font-weight:700;color:#333;border-bottom:1px solid #eee;">${LBL.score}</td>
+              <td style="padding:12px 14px;text-align:center;border-bottom:1px solid #eee;">
+                <span style="font-size:24px;font-weight:800;color:${COLORS[lastRes.dL].badge};">${lastRes.dS}</span>
+              </td>
+              <td style="padding:12px 14px;text-align:center;border-bottom:1px solid #eee;">
+                <span style="font-size:24px;font-weight:800;color:${COLORS[lastRes.aL].badge};">${lastRes.aS}</span>
+              </td>
+              <td style="padding:12px 14px;text-align:center;border-bottom:1px solid #eee;">
+                <span style="font-size:24px;font-weight:800;color:${COLORS[lastRes.sL].badge};">${lastRes.sS}</span>
+              </td>
+            </tr>
+            <tr style="background:#fafafa;">
+              <td style="padding:10px 14px;font-weight:700;color:#333;">${LBL.level}</td>
+              <td style="padding:10px 14px;text-align:center;">${badge(lastRes.dL)}</td>
+              <td style="padding:10px 14px;text-align:center;">${badge(lastRes.aL)}</td>
+              <td style="padding:10px 14px;text-align:center;">${badge(lastRes.sL)}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- SCALE BREAKDOWN BARS -->
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#4a7c6f;font-weight:700;margin-bottom:12px;">
+          ${LBL.section2}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;">
+          ${[
+            { label: LBL.dep, score: lastRes.dS, level: lastRes.dL },
+            { label: LBL.anx, score: lastRes.aS, level: lastRes.aL },
+            { label: LBL.str, score: lastRes.sS, level: lastRes.sL },
+          ].map(x => `
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+                <span style="font-size:12px;font-weight:600;color:#333;">${x.label}</span>
+                ${badge(x.level)}
+              </div>
+              ${bar(x.score, 42, x.level)}
+            </div>`).join('')}
+        </div>
+
+        <!-- CUTOFFS NOTE -->
+        <div style="
+          background:#f0f7f3;border-left:3px solid #4a7c6f;
+          padding:10px 14px;border-radius:0 6px 6px 0;
+          font-size:11px;color:#3d6b55;line-height:1.7;margin-bottom:0;
+        ">
+          ${LBL.cutoffs}
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div style="width:220px;flex-shrink:0;">
+
+        <!-- OVERALL STATUS -->
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#4a7c6f;font-weight:700;margin-bottom:10px;">
+          ${LBL.overallTitle}
+        </div>
+        <div style="
+          background:${worstCol.bg};
+          border:2px solid ${worstCol.badge}40;
+          border-radius:12px; padding:20px 16px; text-align:center;
+          margin-bottom:20px;
+        ">
+          <div style="font-size:32px;margin-bottom:8px;">${statusIcon}</div>
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:${worstCol.text};margin-bottom:4px;">${LBL.worstLabel}</div>
+          <div style="font-size:18px;font-weight:800;color:${worstCol.badge};">
+            ${t.lvLabels[worst]}
+          </div>
+        </div>
+
+        <!-- SCORE REFERENCE TABLE -->
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#4a7c6f;font-weight:700;margin-bottom:8px;">
+          ${isKh ? 'តារាងយោង' : 'Reference Ranges'}
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+          <thead>
+            <tr style="background:#e8f0eb;">
+              <th style="padding:6px 8px;text-align:left;font-weight:600;color:#2c5f3a;">${isKh?'កម្រិត':'Level'}</th>
+              <th style="padding:6px 8px;text-align:center;font-weight:600;color:#2c5f3a;">D</th>
+              <th style="padding:6px 8px;text-align:center;font-weight:600;color:#2c5f3a;">A</th>
+              <th style="padding:6px 8px;text-align:center;font-weight:600;color:#2c5f3a;">S</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${[
+              { label: LBL.normal,    d:'0–9',   a:'0–7',   s:'0–14',  col:'#2E7D52' },
+              { label: LBL.mild,      d:'10–13', a:'8–9',   s:'15–18', col:'#8B6200' },
+              { label: LBL.moderate,  d:'14–20', a:'10–14', s:'19–25', col:'#864200' },
+              { label: LBL.severe,    d:'21–27', a:'15–19', s:'26–33', col:'#8B1A1A' },
+              { label: LBL.extSevere, d:'28+',   a:'20+',   s:'34+',   col:'#5E0E0E' },
+            ].map((row, i) => `
+              <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fbf9'};">
+                <td style="padding:5px 8px;color:${row.col};font-weight:600;">${row.label}</td>
+                <td style="padding:5px 8px;text-align:center;color:#555;">${row.d}</td>
+                <td style="padding:5px 8px;text-align:center;color:#555;">${row.a}</td>
+                <td style="padding:5px 8px;text-align:center;color:#555;">${row.s}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    ${rec ? `
+    <div style="
+      margin:0 36px 28px; padding:20px 24px;
+      background:linear-gradient(135deg,#f4faf7,#fdf9f5);
+      border:1px solid #d4e8db; border-radius:10px;
+      border-left:4px solid ${worstCol.badge};
+    ">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#4a7c6f;font-weight:700;margin-bottom:8px;">
+        ${LBL.section3}
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#1a3d2b;margin-bottom:4px;">
+        ${rec.title[curLang]}
+      </div>
+      <div style="font-size:12px;color:#4a6355;margin-bottom:12px;">
+        ${rec.summary[curLang]}
+      </div>
+      <ul style="margin:0;padding-left:20px;color:#333;font-size:12px;">
+        ${tips}
+      </ul>
+    </div>` : ''}
+
+    <!-- FOOTER -->
+    <div style="
+      margin:0; padding:16px 36px;
+      background:#f7fbf8; border-top:1px solid #d4e8db;
+    ">
+      <p style="font-size:10.5px;color:#555;line-height:1.7;margin:0 0 6px;">
+        ${LBL.disclaimer}
+      </p>
+      <p style="font-size:10px;color:#888;margin:0;">${LBL.ref}</p>
+    </div>
+  `;
+
+  /* ── Inject into print-zone & print ─────────────────────────── */
+  const zone = document.getElementById('print-zone');
+  if (zone) {
+    // Remove old sub-elements — we control everything from here
+    zone.innerHTML = html;
+  }
+
   window.print();
 }
 

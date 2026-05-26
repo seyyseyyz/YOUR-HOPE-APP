@@ -721,21 +721,58 @@ body::before {
 
 /* ══════════════════════════════════════════
    PRINT STYLES
-   ══════════════════════════════════════════ */
-#print-zone { display: none; }
+/* ═══════════════════════════════════════════════════════════════════
+   YOUR HOPE — print styles replacement
+   INSTRUCTIONS:
+     1. Open your style.css
+     2. Find this block (around line 726):
+           #print-zone { display: none; }
+           @media print { ... }
+     3. DELETE that entire block (from #print-zone to the closing })
+     4. PASTE this entire file content in its place
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Hide print zone on screen ─────────────────────────────────── */
+#print-zone {
+  display: none;
+}
+
+/* ── Print media ────────────────────────────────────────────────── */
 @media print {
-  body * { visibility: hidden; }
-  #print-zone, #print-zone * { visibility: visible; }
-  #print-zone {
-    display: block; position: absolute; inset: 0;
-    padding: 32px; font-family: var(--sans);
+
+  /* Hide everything except the print zone */
+  body > * {
+    display: none !important;
   }
-  .print-logo { font-family: var(--serif); font-size: 28px; color: var(--sage-deep); margin-bottom: 6px; }
-  .print-meta { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-  .print-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-  .print-table th { background: var(--sage-deep); color: #fff; padding: 10px; font-size: 13px; text-align: center; }
-  .print-table td { padding: 12px; text-align: center; border: 1px solid #ddd; }
-  .print-footer { font-size: 11px; color: #888; border-top: 1px solid #eee; padding-top: 12px; line-height: 1.7; }
+
+  #print-zone {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Serif', 'Khmer OS', 'Georgia', serif;
+    font-size: 13px;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;       /* force backgrounds + colours to print */
+  }
+
+  /* Page setup */
+  @page {
+    size: A4 portrait;
+    margin: 0;                        /* our own padding is in the HTML */
+  }
+
+  /* No page breaks inside key blocks */
+  #print-zone table,
+  #print-zone ul,
+  #print-zone > div:last-child {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
 }
 
 /* ── RECOMMENDATIONS SECTION ── */
