@@ -221,6 +221,49 @@ function showResults() {
   document.getElementById('pane-results').classList.remove('hidden');
   renderResultsUI(lastRes);
   window.scrollTo(0, 0);
+
+  // ── SAVE TO BACKEND ──────────────────────────────────────────────
+  saveResultToBackend(lastRes);
+}
+
+async function saveResultToBackend(res) {
+  const token = (typeof getToken === 'function') ? getToken() : null;
+  if (!token) return; // not logged in, skip silently
+
+  const answers = QUESTIONS.map(q => ({
+    question_id:  q.id,
+    category:     q.s,
+    answer_value: ANS[q.id] ?? 0
+  }));
+
+  try {
+    const response = await fetch('http://localhost:5001/api/results', {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        depression_score: res.dS,
+        anxiety_score:    res.aS,
+        stress_score:     res.sS,
+        depression_level: res.dL,
+        anxiety_level:    res.aL,
+        stress_level:     res.sL,
+        test_language:    curLang,
+        answers
+      })
+    });
+
+    if (response.ok) {
+      console.log('\u2705 Result saved to database');
+    } else {
+      const err = await response.json();
+      console.warn('\u26a0\ufe0f Could not save result:', err.message);
+    }
+  } catch (error) {
+    console.warn('\u26a0\ufe0f Backend not reachable, result not saved:', error.message);
+  }
 }
 
 function renderResultsUI(res) {
@@ -616,4 +659,3 @@ document.addEventListener('DOMContentLoaded', () => {
   renderQuotes();
   renderQuoteFilters();
 });
-
