@@ -465,58 +465,178 @@
 
   </section><!-- /tab-chat -->
 <!-- ════════════════════════════════════════════
-   
        ABOUT US SCREEN
        ════════════════════════════════════════════ -->
-  <section id="tab-about" class="screen">
+  <section id="tab-about" class="screen about-screen">
 
-    <div class="sec-header">
-      <div class="sec-eyebrow" id="a-eye">About Us</div>
-      <div class="sec-title"   id="a-title">Your HOPE</div>
-      <div class="sec-sub"     id="a-sub">Dedicated to making mental health support accessible to everyone in Phnom Penh</div>
-    </div>
-
-    <!-- Mission section -->
-    <div class="about-section">
-      <div class="about-section-icon">🎯</div>
-      <div class="about-section-title" id="a-mission-title">Our Mission</div>
-      <p class="about-section-text" id="a-mission-text"></p>
-    </div>
-
-    <!-- Vision section -->
-    <div class="about-section">
-      <div class="about-section-icon">🌟</div>
-      <div class="about-section-title" id="a-vision-title">Our Vision</div>
-      <p class="about-section-text" id="a-vision-text"></p>
-    </div>
-
-    <!-- Values section -->
-    <div class="about-section">
-      <div class="about-section-icon">💚</div>
-      <div class="about-section-title" id="a-values-title">Our Values</div>
-      <div class="about-values-list">
-        <div class="about-value">
-          <div class="about-value-icon">🔒</div>
-          <div class="about-value-content">
-            <div class="about-value-name" id="av1-name">Privacy First</div>
-            <div class="about-value-desc" id="av1-desc">Your data is sacred. We never store or share your personal information.</div>
-          </div>
-        </div>
-        <div class="about-value">
-          <div class="about-value-icon">✅</div>
-          <div class="about-value-content">
-            <div class="about-value-name" id="av2-name">Evidence-Based</div>
-            <div class="about-value-desc" id="av2-desc">We use validated screening tools like DASS-21 trusted by professionals worldwide.</div>
-          </div>
-        </div>
-        <div class="about-value">
-          <div class="about-value-icon">🤝</div>
-          <div class="about-value-content">
-            <div class="about-value-name" id="av3-name">Community-Focused</div>
-            <div class="about-value-desc" id="av3-desc">We partner with local clinics and services to support your mental health journey.</div>
-          </div>
+    <div class="about-hero-card">
+      <div class="about-hero-copy">
+        <div class="about-kicker" id="a-eye">About Us</div>
+        <h1 class="about-brand-title" id="a-title">YOUR <span>HOPE</span></h1>
+        <h2 class="about-hero-title" id="about-hero-title">Your safe space for mental health support.</h2>
+        <p class="about-hero-lead" id="about-hero-lead">Helping people understand their emotions, find support, and take the first step toward better mental well-being.</p>
+        <div class="about-hero-actions">
+          <button class="about-primary-btn" id="about-start-btn" onclick="goTab('test')">📋 Start DASS-21 Test</button>
+          <button class="about-secondary-btn" id="about-find-btn" onclick="goTab('services')">📍 Find Mental Health Services</button>
         </div>
       </div>
+
+      <div class="about-illustration" aria-hidden="true">
+        <svg class="about-girl-art" viewBox="0 0 680 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Calm girl holding her heart with plants illustration">
+          <defs>
+            <linearGradient id="aboutSoftBg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#F8FFFB"/>
+              <stop offset="0.55" stop-color="#EAF8F1"/>
+              <stop offset="1" stop-color="#DDF2EA"/>
+            </linearGradient>
+            <linearGradient id="aboutDress" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#CFEFDD"/>
+              <stop offset="1" stop-color="#8BCFA9"/>
+            </linearGradient>
+            <linearGradient id="aboutHair" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#33262B"/>
+              <stop offset="1" stop-color="#151116"/>
+            </linearGradient>
+            <linearGradient id="aboutLeaf" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#A9E0C1"/>
+              <stop offset="1" stop-color="#3E9A73"/>
+            </linearGradient>
+            <filter id="aboutShadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#2A6656" flood-opacity="0.15"/>
+            </filter>
+            <filter id="heartBlur" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="1.5"/>
+            </filter>
+          </defs>
+
+          <!-- big calm heart background -->
+          <path d="M374 112 C340 53 249 53 220 121 C188 197 270 252 374 346 C478 252 560 197 528 121 C499 53 408 53 374 112Z" fill="url(#aboutSoftBg)" opacity="0.92" filter="url(#heartBlur)"/>
+          <circle cx="555" cy="56" r="7" fill="#D8EFE7"/>
+          <circle cx="565" cy="147" r="10" fill="#69BD8D" opacity="0.9"/>
+          <circle cx="166" cy="106" r="9" fill="#B89DE8" opacity="0.75"/>
+          <circle cx="183" cy="241" r="6" fill="#D7EFE6"/>
+          <path d="M135 142 C124 125 97 124 90 146 C84 169 109 184 135 208 C161 184 186 169 180 146 C173 124 146 125 135 142Z" fill="#F2DDF6" opacity="0.55"/>
+          <path d="M581 159 C571 143 548 142 542 161 C536 181 559 195 581 216 C603 195 626 181 620 161 C614 142 591 143 581 159Z" fill="#D7F1E4" opacity="0.72"/>
+
+          <!-- plants behind the girl -->
+          <g opacity="0.94">
+            <path d="M105 390 C126 307 156 250 218 195" stroke="#91D0A9" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <ellipse cx="205" cy="211" rx="25" ry="58" fill="url(#aboutLeaf)" transform="rotate(-32 205 211)"/>
+            <ellipse cx="156" cy="270" rx="23" ry="52" fill="#A7DFC0" transform="rotate(-45 156 270)"/>
+            <ellipse cx="241" cy="165" rx="20" ry="48" fill="#74C596" transform="rotate(-13 241 165)"/>
+            <ellipse cx="111" cy="328" rx="17" ry="40" fill="#C4ECD4" transform="rotate(-28 111 328)"/>
+          </g>
+          <g opacity="0.94">
+            <path d="M612 392 C591 308 560 250 501 196" stroke="#91D0A9" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <ellipse cx="514" cy="211" rx="25" ry="58" fill="url(#aboutLeaf)" transform="rotate(32 514 211)"/>
+            <ellipse cx="562" cy="272" rx="23" ry="52" fill="#A7DFC0" transform="rotate(45 562 272)"/>
+            <ellipse cx="479" cy="165" rx="20" ry="48" fill="#74C596" transform="rotate(13 479 165)"/>
+            <ellipse cx="615" cy="330" rx="17" ry="40" fill="#C4ECD4" transform="rotate(28 615 330)"/>
+          </g>
+
+          <!-- girl: larger, smoother, hands on heart -->
+          <g filter="url(#aboutShadow)">
+            <!-- hair silhouette -->
+            <path d="M280 156 C288 91 352 59 419 78 C482 96 520 151 503 217 C487 280 435 313 369 310 C297 307 247 260 248 202 C249 181 260 166 280 156Z" fill="url(#aboutHair)"/>
+            <path d="M280 153 C229 179 219 262 275 309 C236 303 203 271 196 223 C188 169 218 126 282 111 C276 127 276 140 280 153Z" fill="#211A1F"/>
+            <path d="M442 84 C502 110 532 166 514 223 C500 268 469 299 426 310 C469 258 473 165 442 84Z" fill="#211A1F" opacity="0.95"/>
+
+            <!-- shoulders / clothes -->
+            <path d="M258 420 C264 330 306 274 370 273 C432 272 479 331 488 420 Z" fill="url(#aboutDress)"/>
+            <path d="M281 322 C314 352 426 352 462 322" stroke="#7BC99B" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+            <path d="M322 282 C344 301 398 301 419 282 L407 329 C386 342 357 342 334 329 Z" fill="#EFB7A7"/>
+
+            <!-- face -->
+            <ellipse cx="372" cy="177" rx="67" ry="76" fill="#F4C5B7"/>
+            <path d="M294 164 C304 102 363 87 426 112 C467 128 488 167 472 212 C427 179 362 160 294 164Z" fill="url(#aboutHair)"/>
+            <path d="M300 157 C312 101 369 83 426 112 C386 98 337 110 304 157Z" fill="#3A2A30" opacity="0.95"/>
+            <path d="M289 168 C280 196 284 228 300 252 C271 234 264 195 289 168Z" fill="#241B20"/>
+            <path d="M454 129 C472 145 479 173 474 200 C462 169 433 150 394 140 C415 137 436 136 454 129Z" fill="#211A1F" opacity="0.85"/>
+
+            <!-- face details -->
+            <path d="M337 187 Q348 198 360 187" stroke="#4C3835" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M389 187 Q400 198 412 187" stroke="#4C3835" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M364 218 Q383 232 405 216" stroke="#B76F67" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <circle cx="323" cy="209" r="11" fill="#F0A999" opacity="0.32"/>
+            <circle cx="424" cy="209" r="11" fill="#F0A999" opacity="0.32"/>
+
+            <!-- arms and hands on heart -->
+            <path d="M278 329 C314 365 343 382 376 385" stroke="#83CBA1" stroke-width="31" stroke-linecap="round" fill="none"/>
+            <path d="M460 329 C421 367 397 382 358 385" stroke="#83CBA1" stroke-width="31" stroke-linecap="round" fill="none"/>
+            <ellipse cx="349" cy="382" rx="32" ry="23" fill="#F4C0AE" transform="rotate(12 349 382)"/>
+            <ellipse cx="391" cy="382" rx="32" ry="23" fill="#F4C0AE" transform="rotate(-12 391 382)"/>
+            <path d="M331 371 C351 392 389 395 411 371" stroke="#E69E8F" stroke-width="3" fill="none" opacity="0.75"/>
+            <path d="M358 368 C368 378 380 378 390 368" stroke="#E89F91" stroke-width="2.4" fill="none" opacity="0.7"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="about-card-grid">
+      <div class="about-info-card mission">
+        <div class="about-card-icon">🎯</div>
+        <h3 id="a-mission-title">Our Mission</h3>
+        <p id="a-mission-text">To make mental health support simple, private, and accessible for everyone in Phnom Penh.</p>
+      </div>
+
+      <div class="about-info-card vision">
+        <div class="about-card-icon">👁️</div>
+        <h3 id="a-vision-title">Our Vision</h3>
+        <p id="a-vision-text">A community where mental health is understood, accepted, and supported without stigma.</p>
+      </div>
+
+      <div class="about-info-card promise">
+        <div class="about-card-icon">🛡️</div>
+        <h3 id="a-values-title">Our Promise</h3>
+        <ul class="about-promise-list">
+          <li id="about-promise-1">Private and secure support</li>
+          <li id="about-promise-2">Trusted mental health screening</li>
+          <li id="about-promise-3">Easy access to clinics</li>
+          <li id="about-promise-4">Encouraging and judgment-free guidance</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="about-why-panel">
+      <h2 id="about-why-title">Why Choose YOUR HOPE?</h2>
+      <div class="about-mini-grid">
+        <div class="about-mini-item">
+          <div class="about-mini-icon green">📋</div>
+          <h4 id="about-feature-1-title">Free DASS-21 Screening</h4>
+          <p id="about-feature-1-desc">Quick and easy assessment of depression, anxiety, and stress.</p>
+        </div>
+        <div class="about-mini-item">
+          <div class="about-mini-icon mint">🌐</div>
+          <h4 id="about-feature-2-title">Khmer & English Support</h4>
+          <p id="about-feature-2-desc">Use the app in your preferred language.</p>
+        </div>
+        <div class="about-mini-item">
+          <div class="about-mini-icon gold">⚡</div>
+          <h4 id="about-feature-3-title">Instant Results</h4>
+          <p id="about-feature-3-desc">Get your results immediately and understand your emotions better.</p>
+        </div>
+        <div class="about-mini-item">
+          <div class="about-mini-icon purple">🤖</div>
+          <h4 id="about-feature-4-title">AI Emotional Support</h4>
+          <p id="about-feature-4-desc">Chat with our AI assistant anytime you need support.</p>
+        </div>
+        <div class="about-mini-item">
+          <div class="about-mini-icon blue">🏥</div>
+          <h4 id="about-feature-5-title">Phnom Penh Clinic Directory</h4>
+          <p id="about-feature-5-desc">Find trusted mental health services and locations near you.</p>
+        </div>
+        <div class="about-mini-item">
+          <div class="about-mini-icon pink">❝</div>
+          <h4 id="about-feature-6-title">Motivational Quotes</h4>
+          <p id="about-feature-6-desc">Daily inspiration to keep you positive and strong.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-quote-banner">
+      <div class="about-plant" aria-hidden="true">🌿</div>
+      <p id="about-closing-quote">“You are not alone. Small steps can lead to better mental health.”</p>
+      <div class="about-book" aria-hidden="true">📚☕</div>
     </div>
 
   </section><!-- /tab-about -->
@@ -562,6 +682,7 @@
     Reference: Lovibond, S.H. &amp; Lovibond, P.F. (1995). Manual for the Depression Anxiety &amp; Stress Scales. (2nd Ed.) Sydney: Psychology Foundation.
   </div>
 </div>
+
 <!-- ── SCRIPTS ───────────────────────────────────────────────────── -->
 <!-- Load data first (QUESTIONS, CLINICS, T, getLevel), then app logic -->
 <script src="config.js"></script>
