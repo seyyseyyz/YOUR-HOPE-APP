@@ -8,11 +8,41 @@ No build step. Open `index.html` in any modern browser.
 ## File Structure
 
 ```
-yourhope/
-├── index.html   ← App shell and layout
-├── style.css    ← Design tokens, components, responsive styles
-├── data.js      ← QUESTIONS, CLINICS, RECOMMENDATIONS, translations (T), getLevel()
-└── app.js       ← State, tabs, DASS-21 logic, services, AI chat, PDF export
+mini_project_web/
+├── index.html                         # Main frontend app layout and page structure
+├── style.css                          # UI design, colors, components, responsive layout
+├── app.js                             # Main frontend logic: tabs, DASS-21, services, chat, print
+├── auth.js                            # Frontend authentication: sign up, sign in, logout, session
+├── data.js                            # DASS-21 questions, clinics, recommendations, translations
+├── config.js                          # Frontend API key / app configuration
+├── README.md                          # Project documentation
+├── mental_health_place_dataset.csv    # Mental health service dataset
+│
+├── docs/
+│   └── DASS-21.pdf                    # DASS-21 reference document
+│
+└── YOUR-HOPE-BACKEND/
+    ├── server.js                      # Backend server entry point
+    ├── package.json                   # Backend dependencies and scripts
+    ├── package-lock.json              # Locked dependency versions
+    ├── .env                           # Environment variables
+    │
+    ├── config/
+    │   └── db.js                      # MySQL database connection
+    │
+    ├── middleware/
+    │   └── authMiddleware.js          # JWT authentication middleware
+    │
+    ├── controllers/
+    │   ├── authController.js          # Sign up and login backend logic
+    │   └── resultController.js        # Save and manage DASS-21 result logic
+    │
+    ├── routes/
+    │   ├── authRoutes.js              # API routes for authentication
+    │   └── resultRoutes.js            # API routes for test results
+    │
+    └── sql/
+        └── schema.sql                 # Database tables / SQL setup
 ```
 
 ---
