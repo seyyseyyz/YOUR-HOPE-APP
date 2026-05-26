@@ -41,6 +41,10 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
+.hidden { display: none !important; }
+.input-wrapper { position: relative; }
+.user-name { margin-right: 16px; font-size: 13px; color: #333; }
+
 /* ── BASE ── */
 body {
   font-family: var(--sans);
@@ -457,6 +461,7 @@ body::before {
 .progress-pct   { font-size: 12px; font-weight: 600; color: var(--sage); }
 .progress-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
 .progress-fill  {
+  width: 0%;
   height: 100%;
   background: linear-gradient(90deg, var(--sage) 0%, var(--sage-light) 100%);
   border-radius: 3px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
@@ -658,6 +663,10 @@ body::before {
 .map-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 0.75rem; }
 .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
 .legend-dot  { width: 10px; height: 10px; border-radius: 50%; }
+.legend-dot-clinic { background: #4A7C6F; }
+.legend-dot-hospital { background: #3A6AC8; }
+.legend-dot-ngo { background: #6A40C8; }
+.legend-dot-service { background: var(--clay); }
 .map-container {
   background: var(--warm); border-radius: var(--radius);
   overflow: hidden; border: 1px solid var(--border); margin-bottom: 1rem;
@@ -670,7 +679,7 @@ body::before {
    CHAT SCREEN
    ══════════════════════════════════════════ */
 .chat-wrapper { display: flex; flex-direction: column; gap: 0; }
-.chip-scroll  { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 0.75rem; scrollbar-width: none; }
+.chip-scroll  { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 0.75rem; }
 .chip-scroll::-webkit-scrollbar { display: none; }
 .chip {
   white-space: nowrap; padding: 6px 13px;

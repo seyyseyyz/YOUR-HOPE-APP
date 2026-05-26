@@ -128,7 +128,7 @@ async function logIn(email, password) {
 /* ── SIGN OUT ────────────────────────────────────────────────────── */
 function signOut() {
   const modal = document.getElementById('signout-modal');
-  if (modal) modal.style.display = 'flex';
+  if (modal) modal.classList.remove('hidden');
 }
 
 function confirmSignOut() {
@@ -138,7 +138,7 @@ function confirmSignOut() {
 
 function cancelSignOut() {
   const modal = document.getElementById('signout-modal');
-  if (modal) modal.style.display = 'none';
+  if (modal) modal.classList.add('hidden');
 }
 
 /* ── SESSION CHECK ────────────────────────────────────────────────── */
@@ -233,6 +233,10 @@ function showMainApp() {
 
   // Update UI with user info
   const session = getSession();
+  if (typeof window !== 'undefined') {
+    window.isSignedUp = !!session;
+    window.userInfo = session;
+  }
   if (session) {
     document.getElementById('user-name').textContent = session.fullName;
   }

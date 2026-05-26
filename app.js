@@ -15,11 +15,19 @@ const chatHist = [];  // Anthropic messages array
 let lastRes    = null;   // last computed DASS-21 result
 let displayed  = [...CLINICS]; // currently visible clinics
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof getSession === 'function' && getSession()) {
-    isSignedUp = true;
-    userInfo = getSession();
+function syncAuthState() {
+  const session = typeof getSession === 'function' ? getSession() : null;
+  isSignedUp = !!session;
+  userInfo = session;
+  if (typeof window !== 'undefined') {
+    window.isSignedUp = isSignedUp;
+    window.userInfo = userInfo;
   }
+  return session;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  syncAuthState();
 });
 
 /* ── LANGUAGE ───────────────────────────────────────────────────── */
@@ -41,6 +49,7 @@ function applyLang() {
   sid('nssf-all', curLang === 'kh' ? 'NSSF: ទាំងអស់' : 'NSSF: All');
   sid('nssf-yes', curLang === 'kh' ? 'NSSF: មាន' : 'NSSF: Yes');
   sid('nssf-no',  curLang === 'kh' ? 'NSSF: គ្មាន' : 'NSSF: No');
+  const questionsPane = document.getElementById('pane-questions');
   // Brand
   sid('brand-name',    t.brandName);
   sid('brand-tagline', t.brandTag);
@@ -93,12 +102,14 @@ function applyLang() {
   buildChips();
   renderClinics(displayed);
   if (lastRes) renderResultsUI(lastRes);
-  if (document.getElementById('pane-questions').style.display !== 'none') renderPage();
+  if (questionsPane && !questionsPane.classList.contains('hidden')) renderPage();
 }
 
 /* ── TABS ───────────────────────────────────────────────────────── */
 
 function goTab(tab) {
+  syncAuthState();
+
   // If already signed in, redirect to home instead of signin/signup
   if (isSignedUp && (tab === 'signin' || tab === 'signup')) {
     tab = 'home';
@@ -125,8 +136,9 @@ function goTab(tab) {
 
 /* ── TEST SCREEN ────────────────────────────────────────────────── */
 function startTest() {
-  document.getElementById('pane-intro').style.display     = 'none';
-  document.getElementById('pane-questions').style.display = 'block';
+  document.getElementById('pane-intro').classList.add('hidden');
+  document.getElementById('pane-questions').classList.remove('hidden');
+  document.getElementById('btn-prev').classList.add('hidden');
   curPage = 0;
   renderPage();
 }
@@ -140,7 +152,7 @@ function renderPage() {
   sid('prog-label', `${s + 1}–${e} / 21`);
   sid('prog-pct',   pct + '%');
   document.getElementById('prog-fill').style.width = pct + '%';
-  document.getElementById('btn-prev').style.display = curPage > 0 ? '' : 'none';
+  document.getElementById('btn-prev').classList.toggle('hidden', curPage === 0);
   document.getElementById('btn-next').innerHTML =
     e >= 21
       ? (curLang === 'kh' ? 'មើលលទ្ធផល →' : 'See results →')
@@ -205,8 +217,8 @@ function showResults() {
     sL: getLevel('s', sS),
     date: new Date().toLocaleDateString(),
   };
-  document.getElementById('pane-questions').style.display = 'none';
-  document.getElementById('pane-results').style.display   = 'block';
+  document.getElementById('pane-questions').classList.add('hidden');
+  document.getElementById('pane-results').classList.remove('hidden');
   renderResultsUI(lastRes);
   window.scrollTo(0, 0);
 }
@@ -264,8 +276,10 @@ function resetTest() {
   Object.keys(ANS).forEach(k => delete ANS[k]);
   lastRes = null;
   curPage = 0;
-  document.getElementById('pane-results').style.display = 'none';
-  document.getElementById('pane-intro').style.display   = 'block';
+  document.getElementById('pane-results').classList.add('hidden');
+  document.getElementById('pane-intro').classList.remove('hidden');
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-pct').textContent = '0%';
 }
 
 /* ── SERVICES SCREEN ────────────────────────────────────────────── */
@@ -414,12 +428,12 @@ function showAuthPrompt(tab) {
       ? T[curLang].authPromptTestMsg
       : T[curLang].authPromptServicesMsg;
   }
-  if (modal) modal.style.display = 'flex';
+  if (modal) modal.classList.remove('hidden');
 }
 
 function closeAuthPrompt() {
   const modal = document.getElementById('auth-prompt-modal');
-  if (modal) modal.style.display = 'none';
+  if (modal) modal.classList.add('hidden');
 }
 
 function handleAuthPromptSignin() {
