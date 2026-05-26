@@ -6,7 +6,7 @@ import authRoutes   from './routes/authRoutes.js';
 import resultRoutes from './routes/resultRoutes.js';
 
 const app  = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;   // fixed: was 3000, frontend calls 5001
 
 /* ── MIDDLEWARE ───────────────────────────────────────────────────── */
 app.use(cors());

@@ -1,128 +1,120 @@
 /* ═══════════════════════════════════════════════════════════════════
    YOUR HOPE — auth.js
    Authentication: Sign Up, Sign In, Logout, Session Management
+   Connects to backend API at http://localhost:5001
    ═══════════════════════════════════════════════════════════════════ */
 
-/* ── USER DATABASE (localStorage) ────────────────────────────────── */
-const STORAGE_KEY = 'hope_users';
+const API_BASE    = 'http://localhost:5001/api';
 const SESSION_KEY = 'hope_session';
+const TOKEN_KEY   = 'hope_token';
 
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+/* ── TOKEN HELPERS ──────────────────────────────────────────────── */
+function getToken() {
+  return localStorage.getItem(TOKEN_KEY);
 }
 
-// Initialize users database
-function initUsers() {
-  if (!localStorage.getItem(STORAGE_KEY)) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({}));
-  }
+function saveToken(token) {
+  localStorage.setItem(TOKEN_KEY, token);
 }
 
-// Get all users
-function getAllUsers() {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : {};
+/* ── SESSION HELPERS ────────────────────────────────────────────── */
+function getSession() {
+  const data = localStorage.getItem(SESSION_KEY);
+  return data ? JSON.parse(data) : null;
 }
 
-// Save all users
-function saveAllUsers(users) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+function isLoggedIn() {
+  return getSession() !== null && getToken() !== null;
 }
 
 /* ── SIGN UP ────────────────────────────────────────────────────── */
 async function signUp() {
   currentAuthPage = 'signup';
-  const fullName = document.getElementById('signup-name').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const password = document.getElementById('signup-password').value;
-  const confirmPwd = document.getElementById('signup-confirm').value;
+
+  const fullName    = document.getElementById('signup-name').value.trim();
+  const email       = document.getElementById('signup-email').value.trim();
+  const password    = document.getElementById('signup-password').value;
+  const confirmPwd  = document.getElementById('signup-confirm').value;
   const termsChecked = document.getElementById('signup-terms').checked;
+
+  // Clear messages
+  document.getElementById('signup-error').innerHTML   = '';
+  document.getElementById('signup-success').innerHTML = '';
 
   // Validation
   if (!fullName || !email || !password || !confirmPwd) {
-    showAuthError('Please fill in all fields');
-    return;
+    showAuthError('Please fill in all fields'); return;
   }
-
-  if (password.length < 6) {
-    showAuthError('Password must be at least 6 characters');
-    return;
-  }
-
-  if (password !== confirmPwd) {
-    showAuthError('Passwords do not match');
-    return;
-  }
-
-  if (!termsChecked) {
-    showAuthError('Please agree to Terms of Service');
-    return;
-  }
-
   if (!validateEmail(email)) {
-    showAuthError('Please enter a valid email');
-    return;
+    showAuthError('Please enter a valid email'); return;
+  }
+  if (password.length < 6) {
+    showAuthError('Password must be at least 6 characters'); return;
+  }
+  if (password !== confirmPwd) {
+    showAuthError('Passwords do not match'); return;
+  }
+  if (!termsChecked) {
+    showAuthError('Please agree to Terms of Service'); return;
   }
 
-  // Check if email already exists
-  const users = getAllUsers();
-  if (users[email]) {
-    showAuthError('Email already registered');
-    return;
+  try {
+    const response = await fetch(`${API_BASE}/auth/signup`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ full_name: fullName, email, password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      showAuthSuccess('Account created! Logging in...');
+      setTimeout(() => logIn(email, password), 1000);
+    } else {
+      showAuthError(data.message || 'Signup failed');
+    }
+
+  } catch (error) {
+    console.error('[signUp]', error);
+    showAuthError('Cannot connect to backend. Is the server running?');
   }
-
-  // Create new user
-  users[email] = {
-    fullName: fullName,
-    email: email,
-    password: await hashPassword(password),
-    createdAt: new Date().toISOString()
-  };
-
-  saveAllUsers(users);
-  showAuthSuccess('Account created! Logging in...');
-  
-  setTimeout(() => {
-    logIn(email, password);
-  }, 1000);
 }
 
 /* ── SIGN IN ────────────────────────────────────────────────────── */
 async function logIn(email, password) {
   currentAuthPage = 'signin';
-  email = email || document.getElementById('signin-email').value.trim();
+
+  email    = email    || document.getElementById('signin-email').value.trim();
   password = password || document.getElementById('signin-password').value;
 
-  // Validation
   if (!email || !password) {
-    showAuthError('Please enter email and password');
-    return;
+    showAuthError('Please enter email and password'); return;
   }
 
-  // Find user
-  const users = getAllUsers();
-  if (!users[email] || users[email].password !== await hashPassword(password)) {
-    showAuthError('Invalid email or password');
-    return;
+  try {
+    const response = await fetch(`${API_BASE}/auth/login`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email, password })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      showAuthError(data.message || 'Login failed'); return;
+    }
+
+    // ── Save JWT token + session ─────────────────────────────────
+    saveToken(data.token);
+    localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+
+    showAuthSuccess('Login successful!');
+    setTimeout(() => showMainApp(), 800);
+
+  } catch (error) {
+    console.error('[logIn]', error);
+    showAuthError('Cannot connect to backend. Is the server running?');
   }
-
-  // Create session
-  const session = {
-    email: email,
-    fullName: users[email].fullName,
-    loginTime: new Date().toISOString()
-  };
-
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  showAuthSuccess('Login successful!');
-
-  setTimeout(() => {
-    showMainApp();
-  }, 800);
 }
 
 /* ── SIGN OUT ────────────────────────────────────────────────────── */
@@ -133,6 +125,7 @@ function signOut() {
 
 function confirmSignOut() {
   localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(TOKEN_KEY);
   location.reload();
 }
 
@@ -141,17 +134,7 @@ function cancelSignOut() {
   if (modal) modal.classList.add('hidden');
 }
 
-/* ── SESSION CHECK ────────────────────────────────────────────────── */
-function getSession() {
-  const data = localStorage.getItem(SESSION_KEY);
-  return data ? JSON.parse(data) : null;
-}
-
-function isLoggedIn() {
-  return getSession() !== null;
-}
-
-/* ── UI HELPERS ────────────────────────────────────────────────────── */
+/* ── UI HELPERS ─────────────────────────────────────────────────── */
 let currentAuthPage = 'signin';
 
 function showAuthError(message) {
@@ -173,29 +156,22 @@ function showAuthSuccess(message) {
 }
 
 function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function togglePasswordVisibility(inputId) {
   const input = document.getElementById(inputId);
-  if (input.type === 'password') {
-    input.type = 'text';
-  } else {
-    input.type = 'password';
-  }
+  input.type = input.type === 'password' ? 'text' : 'password';
 }
 
-/* ── PAGE SWITCHING ────────────────────────────────────────────────── */
+/* ── PAGE SWITCHING ─────────────────────────────────────────────── */
 function showPage(page) {
   currentAuthPage = page;
   document.querySelectorAll('[data-auth-page]').forEach(el => {
     el.style.display = 'none';
   });
   const pageEl = document.querySelector(`[data-auth-page="${page}"]`);
-  if (pageEl) {
-    pageEl.style.display = 'flex';
-  }
+  if (pageEl) pageEl.style.display = 'flex';
 }
 
 function goToSignIn() {
@@ -211,34 +187,30 @@ function goToSignUp() {
 function clearAuthForm(page) {
   const pageEl = document.querySelector(`[data-auth-page="${page}"]`);
   if (!pageEl) return;
-  pageEl.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]').forEach(input => {
-    input.value = '';
-  });
-  const errorEl = document.getElementById(page + '-error');
-  if (errorEl) errorEl.style.display = 'none';
+  pageEl.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]')
+        .forEach(input => { input.value = ''; });
+  const errorEl   = document.getElementById(page + '-error');
   const successEl = document.getElementById(page + '-success');
+  if (errorEl)   errorEl.style.display   = 'none';
   if (successEl) successEl.style.display = 'none';
 }
 
 function showMainApp() {
   const authContainer = document.getElementById('auth-container');
-  const mainApp = document.querySelector('.app');
-  
-  if (authContainer) {
-    authContainer.style.display = 'none';
-  }
-  if (mainApp) {
-    mainApp.style.display = 'block';
-  }
+  const mainApp       = document.querySelector('.app');
 
-  // Update UI with user info
+  if (authContainer) authContainer.style.display = 'none';
+  if (mainApp)       mainApp.style.display       = 'block';
+
   const session = getSession();
   if (typeof window !== 'undefined') {
     window.isSignedUp = !!session;
-    window.userInfo = session;
+    window.userInfo   = session;
   }
+
   if (session) {
-    document.getElementById('user-name').textContent = session.fullName;
+    const nameEl = document.getElementById('user-name');
+    if (nameEl) nameEl.textContent = session.full_name || session.fullName || '';
   }
 
   if (typeof goTab === 'function') {
@@ -248,17 +220,12 @@ function showMainApp() {
   }
 }
 
-/* ── INIT ────────────────────────────────────────────────────────── */
+/* ── INIT ───────────────────────────────────────────────────────── */
 function initAuth() {
-  initUsers();
-
   if (isLoggedIn()) {
     if (typeof window !== 'undefined') {
       window.isSignedUp = true;
-      const session = getSession();
-      if (session) {
-        window.userInfo = session;
-      }
+      window.userInfo   = getSession();
     }
     showMainApp();
   } else {
@@ -266,7 +233,6 @@ function initAuth() {
   }
 }
 
-// Run on page load
 document.addEventListener('DOMContentLoaded', () => {
   initAuth();
 });
