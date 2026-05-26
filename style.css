@@ -298,49 +298,249 @@ body::before {
    HOME SCREEN
    ══════════════════════════════════════════ */
 .hero-banner {
-  background: linear-gradient(135deg, var(--sage-deep) 0%, var(--sage) 60%, var(--sage-light) 100%);
-  border-radius: 28px; padding: 2.5rem 2.5rem 2rem; margin-bottom: 2rem;
-  position: relative; overflow: hidden; color: #fff;
-  display: flex; flex-direction: column; align-items: center; text-align: center;
+  background: transparent;
+  border-radius: 28px;
+  padding: 0;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: visible;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  gap: 22px;
 }
-.hero-banner::before {
-  content: ''; position: absolute; right: -20px; top: -30px;
-  width: 200px; height: 200px;
-  background: rgba(255,255,255,0.06); border-radius: 50%;
-}
+
+.hero-banner::before,
 .hero-banner::after {
-  content: ''; position: absolute; right: 40px; bottom: -50px;
-  width: 140px; height: 140px;
-  background: rgba(255,255,255,0.04); border-radius: 50%;
+  display: none;
 }
-.hero-eyebrow { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.75rem; font-weight: 600; }
+
+/* ── WELCOME + AUTO ROTATING HERO QUOTE ── */
+.hero-intro-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 3.2rem 2.2rem 2.8rem;
+  background: linear-gradient(135deg, var(--sage-deep) 0%, var(--sage) 65%, var(--sage-light) 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-intro-panel::before {
+  content: '';
+  position: absolute;
+  right: -70px;
+  top: -95px;
+  width: 285px;
+  height: 285px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+}
+
+.hero-intro-panel::after {
+  content: '';
+  position: absolute;
+  left: -60px;
+  bottom: -95px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.045);
+}
+
+.welcome-text {
+  font-family: var(--serif);
+  font-size: clamp(42px, 6vw, 76px);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 34px;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 4px 22px rgba(0,0,0,0.18);
+}
+
+.welcome-text span {
+  display: block;
+}
+
+.welcome-text span:first-child {
+  margin-bottom: 0.12em;
+}
+
+.hero-random-quote {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 22px 30px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.28);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  color: rgba(255,255,255,0.96);
+  font-size: clamp(18px, 2.25vw, 28px);
+  line-height: 1.7;
+  font-style: italic;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+  transition: all 0.5s ease;
+}
+
+.hero-random-quote::before {
+  content: '✨';
+  margin-right: 10px;
+  font-style: normal;
+}
+
+.fade-quote {
+  animation: fadeQuote 0.8s ease;
+}
+
+@keyframes fadeQuote {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── MAIN HERO PANEL ───────────────────────────────────────────── */
+.hero-main-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  min-height: 560px;
+  padding: 4.2rem 2.5rem 3rem;
+  background: linear-gradient(135deg, #2A6656 0%, #3A8B6F 62%, #5BA387 100%);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
+
+.hero-main-panel::before {
+  content: '';
+  position: absolute;
+  right: -95px;
+  top: -125px;
+  width: 360px;
+  height: 360px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+
+.hero-main-panel::after {
+  content: '';
+  position: absolute;
+  right: 48px;
+  bottom: -70px;
+  width: 230px;
+  height: 230px;
+  background: rgba(255,255,255,0.055);
+  border-radius: 50%;
+}
+
+.hero-eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  margin-bottom: 2.4rem;
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
+}
+
 .hero-illustration {
-  width: 140px; height: 140px; margin: 1.5rem 0 1rem;
-  position: relative; z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 5rem;
+  position: relative;
+  z-index: 1;
   animation: float 3s ease-in-out infinite;
 }
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
+
 .hero-illustration svg {
-  width: 100%; height: 100%;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.16));
 }
-.hero-title   { font-family: var(--serif); font-size: 42px; line-height: 1.15; margin-bottom: 1rem; position: relative; z-index: 1; font-weight: 400; letter-spacing: -0.5px; }
-.hero-title em { font-style: italic; opacity: 0.85; }
-.hero-sub     { font-size: 15px; opacity: 0.85; line-height: 1.7; max-width: 420px; margin-bottom: 2rem; }
-.hero-stats   { display: flex; gap: 2.5rem; justify-content: center; width: 100%; }
-.hero-stat-num { font-family: var(--serif); font-size: 32px; font-style: normal; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-.hero-stat-lbl { font-size: 11px; opacity: 0.7; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 1.12;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: rgba(255,255,255,0.96);
+}
+
+.hero-title em {
+  font-style: italic;
+  opacity: 0.92;
+}
+
+.hero-sub {
+  font-size: clamp(17px, 2vw, 24px);
+  opacity: 0.86;
+  line-height: 1.75;
+  max-width: 740px;
+  margin: 0 auto 3.1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 2.7rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
 .hero-stat {
-  padding: 10px 15px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 12px;
-  transition: background 0.3s;
+  min-width: 132px;
+  padding: 18px 26px;
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  transition: background 0.3s, transform 0.25s;
 }
+
 .hero-stat:hover {
   background: rgba(255,255,255,0.2);
+  transform: translateY(-3px);
+}
+
+.hero-stat-num {
+  font-family: var(--serif);
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.hero-stat-lbl {
+  font-size: 12px;
+  opacity: 0.76;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-top: 10px;
 }
 
 .home-grid {
@@ -368,20 +568,21 @@ body::before {
 .home-card.green  .home-card-icon { background: #D1E8D8; }
 .home-card.clay   .home-card-icon { background: #F5D5C7; }
 .home-card.purple .home-card-icon { background: #E0DFFA; }
-.home-card.dark   .home-card-icon { background: rgba(255,255,255,0.2); }
+.home-card.dark   { background: #fff; border-color: #E8E8FB; }
+.home-card.dark   .home-card-icon { background: #E0DFFA; }
 .home-card.blue   .home-card-icon { background: #D1E8F5; }
 
 .home-card-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; display: none; }
-.home-card.dark .home-card-label { color: rgba(255,255,255,0.5); }
+.home-card.dark .home-card-label { color: var(--muted); }
 .home-card-title  { font-family: var(--sans); font-size: 18px; margin-bottom: 8px; font-weight: 700; color: var(--ink); }
-.home-card.dark .home-card-title { color: #fff; }
+.home-card.dark .home-card-title { color: var(--ink); }
 .home-card-desc   { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; flex: 1; }
-.home-card.dark .home-card-desc { color: rgba(255,255,255,0.75); }
+.home-card.dark .home-card-desc { color: var(--muted); }
 .home-card-btn    { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; }
 .home-card.green  .home-card-btn { color: var(--sage-deep); }
 .home-card.clay   .home-card-btn { color: #8B4A1E; }
 .home-card.purple .home-card-btn { color: #3A4490; }
-.home-card.dark   .home-card-btn { color: #fff; }
+.home-card.dark   .home-card-btn { color: #3A4490; }
 .home-card.blue   .home-card-btn { color: #1A5F8A; }
 
 .quotes-panel {
@@ -1706,4 +1907,205 @@ body::before {
 /* Main app hidden initially */
 .app {
   display: none;
+}
+
+/* ── Hero responsive refinements ───────────────────────────────── */
+@media (max-width: 640px) {
+  .hero-intro-panel,
+  .hero-main-panel {
+    padding: 2rem 1.25rem;
+    border-radius: 22px;
+  }
+
+  /* removed empty .hero-main-panel ruleset */
+
+  .welcome-text {
+    letter-spacing: 0.045em;
+    font-size: 34px;
+  }
+
+  .hero-random-quote {
+    font-size: 16px;
+    padding: 14px 16px;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    margin-bottom: 1.6rem;
+  }
+
+  .hero-illustration {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 3rem;
+  }
+
+  .hero-stats {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    min-width: 96px;
+    padding: 14px 16px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FINAL HERO SIZE REFINEMENT
+   Makes the home hero cleaner, smaller, and closer to the original layout
+   while keeping the new welcome + rotating quote section.
+   ═══════════════════════════════════════════════════════ */
+.hero-banner {
+  gap: 18px;
+  margin-bottom: 1.75rem;
+}
+
+.hero-intro-panel {
+  padding: 2.4rem 2rem 2.2rem;
+  border-radius: 26px;
+}
+
+.welcome-text {
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 1.08;
+  letter-spacing: 0.065em;
+  margin-bottom: 24px;
+}
+
+.hero-random-quote {
+  max-width: 720px;
+  padding: 18px 24px;
+  font-size: clamp(17px, 2vw, 22px);
+  line-height: 1.65;
+  border-radius: 18px;
+}
+
+.hero-main-panel {
+  min-height: 470px;
+  padding: 3rem 2.4rem 2.4rem;
+  border-radius: 26px;
+  justify-content: flex-start;
+}
+
+.hero-main-panel::before {
+  right: -75px;
+  top: -105px;
+  width: 300px;
+  height: 300px;
+}
+
+.hero-main-panel::after {
+  right: 42px;
+  bottom: -58px;
+  width: 190px;
+  height: 190px;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  margin-bottom: 2rem;
+}
+
+.hero-illustration {
+  width: 116px;
+  height: 116px;
+  margin: 0 auto 3.2rem;
+}
+
+.hero-title {
+  font-size: clamp(36px, 4.7vw, 54px);
+  line-height: 1.14;
+  margin-bottom: 1.15rem;
+}
+
+.hero-sub {
+  font-size: clamp(15px, 1.55vw, 18px);
+  line-height: 1.7;
+  max-width: 580px;
+  margin-bottom: 2.3rem;
+}
+
+.hero-stats {
+  gap: 1.8rem;
+}
+
+.hero-stat {
+  min-width: 108px;
+  padding: 14px 20px;
+  border-radius: 15px;
+}
+
+.hero-stat-num {
+  font-size: 30px;
+}
+
+.hero-stat-lbl {
+  font-size: 10px;
+  letter-spacing: 0.09em;
+}
+
+@media (max-width: 640px) {
+  .hero-intro-panel {
+    padding: 2rem 1.2rem;
+  }
+
+  .welcome-text {
+    font-size: 34px;
+  }
+
+  .hero-random-quote {
+    font-size: 15px;
+    padding: 14px 16px;
+  }
+
+  .hero-main-panel {
+    /* min-height: auto;  Firefox does not support this value */
+    padding: 2.3rem 1.2rem 2rem;
+  }
+
+  .hero-illustration {
+    width: 96px;
+    height: 96px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-title {
+    font-size: 34px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    margin-bottom: 1.8rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   KHMER HERO WELCOME POLISH
+   Keeps the Khmer version clean, balanced, and readable.
+   ═══════════════════════════════════════════════════════ */
+.welcome-text.khmer-welcome {
+  font-family: 'DM Sans', 'Kantumruy Pro', 'Noto Sans Khmer', system-ui, sans-serif;
+  font-size: clamp(30px, 4.2vw, 48px);
+  line-height: 1.35;
+  letter-spacing: 0.015em;
+  font-weight: 800;
+}
+
+.welcome-text.khmer-welcome span:first-child {
+  font-size: 0.72em;
+  opacity: 0.92;
+  margin-bottom: 0.25em;
+}
+
+.welcome-text.khmer-welcome span:last-child {
+  font-size: 1em;
+}
+
+html[lang="km"] .hero-random-quote,
+.hero-random-quote.khmer-quote {
+  font-family: 'DM Sans', 'Kantumruy Pro', 'Noto Sans Khmer', system-ui, sans-serif;
+  line-height: 1.9;
 }

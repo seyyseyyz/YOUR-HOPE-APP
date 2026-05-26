@@ -15,6 +15,85 @@ const chatHist = [];  // Anthropic messages array
 let lastRes    = null;   // last computed DASS-21 result
 let displayed  = [...CLINICS]; // currently visible clinics
 
+/* ── RANDOM HERO QUOTES ─────────────────────────────────────────── */
+const HERO_WELCOME = {
+  eng: ['Welcome to', 'Your-Hope'],
+  kh: ['សូមស្វាគមន៍មកកាន់', 'ក្តីសង្ឃឹមរបស់អ្នក']
+};
+
+const heroQuotes = {
+  eng: [
+    'Healing takes time, and asking for help is a courageous step.',
+    'Your feelings are valid, and your story matters.',
+    'Mental health is just as important as physical health.',
+    'Small progress is still progress.',
+    'Hope is stronger than fear.',
+    'You are stronger than you think.',
+    'Every day is a fresh beginning.',
+    'Take a deep breath. You are doing your best.',
+    'It is okay to slow down and heal.',
+    'You deserve happiness, peace, and support.'
+  ],
+  kh: [
+    'ការព្យាបាលត្រូវការពេលវេលា ហើយការសុំជំនួយគឺជាជំហានដ៏ក្លាហាន។',
+    'អារម្មណ៍របស់អ្នកមានតម្លៃ ហើយរឿងរ៉ាវរបស់អ្នកក៏សំខាន់។',
+    'សុខភាពផ្លូវចិត្តសំខាន់ដូចសុខភាពរាងកាយដែរ។',
+    'ការរីកចម្រើនតិចតួច ក៏នៅតែជាការរីកចម្រើន។',
+    'ក្តីសង្ឃឹមខ្លាំងជាងការភ័យខ្លាច។',
+    'អ្នកខ្លាំងជាងអ្វីដែលអ្នកគិត។',
+    'រាល់ថ្ងៃគឺជាការចាប់ផ្តើមថ្មី។',
+    'ដកដង្ហើមវែងៗ។ អ្នកកំពុងព្យាយាមបានល្អហើយ។',
+    'មិនអីទេបើអ្នកត្រូវការសម្រាក និងព្យាបាលខ្លួន។',
+    'អ្នកសមនឹងទទួលបានសន្តិភាព សុភមង្គល និងការគាំទ្រ។'
+  ]
+};
+
+let currentQuoteIndex = 0;
+let heroQuoteTimer = null;
+
+function getHeroQuoteList() {
+  return heroQuotes[curLang] || heroQuotes.eng;
+}
+
+function setHeroWelcomeText() {
+  const welcomeEl = document.getElementById('welcome-text');
+  if (!welcomeEl) return;
+  const lines = HERO_WELCOME[curLang] || HERO_WELCOME.eng;
+  welcomeEl.classList.toggle('khmer-welcome', curLang === 'kh');
+  welcomeEl.innerHTML = `<span>${lines[0]}</span><span>${lines[1]}</span>`;
+}
+
+function updateHeroQuote() {
+  const quoteElement = document.getElementById('hero-random-quote');
+  const quotes = getHeroQuoteList();
+  if (!quoteElement || !quotes.length) return;
+  quoteElement.classList.toggle('khmer-quote', curLang === 'kh');
+
+  currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+  quoteElement.classList.remove('fade-quote');
+
+  setTimeout(() => {
+    quoteElement.textContent = `“${quotes[currentQuoteIndex]}”`;
+    quoteElement.classList.add('fade-quote');
+  }, 120);
+}
+
+function refreshHeroQuoteLanguage(resetIndex = true) {
+  const quoteElement = document.getElementById('hero-random-quote');
+  const quotes = getHeroQuoteList();
+  if (!quoteElement || !quotes.length) return;
+  quoteElement.classList.toggle('khmer-quote', curLang === 'kh');
+  if (resetIndex) currentQuoteIndex = 0;
+  setHeroWelcomeText();
+  quoteElement.textContent = `“${quotes[currentQuoteIndex]}”`;
+}
+
+function startHeroQuotes() {
+  if (heroQuoteTimer) return;
+  refreshHeroQuoteLanguage(true);
+  heroQuoteTimer = setInterval(updateHeroQuote, 30000);
+}
+
 function syncAuthState() {
   const session = typeof getSession === 'function' ? getSession() : null;
   isSignedUp = !!session;
@@ -28,6 +107,7 @@ function syncAuthState() {
 
 document.addEventListener('DOMContentLoaded', () => {
   syncAuthState();
+  startHeroQuotes();
 });
 
 /* ── LANGUAGE ───────────────────────────────────────────────────── */
@@ -46,6 +126,7 @@ function sid(id, v) {
 
 function applyLang() {
   const t = T[curLang];
+  refreshHeroQuoteLanguage(true);
   sid('nssf-all', curLang === 'kh' ? 'NSSF: ទាំងអស់' : 'NSSF: All');
   sid('nssf-yes', curLang === 'kh' ? 'NSSF: មាន' : 'NSSF: Yes');
   sid('nssf-no',  curLang === 'kh' ? 'NSSF: គ្មាន' : 'NSSF: No');
@@ -77,14 +158,9 @@ function applyLang() {
   sid('vplist', t.svList); sid('vpmap', t.svMap);
   // Chat
   sid('c-eye', t.cEye); sid('c-title', t.cTitle); sid('c-sub', t.cSub); sid('c-disc', t.cDisc);
-  // Quotes
-  sid('q-eye',           t.qEye);  sid('q-title', t.qTitle); sid('q-sub', t.qSub);
-  sid('home-q-eye',      t.qEye);
-  sid('home-quotes-title', t.qTitle);
-  sid('home-quotes-sub',   t.qSub);
   // Nav
   sid('nav-home', t.navHome); sid('nav-test', t.navTest);
-  sid('nav-services', t.navServices); sid('nav-quotes', t.navQuotes); sid('nav-chat', t.navChat);
+  sid('nav-services', t.navServices); sid('nav-chat', t.navChat);
   // About
   sid('a-eye', t.aEye); sid('a-title', t.aTitle); sid('a-sub', t.aSub);
   sid('a-mission-title', t.aMissionTitle); sid('a-mission-text', t.aMissionText);
@@ -124,13 +200,12 @@ function goTab(tab) {
   document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(e => e.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
-  const tabs = ['home', 'test', 'services', 'quotes', 'chat', 'about'];
+  const tabs = ['home', 'test', 'services', 'chat', 'about'];
   const tabIndex = tabs.indexOf(tab);
-  if (tabIndex >= 0 && tabIndex < 6) {
+  if (tabIndex >= 0 && tabIndex < tabs.length) {
     document.querySelectorAll('.nav-btn')[tabIndex].classList.add('active');
   }
   if (tab === 'services') renderClinics(displayed);
-  if (tab === 'quotes') { renderQuotes(); renderQuoteFilters(); }
   window.scrollTo(0, 0);
 }
 
@@ -455,13 +530,6 @@ function buildChips() {
     .join('');
 }
 
-function scrollToQuotes() {
-  goTab('home');
-  setTimeout(() => {
-  const section = document.getElementById('quotes-section');
-  if (section) section.scrollIntoView({ behavior: 'smooth' });
-  }, 350);
-}
 
 function showAuthPrompt(tab) {
   const modal = document.getElementById('auth-prompt-modal');
@@ -919,51 +987,9 @@ function printResults() {
 
 /* ── AUTHENTICATION ───────────────────────────────────────────── */
 
-let activeQuoteCategory = 'all';
-
-function renderQuotes() {
-  renderQuotesTo('quotes-container');
-  renderQuotesTo('quotes-grid');
-}
-
-function renderQuotesTo(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.innerHTML = '';
-  const categories = QUOTES[curLang];
-  Object.entries(categories).forEach(([key, quotesArr]) => {
-    if (activeQuoteCategory !== 'all' && activeQuoteCategory !== key) return;
-    quotesArr.forEach(quote => {
-      const card = document.createElement('div');
-      card.className = 'quote-card';
-      card.innerHTML = `<p class="quote-text">${quote}</p>`;
-      container.appendChild(card);
-    });
-  });
-}
-
-function renderQuoteFilters() {
-  ['quotes-filters', 'home-quotes-filters'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = QUOTE_CATEGORIES.map(cat => `
-      <button class="chip ${activeQuoteCategory === cat.key ? 'active' : ''}"
-        onclick="setQuoteCategory('${cat.key}')">
-        ${curLang === 'kh' ? cat.kh : cat.eng}
-      </button>`).join('');
-  });
-}
-
-function setQuoteCategory(key) {
-  activeQuoteCategory = key;
-  renderQuotes();
-  renderQuoteFilters();
-}
 
 /* ── INIT ───────────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   buildChips();
   renderClinics(CLINICS);
-  renderQuotes();
-  renderQuoteFilters();
 });

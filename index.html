@@ -148,9 +148,6 @@
     <button class="nav-btn" onclick="goTab('services')">
       <span class="nav-icon">🏥</span><span id="nav-services">Services</span>
     </button>
-    <button class="nav-btn" onclick="goTab('quotes')">
-      <span class="nav-icon">✨</span><span id="nav-quotes">Quotes</span>
-    </button>
     <button class="nav-btn" onclick="goTab('chat')">
       <span class="nav-icon">💬</span><span id="nav-chat">AI Support</span>
     </button>
@@ -166,6 +163,15 @@
 
     <!-- Hero banner -->
     <div class="hero-banner">
+      <div class="hero-intro-panel">
+        <div class="welcome-text" id="welcome-text">
+          <span>Welcome to</span>
+          <span>Your-Hope</span>
+        </div>
+        <div class="hero-random-quote" id="hero-random-quote">“Healing takes time, and asking for help is a courageous step.”</div>
+      </div>
+
+      <div class="hero-main-panel">
       <div class="hero-eyebrow" id="h-eye">Mental Health · Phnom Penh</div>
       <div class="hero-illustration">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -246,6 +252,7 @@
           <div class="hero-stat-lbl" id="h-stat3">Scales</div>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- Quick-action cards -->
@@ -271,14 +278,7 @@
         <div class="home-card-desc"  id="hc3d">Ask questions, understand your results, find help</div>
         <div class="home-card-btn"   id="hc3b">Chat now →</div>
       </div>
-      <div class="home-card blue" onclick="scrollToQuotes()">
-        <div class="home-card-icon">✨</div>
-        <div class="home-card-label" id="hc5l">Quotes</div>
-        <div class="home-card-title" id="hc5t">Daily Inspiration</div>
-        <div class="home-card-desc"  id="hc5d">Browse categorized quotes for hope, strength, and calm.</div>
-        <div class="home-card-btn"   id="hc5b">View quotes →</div>
-      </div>
-      <div class="home-card dark" onclick="printResults()">
+<div class="home-card dark" onclick="printResults()">
         <div class="home-card-icon">📄</div>
         <div class="home-card-label" id="hc4l">Export</div>
         <div class="home-card-title" id="hc4t">Print Results</div>
@@ -286,18 +286,7 @@
         <div class="home-card-btn"   id="hc4b">Export PDF →</div>
       </div>
     </div>
-
-  <section id="quotes-section" class="quotes-panel">
-    <div class="sec-header">
-      <div class="sec-eyebrow" id="home-q-eye">Daily Inspiration</div>
-      <div class="sec-title"   id="home-quotes-title">Motivational Quotes</div>
-      <div class="sec-sub"     id="home-quotes-sub">Browse encouraging quotes by category.</div>
-    </div>
-    <div class="quotes-actions" id="home-quotes-filters"></div>
-    <div class="quotes-grid" id="quotes-grid"></div>
-  </section>
-
-    <!-- Disclaimer -->
+<!-- Disclaimer -->
     <div class="disclaimer-box" id="h-disc">
       This app is for informational purposes only. The DASS-21 is a validated screening tool, not a clinical diagnosis. If you are in crisis, please contact a healthcare professional immediately.
     </div>
@@ -475,25 +464,7 @@
     </div>
 
   </section><!-- /tab-chat -->
-
-  <!-- ════════════════════════════════════════════
-       QUOTES SCREEN
-       ════════════════════════════════════════════ -->
-  <section id="tab-quotes" class="screen">
-
-    <div class="sec-header">
-      <div class="sec-eyebrow" id="q-eye">Daily Inspiration</div>
-      <div class="sec-title"   id="q-title">Words of Hope</div>
-      <div class="sec-sub"     id="q-sub">Take a moment to find your daily dose of motivation and encouragement</div>
-    </div>
-
-    <div class="quotes-container" id="quotes-container">
-      <!-- Quotes will be loaded here -->
-    </div>
-
-  </section><!-- /tab-quotes -->
-
-  <!-- ════════════════════════════════════════════
+<!-- ════════════════════════════════════════════
    
        ABOUT US SCREEN
        ════════════════════════════════════════════ -->
