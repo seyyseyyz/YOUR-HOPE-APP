@@ -1,30 +1,26 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 
-import authRoutes from './routes/authRoutes.js';
+import authRoutes   from './routes/authRoutes.js';
 import resultRoutes from './routes/resultRoutes.js';
 
-dotenv.config();
+const app  = express();
+const PORT = process.env.PORT || 3000;
 
-const app = express();
-
-/* Middleware */
+/* ── MIDDLEWARE ───────────────────────────────────────────────────── */
 app.use(cors());
 app.use(express.json());
 
-/* Routes */
-app.use('/api/auth', authRoutes);
+/* ── ROUTES ───────────────────────────────────────────────────────── */
+app.use('/api/auth',    authRoutes);
 app.use('/api/results', resultRoutes);
 
-/* Test Route */
-app.get('/', (req, res) => {
-    res.send('YOUR HOPE Backend Running');
-});
+/* ── HEALTH CHECK ─────────────────────────────────────────────────── */
+app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
-/* Start Server */
-const PORT = process.env.PORT || 5001;
+/* ── 404 ──────────────────────────────────────────────────────────── */
+app.use((_req, res) => res.status(404).json({ success: false, message: 'Route not found' }));
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+/* ── START ────────────────────────────────────────────────────────── */
+app.listen(PORT, () => console.log(`🚀  Server running on port ${PORT}`));

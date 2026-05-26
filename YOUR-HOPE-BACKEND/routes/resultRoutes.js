@@ -1,17 +1,20 @@
-import express from 'express';
-
+import { Router } from 'express';
 import {
     saveResult,
-    getMyResults
+    getMyResults,
+    getResultDetail,
+    deleteResult,
 } from '../controllers/resultController.js';
+import { verifyToken } from '../middleware/authMiddleware.js';
 
-import {
-    verifyToken
-} from '../middleware/authMiddleware.js';
+const router = Router();
 
-const router = express.Router();
+// All result routes require a valid token
+router.use(verifyToken);
 
-router.post('/', verifyToken, saveResult);
-router.get('/me', verifyToken, getMyResults);
+router.post  ('/',    saveResult);        // save a new test result
+router.get   ('/',    getMyResults);      // list my results  (?limit=20&offset=0)
+router.get   ('/:id', getResultDetail);   // full result + answers by id
+router.delete('/:id', deleteResult);      // delete one result
 
 export default router;
