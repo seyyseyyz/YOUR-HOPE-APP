@@ -113,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ── LANGUAGE ───────────────────────────────────────────────────── */
 function setLang(l) {
   curLang = l;
+  document.documentElement.setAttribute('lang', l === 'kh' ? 'kh' : 'en');
   document.querySelectorAll('.lang-btn').forEach((b, i) =>
     b.classList.toggle('active', (i === 0 && l === 'eng') || (i === 1 && l === 'kh'))
   );
@@ -163,9 +164,25 @@ function applyLang() {
   sid('nav-services', t.navServices); sid('nav-chat', t.navChat);
   // About
   sid('a-eye', t.aEye); sid('a-title', t.aTitle); sid('a-sub', t.aSub);
+  sid('about-hero-title', t.aboutHeroTitle);
+  sid('about-hero-lead', t.aboutHeroLead);
+  sid('about-start-btn', t.aboutStartBtn);
+  sid('about-find-btn', t.aboutFindBtn);
   sid('a-mission-title', t.aMissionTitle); sid('a-mission-text', t.aMissionText);
   sid('a-vision-title', t.aVisionTitle); sid('a-vision-text', t.aVisionText);
   sid('a-values-title', t.aValuesTitle);
+  sid('about-promise-1', t.aboutPromise1);
+  sid('about-promise-2', t.aboutPromise2);
+  sid('about-promise-3', t.aboutPromise3);
+  sid('about-promise-4', t.aboutPromise4);
+  sid('about-why-title', t.aboutWhyTitle);
+  sid('about-feature-1-title', t.aboutFeature1Title); sid('about-feature-1-desc', t.aboutFeature1Desc);
+  sid('about-feature-2-title', t.aboutFeature2Title); sid('about-feature-2-desc', t.aboutFeature2Desc);
+  sid('about-feature-3-title', t.aboutFeature3Title); sid('about-feature-3-desc', t.aboutFeature3Desc);
+  sid('about-feature-4-title', t.aboutFeature4Title); sid('about-feature-4-desc', t.aboutFeature4Desc);
+  sid('about-feature-5-title', t.aboutFeature5Title); sid('about-feature-5-desc', t.aboutFeature5Desc);
+  sid('about-feature-6-title', t.aboutFeature6Title); sid('about-feature-6-desc', t.aboutFeature6Desc);
+  sid('about-closing-quote', t.aboutClosingQuote);
   sid('av1-name', t.av1Name); sid('av1-desc', t.av1Desc);
   sid('av2-name', t.av2Name); sid('av2-desc', t.av2Desc);
   sid('av3-name', t.av3Name); sid('av3-desc', t.av3Desc);
