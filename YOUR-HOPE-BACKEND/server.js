@@ -24,7 +24,8 @@ const allowedOrigins = [
   'http://127.0.0.1:5500',
   'http://localhost:5001',
   'http://127.0.0.1:5001',
-  'https://symphonious-pegasus-d35df6.netlify.app'
+  'https://symphonious-pegasus-d35df6.netlify.app',
+  'https://your-hope-app-production.up.railway.app'
 ];
 
 const corsOptions = {
@@ -38,6 +39,12 @@ const corsOptions = {
       return callback(null, true);
     }
 
+    // Allow any Netlify preview deployments for this project
+    if (origin.endsWith('.netlify.app')) {
+      return callback(null, true);
+    }
+
+    console.warn(`CORS blocked for origin: ${origin}`);
     return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
