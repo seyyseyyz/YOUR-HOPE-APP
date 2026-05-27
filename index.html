@@ -78,6 +78,29 @@
         </div>
 
         <div class="auth-input-group">
+          <label for="signup-job">Job / Occupation <span class="optional-label">Optional</span></label>
+          <input type="text" id="signup-job" placeholder="Student, Teacher, Developer..." maxlength="120">
+        </div>
+
+        <div class="auth-profile-grid">
+          <div class="auth-input-group">
+            <label for="signup-age">Age <span class="optional-label">Optional</span></label>
+            <input type="number" id="signup-age" placeholder="18" min="1" max="120" inputmode="numeric">
+          </div>
+
+          <div class="auth-input-group">
+            <label for="signup-gender">Gender <span class="optional-label">Optional</span></label>
+            <select id="signup-gender">
+              <option value="">Prefer not to say</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+              <option value="other">Other</option>
+              <option value="prefer_not_to_say">Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="auth-input-group">
           <label for="signup-password">Password</label>
           <div class="input-wrapper">
             <input type="password" id="signup-password" placeholder="At least 6 characters" required>
@@ -153,6 +176,9 @@
     </button>
     <button class="nav-btn" onclick="goTab('about')">
       <span class="nav-icon">ℹ️</span><span id="nav-about">About</span>
+    </button>
+    <button class="nav-btn admin-nav hidden" id="nav-admin-btn" onclick="goTab('admin')">
+      <span class="nav-icon">📊</span><span id="nav-admin">Admin</span>
     </button>
   </nav>
 
@@ -640,6 +666,126 @@
     </div>
 
   </section><!-- /tab-about -->
+
+  <!-- ════════════════════════════════════════════
+       ADMIN DASHBOARD SCREEN
+       ════════════════════════════════════════════ -->
+  <section id="tab-admin" class="screen admin-screen">
+    <div class="admin-hero">
+      <div>
+        <div class="sec-eyebrow" id="admin-eye">Admin Control Center</div>
+        <div class="sec-title" id="admin-title">YOUR HOPE Dashboard</div>
+        <div class="sec-sub" id="admin-sub">Manage users, screening results, clinics, and quotes from one clean workspace.</div>
+      </div>
+      <button class="admin-refresh-btn" onclick="loadAdminDashboard(true)">↻ Refresh</button>
+    </div>
+
+    <div class="admin-status" id="admin-status">Loading admin dashboard…</div>
+
+    <div class="admin-stats-grid" id="admin-stats-grid">
+      <div class="admin-stat-card"><span>Total Users</span><strong>—</strong></div>
+      <div class="admin-stat-card"><span>Total Tests</span><strong>—</strong></div>
+      <div class="admin-stat-card danger"><span>High Risk</span><strong>—</strong></div>
+      <div class="admin-stat-card"><span>Clinics</span><strong>—</strong></div>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchAdminPanel('overview')">Overview</button>
+      <button class="admin-tab" onclick="switchAdminPanel('users')">Users</button>
+      <button class="admin-tab" onclick="switchAdminPanel('results')">Results</button>
+      <button class="admin-tab" onclick="switchAdminPanel('clinics')">Clinics</button>
+      <button class="admin-tab" onclick="switchAdminPanel('quotes')">Quotes</button>
+    </div>
+
+    <div class="admin-panel active" id="admin-panel-overview">
+      <div class="admin-grid-two">
+        <div class="admin-card">
+          <div class="admin-card-title">Risk Level Breakdown</div>
+          <div id="admin-risk-breakdown" class="admin-risk-list"></div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">Average Scores</div>
+          <div id="admin-average-scores" class="admin-average-list"></div>
+        </div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">Recent Screening Results</div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>User</th><th>D</th><th>A</th><th>S</th><th>Worst</th><th>Date</th></tr></thead>
+            <tbody id="admin-recent-results"><tr><td colspan="6">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="admin-panel-users">
+      <div class="admin-toolbar">
+        <input id="admin-user-search" class="admin-input" placeholder="Search users by name, email, or job…">
+        <select id="admin-user-role" class="admin-input">
+          <option value="">All roles</option><option value="user">User</option><option value="admin">Admin</option>
+        </select>
+        <button class="admin-action-btn" onclick="loadAdminUsers()">Search</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>User</th><th>Profile</th><th>Role</th><th>Status</th><th>Joined</th></tr></thead>
+          <tbody id="admin-users-body"><tr><td colspan="5">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="admin-panel-results">
+      <div class="admin-toolbar">
+        <input id="admin-result-search" class="admin-input" placeholder="Search result by user or email…">
+        <select id="admin-result-level" class="admin-input">
+          <option value="">All levels</option>
+          <option value="Normal">Normal</option><option value="Mild">Mild</option><option value="Moderate">Moderate</option><option value="Severe">Severe</option><option value="Extremely Severe">Extremely Severe</option>
+        </select>
+        <button class="admin-action-btn" onclick="loadAdminResults()">Search</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>User</th><th>Scores</th><th>Levels</th><th>Worst</th><th>Date</th></tr></thead>
+          <tbody id="admin-results-body"><tr><td colspan="5">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="admin-panel-clinics">
+      <div class="admin-card">
+        <div class="admin-card-title">Add Clinic / Service</div>
+        <form class="admin-form" onsubmit="event.preventDefault(); createAdminClinic();">
+          <input id="admin-clinic-name" class="admin-input" placeholder="Clinic name" required>
+          <select id="admin-clinic-type" class="admin-input"><option>Clinic</option><option>Hospital</option><option>NGO</option><option>Service</option></select>
+          <input id="admin-clinic-location" class="admin-input" placeholder="Location / District">
+          <input id="admin-clinic-phone" class="admin-input" placeholder="Phone number">
+          <select id="admin-clinic-nssf" class="admin-input"><option value="No">NSSF: No</option><option value="Yes">NSSF: Yes</option></select>
+          <button class="admin-action-btn" type="submit">Add Clinic</button>
+        </form>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">Clinic Directory Preview</div>
+        <div id="admin-clinics-body" class="admin-mini-list">Loading…</div>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="admin-panel-quotes">
+      <div class="admin-card">
+        <div class="admin-card-title">Add Motivational Quote</div>
+        <form class="admin-form quote-form" onsubmit="event.preventDefault(); createAdminQuote();">
+          <input id="admin-quote-text" class="admin-input admin-input-wide" placeholder="Write a quote…" required>
+          <select id="admin-quote-language" class="admin-input"><option value="eng">English</option><option value="kh">Khmer</option></select>
+          <input id="admin-quote-category" class="admin-input" placeholder="Category" value="hope">
+          <button class="admin-action-btn" type="submit">Add Quote</button>
+        </form>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">Latest Quotes</div>
+        <div id="admin-quotes-body" class="admin-mini-list">Loading…</div>
+      </div>
+    </div>
+  </section><!-- /tab-admin -->
 
   <!-- ════════════════════════════════════════════
        AUTH PROMPT MODAL
