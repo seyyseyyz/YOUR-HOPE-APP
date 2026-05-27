@@ -4,8 +4,8 @@
    Connects to backend API from config.js
    ═══════════════════════════════════════════════════════════════════ */
 
-const API_BASE = (window.CONFIG && CONFIG.apiBase) || 'http://localhost:5001/api';
-if (typeof window !== 'undefined') window.API_BASE = API_BASE;
+const API_BASE = window.CONFIG?.apiBase || 'http://localhost:5001/api';
+window.API_BASE = API_BASE;
 const SESSION_KEY = 'hope_session';
 const TOKEN_KEY   = 'hope_token';
 
@@ -28,51 +28,12 @@ function isLoggedIn() {
   return getSession() !== null && getToken() !== null;
 }
 
-
-/* ── REFRESH SESSION FROM BACKEND ─────────────────────────────────
-   Important for admin: if you change a user's role in MySQL, the old
-   browser session may still say role='user'. This refreshes /auth/me
-   and updates localStorage so the Admin button appears after reload.
-────────────────────────────────────────────────────────────────── */
-async function refreshSessionFromBackend() {
-  const token = getToken();
-  if (!token) return null;
-
-  try {
-    const response = await fetch(`${API_BASE}/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    if (!response.ok) {
-      localStorage.removeItem(SESSION_KEY);
-      localStorage.removeItem(TOKEN_KEY);
-      return null;
-    }
-
-    const data = await response.json();
-    if (data.user) {
-      localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
-      return data.user;
-    }
-  } catch (error) {
-    console.warn('[refreshSessionFromBackend]', error.message);
-  }
-
-  return getSession();
-}
-
 /* ── SIGN UP ────────────────────────────────────────────────────── */
 async function signUp() {
   currentAuthPage = 'signup';
 
   const fullName    = document.getElementById('signup-name').value.trim();
   const email       = document.getElementById('signup-email').value.trim();
-  const jobInput    = document.getElementById('signup-job');
-  const ageInput    = document.getElementById('signup-age');
-  const genderInput = document.getElementById('signup-gender');
-  const job         = jobInput ? jobInput.value.trim() : '';
-  const ageRaw      = ageInput ? ageInput.value.trim() : '';
-  const gender      = genderInput ? genderInput.value : '';
   const password    = document.getElementById('signup-password').value;
   const confirmPwd  = document.getElementById('signup-confirm').value;
   const termsChecked = document.getElementById('signup-terms').checked;
@@ -97,32 +58,12 @@ async function signUp() {
   if (!termsChecked) {
     showAuthError('Please agree to Terms of Service'); return;
   }
-  if (job.length > 120) {
-    showAuthError('Job must be 120 characters or less'); return;
-  }
-
-  const age = ageRaw === '' ? null : Number(ageRaw);
-  if (age !== null && (!Number.isInteger(age) || age < 1 || age > 120)) {
-    showAuthError('Age must be a whole number between 1 and 120'); return;
-  }
-
-  const allowedGenders = ['', 'male', 'female', 'other', 'prefer_not_to_say'];
-  if (!allowedGenders.includes(gender)) {
-    showAuthError('Please choose a valid gender option'); return;
-  }
 
   try {
     const response = await fetch(`${API_BASE}/auth/signup`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({
-        full_name: fullName,
-        email,
-        job: job || null,
-        age,
-        gender: gender || null,
-        password
-      })
+      body:    JSON.stringify({ full_name: fullName, email, password })
     });
 
     const data = await response.json();
@@ -167,8 +108,6 @@ async function logIn(email, password) {
     // ── Save JWT token + session ─────────────────────────────────
     saveToken(data.token);
     localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
-
-    if (typeof updateAdminAccessUI === 'function') updateAdminAccessUI();
 
     showAuthSuccess('Login successful!');
     setTimeout(() => showMainApp(), 800);
@@ -249,25 +188,12 @@ function goToSignUp() {
 function clearAuthForm(page) {
   const pageEl = document.querySelector(`[data-auth-page="${page}"]`);
   if (!pageEl) return;
-  pageEl.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="number"]')
+  pageEl.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]')
         .forEach(input => { input.value = ''; });
-  pageEl.querySelectorAll('select')
-        .forEach(select => { select.selectedIndex = 0; });
   const errorEl   = document.getElementById(page + '-error');
   const successEl = document.getElementById(page + '-success');
   if (errorEl)   errorEl.style.display   = 'none';
   if (successEl) successEl.style.display = 'none';
-}
-
-function formatUserMeta(session) {
-  const parts = [];
-  if (session.job) parts.push(session.job);
-  if (session.age) parts.push(`${session.age} years old`);
-  if (session.gender && session.gender !== 'prefer_not_to_say') {
-    const genderLabel = { male: 'Male', female: 'Female', other: 'Other' }[session.gender] || session.gender;
-    parts.push(genderLabel);
-  }
-  return parts.join(' · ');
 }
 
 function showMainApp() {
@@ -283,15 +209,9 @@ function showMainApp() {
     window.userInfo   = session;
   }
 
-  if (typeof updateAdminAccessUI === 'function') updateAdminAccessUI();
-
   if (session) {
     const nameEl = document.getElementById('user-name');
-    if (nameEl) {
-      const displayName = session.full_name || session.fullName || '';
-      const profileMeta = formatUserMeta(session);
-      nameEl.textContent = profileMeta ? `${displayName} · ${profileMeta}` : displayName;
-    }
+    if (nameEl) nameEl.textContent = session.full_name || session.fullName || '';
   }
 
   if (typeof goTab === 'function') {
@@ -302,16 +222,12 @@ function showMainApp() {
 }
 
 /* ── INIT ───────────────────────────────────────────────────────── */
-async function initAuth() {
+function initAuth() {
   if (isLoggedIn()) {
-    await refreshSessionFromBackend();
-
     if (typeof window !== 'undefined') {
       window.isSignedUp = true;
       window.userInfo   = getSession();
     }
-
-    if (typeof updateAdminAccessUI === 'function') updateAdminAccessUI();
     showMainApp();
   } else {
     showPage('signin');

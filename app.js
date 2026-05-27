@@ -4,6 +4,8 @@
    Depends on: data.js (QUESTIONS, CLINICS, T, getLevel)
    ═══════════════════════════════════════════════════════════════════ */
 
+const API_BASE = window.API_BASE || window.CONFIG?.apiBase || 'http://localhost:5001/api';
+
 /* ── APP STATE ──────────────────────────────────────────────────── */
 let curLang = 'eng';   // 'eng' | 'kh'
 let curPage = 0;      // current question page (0–2, 7 questions each)
@@ -15,85 +17,6 @@ const chatHist = [];  // Anthropic messages array
 let lastRes    = null;   // last computed DASS-21 result
 let displayed  = [...CLINICS]; // currently visible clinics
 
-/* ── RANDOM HERO QUOTES ─────────────────────────────────────────── */
-const HERO_WELCOME = {
-  eng: ['Welcome to', 'Your-Hope'],
-  kh: ['សូមស្វាគមន៍មកកាន់', 'ក្តីសង្ឃឹមរបស់អ្នក']
-};
-
-const heroQuotes = {
-  eng: [
-    'Healing takes time, and asking for help is a courageous step.',
-    'Your feelings are valid, and your story matters.',
-    'Mental health is just as important as physical health.',
-    'Small progress is still progress.',
-    'Hope is stronger than fear.',
-    'You are stronger than you think.',
-    'Every day is a fresh beginning.',
-    'Take a deep breath. You are doing your best.',
-    'It is okay to slow down and heal.',
-    'You deserve happiness, peace, and support.'
-  ],
-  kh: [
-    'ការព្យាបាលត្រូវការពេលវេលា ហើយការសុំជំនួយគឺជាជំហានដ៏ក្លាហាន។',
-    'អារម្មណ៍របស់អ្នកមានតម្លៃ ហើយរឿងរ៉ាវរបស់អ្នកក៏សំខាន់។',
-    'សុខភាពផ្លូវចិត្តសំខាន់ដូចសុខភាពរាងកាយដែរ។',
-    'ការរីកចម្រើនតិចតួច ក៏នៅតែជាការរីកចម្រើន។',
-    'ក្តីសង្ឃឹមខ្លាំងជាងការភ័យខ្លាច។',
-    'អ្នកខ្លាំងជាងអ្វីដែលអ្នកគិត។',
-    'រាល់ថ្ងៃគឺជាការចាប់ផ្តើមថ្មី។',
-    'ដកដង្ហើមវែងៗ។ អ្នកកំពុងព្យាយាមបានល្អហើយ។',
-    'មិនអីទេបើអ្នកត្រូវការសម្រាក និងព្យាបាលខ្លួន។',
-    'អ្នកសមនឹងទទួលបានសន្តិភាព សុភមង្គល និងការគាំទ្រ។'
-  ]
-};
-
-let currentQuoteIndex = 0;
-let heroQuoteTimer = null;
-
-function getHeroQuoteList() {
-  return heroQuotes[curLang] || heroQuotes.eng;
-}
-
-function setHeroWelcomeText() {
-  const welcomeEl = document.getElementById('welcome-text');
-  if (!welcomeEl) return;
-  const lines = HERO_WELCOME[curLang] || HERO_WELCOME.eng;
-  welcomeEl.classList.toggle('khmer-welcome', curLang === 'kh');
-  welcomeEl.innerHTML = `<span>${lines[0]}</span><span>${lines[1]}</span>`;
-}
-
-function updateHeroQuote() {
-  const quoteElement = document.getElementById('hero-random-quote');
-  const quotes = getHeroQuoteList();
-  if (!quoteElement || !quotes.length) return;
-  quoteElement.classList.toggle('khmer-quote', curLang === 'kh');
-
-  currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
-  quoteElement.classList.remove('fade-quote');
-
-  setTimeout(() => {
-    quoteElement.textContent = `“${quotes[currentQuoteIndex]}”`;
-    quoteElement.classList.add('fade-quote');
-  }, 120);
-}
-
-function refreshHeroQuoteLanguage(resetIndex = true) {
-  const quoteElement = document.getElementById('hero-random-quote');
-  const quotes = getHeroQuoteList();
-  if (!quoteElement || !quotes.length) return;
-  quoteElement.classList.toggle('khmer-quote', curLang === 'kh');
-  if (resetIndex) currentQuoteIndex = 0;
-  setHeroWelcomeText();
-  quoteElement.textContent = `“${quotes[currentQuoteIndex]}”`;
-}
-
-function startHeroQuotes() {
-  if (heroQuoteTimer) return;
-  refreshHeroQuoteLanguage(true);
-  heroQuoteTimer = setInterval(updateHeroQuote, 30000);
-}
-
 function syncAuthState() {
   const session = typeof getSession === 'function' ? getSession() : null;
   isSignedUp = !!session;
@@ -102,19 +25,16 @@ function syncAuthState() {
     window.isSignedUp = isSignedUp;
     window.userInfo = userInfo;
   }
-  if (typeof updateAdminAccessUI === 'function') updateAdminAccessUI();
   return session;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   syncAuthState();
-  startHeroQuotes();
 });
 
 /* ── LANGUAGE ───────────────────────────────────────────────────── */
 function setLang(l) {
   curLang = l;
-  document.documentElement.setAttribute('lang', l === 'kh' ? 'kh' : 'en');
   document.querySelectorAll('.lang-btn').forEach((b, i) =>
     b.classList.toggle('active', (i === 0 && l === 'eng') || (i === 1 && l === 'kh'))
   );
@@ -128,7 +48,6 @@ function sid(id, v) {
 
 function applyLang() {
   const t = T[curLang];
-  refreshHeroQuoteLanguage(true);
   sid('nssf-all', curLang === 'kh' ? 'NSSF: ទាំងអស់' : 'NSSF: All');
   sid('nssf-yes', curLang === 'kh' ? 'NSSF: មាន' : 'NSSF: Yes');
   sid('nssf-no',  curLang === 'kh' ? 'NSSF: គ្មាន' : 'NSSF: No');
@@ -160,30 +79,19 @@ function applyLang() {
   sid('vplist', t.svList); sid('vpmap', t.svMap);
   // Chat
   sid('c-eye', t.cEye); sid('c-title', t.cTitle); sid('c-sub', t.cSub); sid('c-disc', t.cDisc);
+  // Quotes
+  sid('q-eye',           t.qEye);  sid('q-title', t.qTitle); sid('q-sub', t.qSub);
+  sid('home-q-eye',      t.qEye);
+  sid('home-quotes-title', t.qTitle);
+  sid('home-quotes-sub',   t.qSub);
   // Nav
   sid('nav-home', t.navHome); sid('nav-test', t.navTest);
-  sid('nav-services', t.navServices); sid('nav-chat', t.navChat); sid('nav-admin', t.navAdmin || 'Admin');
+  sid('nav-services', t.navServices); sid('nav-quotes', t.navQuotes); sid('nav-chat', t.navChat);
   // About
   sid('a-eye', t.aEye); sid('a-title', t.aTitle); sid('a-sub', t.aSub);
-  sid('about-hero-title', t.aboutHeroTitle);
-  sid('about-hero-lead', t.aboutHeroLead);
-  sid('about-start-btn', t.aboutStartBtn);
-  sid('about-find-btn', t.aboutFindBtn);
   sid('a-mission-title', t.aMissionTitle); sid('a-mission-text', t.aMissionText);
   sid('a-vision-title', t.aVisionTitle); sid('a-vision-text', t.aVisionText);
   sid('a-values-title', t.aValuesTitle);
-  sid('about-promise-1', t.aboutPromise1);
-  sid('about-promise-2', t.aboutPromise2);
-  sid('about-promise-3', t.aboutPromise3);
-  sid('about-promise-4', t.aboutPromise4);
-  sid('about-why-title', t.aboutWhyTitle);
-  sid('about-feature-1-title', t.aboutFeature1Title); sid('about-feature-1-desc', t.aboutFeature1Desc);
-  sid('about-feature-2-title', t.aboutFeature2Title); sid('about-feature-2-desc', t.aboutFeature2Desc);
-  sid('about-feature-3-title', t.aboutFeature3Title); sid('about-feature-3-desc', t.aboutFeature3Desc);
-  sid('about-feature-4-title', t.aboutFeature4Title); sid('about-feature-4-desc', t.aboutFeature4Desc);
-  sid('about-feature-5-title', t.aboutFeature5Title); sid('about-feature-5-desc', t.aboutFeature5Desc);
-  sid('about-feature-6-title', t.aboutFeature6Title); sid('about-feature-6-desc', t.aboutFeature6Desc);
-  sid('about-closing-quote', t.aboutClosingQuote);
   sid('av1-name', t.av1Name); sid('av1-desc', t.av1Desc);
   sid('av2-name', t.av2Name); sid('av2-desc', t.av2Desc);
   sid('av3-name', t.av3Name); sid('av3-desc', t.av3Desc);
@@ -209,13 +117,8 @@ function goTab(tab) {
     tab = 'home';
   }
 
-  // Check if user needs to sign up before accessing protected pages
-  if (tab === 'admin' && !isAdminUser()) {
-    alert(curLang === 'kh' ? 'ត្រូវការសិទ្ធិ Admin' : 'Admin access required');
-    tab = 'home';
-  }
-
-  if ((tab === 'test' || tab === 'services' || tab === 'admin') && !isSignedUp) {
+  // Check if user needs to sign up before accessing test or services
+  if ((tab === 'test' || tab === 'services') && !isSignedUp) {
     showAuthPrompt(tab);
     return;
   }
@@ -223,13 +126,13 @@ function goTab(tab) {
   document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(e => e.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
-  const tabs = ['home', 'test', 'services', 'chat', 'about', 'admin'];
+  const tabs = ['home', 'test', 'services', 'quotes', 'chat', 'about'];
   const tabIndex = tabs.indexOf(tab);
-  if (tabIndex >= 0 && tabIndex < tabs.length) {
+  if (tabIndex >= 0 && tabIndex < 6) {
     document.querySelectorAll('.nav-btn')[tabIndex].classList.add('active');
   }
   if (tab === 'services') renderClinics(displayed);
-  if (tab === 'admin') loadAdminDashboard();
+  if (tab === 'quotes') { renderQuotes(); renderQuoteFilters(); }
   window.scrollTo(0, 0);
 }
 
@@ -554,6 +457,13 @@ function buildChips() {
     .join('');
 }
 
+function scrollToQuotes() {
+  goTab('home');
+  setTimeout(() => {
+  const section = document.getElementById('quotes-section');
+  if (section) section.scrollIntoView({ behavior: 'smooth' });
+  }, 350);
+}
 
 function showAuthPrompt(tab) {
   const modal = document.getElementById('auth-prompt-modal');
@@ -617,7 +527,7 @@ async function sendChat() {
     ? `The user completed DASS-21: Depression=${lastRes.dS}(${lastRes.dL}), Anxiety=${lastRes.aS}(${lastRes.aL}), Stress=${lastRes.sS}(${lastRes.sL}).`
     : 'User has not completed the DASS-21 test yet.';
 
-  const GEMINI_KEY = CONFIG.geminiKey;
+  const GEMINI_KEY = window.CONFIG?.geminiKey || '';
 
   try {
     const r = await fetch(
@@ -1011,258 +921,51 @@ function printResults() {
 
 /* ── AUTHENTICATION ───────────────────────────────────────────── */
 
+let activeQuoteCategory = 'all';
+
+function renderQuotes() {
+  renderQuotesTo('quotes-container');
+  renderQuotesTo('quotes-grid');
+}
+
+function renderQuotesTo(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  const categories = QUOTES[curLang];
+  Object.entries(categories).forEach(([key, quotesArr]) => {
+    if (activeQuoteCategory !== 'all' && activeQuoteCategory !== key) return;
+    quotesArr.forEach(quote => {
+      const card = document.createElement('div');
+      card.className = 'quote-card';
+      card.innerHTML = `<p class="quote-text">${quote}</p>`;
+      container.appendChild(card);
+    });
+  });
+}
+
+function renderQuoteFilters() {
+  ['quotes-filters', 'home-quotes-filters'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = QUOTE_CATEGORIES.map(cat => `
+      <button class="chip ${activeQuoteCategory === cat.key ? 'active' : ''}"
+        onclick="setQuoteCategory('${cat.key}')">
+        ${curLang === 'kh' ? cat.kh : cat.eng}
+      </button>`).join('');
+  });
+}
+
+function setQuoteCategory(key) {
+  activeQuoteCategory = key;
+  renderQuotes();
+  renderQuoteFilters();
+}
 
 /* ── INIT ───────────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   buildChips();
   renderClinics(CLINICS);
+  renderQuotes();
+  renderQuoteFilters();
 });
-/* ── ADMIN DASHBOARD ────────────────────────────────────────────── */
-let adminLoaded = false;
-let currentAdminPanel = 'overview';
-
-function isAdminUser() {
-  const session = typeof getSession === 'function' ? getSession() : null;
-  return session && session.role === 'admin';
-}
-
-function updateAdminAccessUI() {
-  const btn = document.getElementById('nav-admin-btn');
-  if (!btn) return;
-  btn.classList.toggle('hidden', !isAdminUser());
-}
-
-function adminApi(path, options = {}) {
-  const token = typeof getToken === 'function' ? getToken() : null;
-  return fetch(`${API_BASE}/admin${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-  }).then(async (res) => {
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.message || 'Admin request failed');
-    return data;
-  });
-}
-
-function setAdminStatus(message, isError = false) {
-  const el = document.getElementById('admin-status');
-  if (!el) return;
-  el.textContent = message;
-  el.classList.toggle('error', isError);
-}
-
-function levelBadge(level) {
-  const safe = String(level || 'Normal').replace(/\s+/g, '-');
-  return `<span class="admin-level-badge admin-level-${safe}">${level || 'Normal'}</span>`;
-}
-
-function formatDateTime(value) {
-  if (!value) return '—';
-  try { return new Date(value).toLocaleString(); } catch { return value; }
-}
-
-async function loadAdminDashboard(force = false) {
-  if (!isAdminUser()) {
-    setAdminStatus('Admin access required.', true);
-    return;
-  }
-  if (adminLoaded && !force) return;
-
-  try {
-    setAdminStatus('Loading admin dashboard…');
-    const data = await adminApi('/summary');
-    const s = data.summary || {};
-    const stats = [
-      ['Total Users', s.total_users ?? 0, '👥'],
-      ['Total Tests', s.total_tests ?? 0, '📋'],
-      ['High Risk', s.high_risk_tests ?? 0, '⚠️', 'danger'],
-      ['Clinics', s.total_clinics ?? 0, '🏥'],
-    ];
-    const statsEl = document.getElementById('admin-stats-grid');
-    if (statsEl) {
-      statsEl.innerHTML = stats.map(([label, value, icon, cls]) => `
-        <div class="admin-stat-card ${cls || ''}">
-          <div class="admin-stat-icon">${icon}</div>
-          <span>${label}</span>
-          <strong>${value}</strong>
-        </div>`).join('');
-    }
-
-    const riskEl = document.getElementById('admin-risk-breakdown');
-    if (riskEl) {
-      const total = Math.max(Number(s.total_tests || 0), 1);
-      const rows = data.risk_breakdown || [];
-      riskEl.innerHTML = rows.length ? rows.map(r => {
-        const pct = Math.round((Number(r.total) / total) * 100);
-        return `<div class="admin-risk-row"><span>${levelBadge(r.worst_level)}</span><strong>${r.total}</strong><div class="admin-risk-bar"><i style="width:${pct}%"></i></div></div>`;
-      }).join('') : '<p class="admin-empty">No results yet.</p>';
-    }
-
-    const avgEl = document.getElementById('admin-average-scores');
-    if (avgEl) {
-      avgEl.innerHTML = `
-        <div class="admin-average-item dep"><span>Depression</span><strong>${s.avg_depression ?? 0}</strong></div>
-        <div class="admin-average-item anx"><span>Anxiety</span><strong>${s.avg_anxiety ?? 0}</strong></div>
-        <div class="admin-average-item str"><span>Stress</span><strong>${s.avg_stress ?? 0}</strong></div>`;
-    }
-
-    const recentEl = document.getElementById('admin-recent-results');
-    if (recentEl) {
-      const rows = data.recent_results || [];
-      recentEl.innerHTML = rows.length ? rows.map(r => `
-        <tr>
-          <td><strong>${r.full_name || 'Unknown'}</strong><small>${r.email || ''}</small></td>
-          <td>${r.depression_score}</td><td>${r.anxiety_score}</td><td>${r.stress_score}</td>
-          <td>${levelBadge(r.worst_level)}</td>
-          <td>${formatDateTime(r.created_at)}</td>
-        </tr>`).join('') : '<tr><td colspan="6">No screening results yet.</td></tr>';
-    }
-
-    await Promise.allSettled([loadAdminUsers(), loadAdminResults(), loadAdminClinics(), loadAdminQuotes()]);
-    adminLoaded = true;
-    setAdminStatus('Dashboard ready. Data loaded from backend.');
-  } catch (err) {
-    console.error('[loadAdminDashboard]', err);
-    setAdminStatus(err.message || 'Could not load admin dashboard.', true);
-  }
-}
-
-function switchAdminPanel(panel) {
-  currentAdminPanel = panel;
-  document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.admin-panel').forEach(el => el.classList.remove('active'));
-  const btns = Array.from(document.querySelectorAll('.admin-tab'));
-  const idx = ['overview','users','results','clinics','quotes'].indexOf(panel);
-  if (btns[idx]) btns[idx].classList.add('active');
-  const panelEl = document.getElementById(`admin-panel-${panel}`);
-  if (panelEl) panelEl.classList.add('active');
-  if (panel === 'users') loadAdminUsers();
-  if (panel === 'results') loadAdminResults();
-  if (panel === 'clinics') loadAdminClinics();
-  if (panel === 'quotes') loadAdminQuotes();
-}
-
-async function loadAdminUsers() {
-  if (!isAdminUser()) return;
-  const q = document.getElementById('admin-user-search')?.value || '';
-  const role = document.getElementById('admin-user-role')?.value || '';
-  const data = await adminApi(`/users?q=${encodeURIComponent(q)}&role=${encodeURIComponent(role)}&limit=50`);
-  const body = document.getElementById('admin-users-body');
-  if (!body) return;
-  body.innerHTML = (data.users || []).length ? data.users.map(u => `
-    <tr>
-      <td><strong>${u.full_name}</strong><small>${u.email}</small></td>
-      <td>${u.job || '—'}<small>${u.age ? `${u.age} yrs` : 'Age —'} · ${u.gender || 'Gender —'}</small></td>
-      <td><select class="admin-mini-select" onchange="updateAdminUser(${u.user_id}, { role: this.value })"><option value="user" ${u.role === 'user' ? 'selected' : ''}>user</option><option value="admin" ${u.role === 'admin' ? 'selected' : ''}>admin</option></select></td>
-      <td><select class="admin-mini-select" onchange="updateAdminUser(${u.user_id}, { status: this.value })"><option value="active" ${u.status === 'active' ? 'selected' : ''}>active</option><option value="inactive" ${u.status === 'inactive' ? 'selected' : ''}>inactive</option><option value="blocked" ${u.status === 'blocked' ? 'selected' : ''}>blocked</option></select></td>
-      <td>${formatDateTime(u.created_at)}</td>
-    </tr>`).join('') : '<tr><td colspan="5">No users found.</td></tr>';
-}
-
-async function updateAdminUser(userId, payload) {
-  try {
-    await adminApi(`/users/${userId}`, { method: 'PATCH', body: JSON.stringify(payload) });
-    setAdminStatus('User updated successfully.');
-  } catch (err) {
-    setAdminStatus(err.message, true);
-    loadAdminUsers();
-  }
-}
-
-async function loadAdminResults() {
-  if (!isAdminUser()) return;
-  const q = document.getElementById('admin-result-search')?.value || '';
-  const level = document.getElementById('admin-result-level')?.value || '';
-  const data = await adminApi(`/results?q=${encodeURIComponent(q)}&level=${encodeURIComponent(level)}&limit=50`);
-  const body = document.getElementById('admin-results-body');
-  if (!body) return;
-  body.innerHTML = (data.results || []).length ? data.results.map(r => `
-    <tr>
-      <td><strong>${r.full_name}</strong><small>${r.email}</small></td>
-      <td>D ${r.depression_score} · A ${r.anxiety_score} · S ${r.stress_score}</td>
-      <td><small>D: ${r.depression_level}<br>A: ${r.anxiety_level}<br>S: ${r.stress_level}</small></td>
-      <td>${levelBadge(r.worst_level)}</td>
-      <td>${formatDateTime(r.created_at)}</td>
-    </tr>`).join('') : '<tr><td colspan="5">No results found.</td></tr>';
-}
-
-async function loadAdminClinics() {
-  if (!isAdminUser()) return;
-  const res = await fetch(`${API_BASE}/clinics?limit=8`);
-  const data = await res.json();
-  const el = document.getElementById('admin-clinics-body');
-  if (!el) return;
-  el.innerHTML = (data.clinics || []).length ? data.clinics.map(c => `
-    <div class="admin-mini-item">
-      <div><strong>${c.name}</strong><small>${c.type} · ${c.location || 'No location'} · NSSF ${c.nssf}</small></div>
-      <button onclick="deleteAdminClinic(${c.clinic_id})">Delete</button>
-    </div>`).join('') : '<p class="admin-empty">No clinics in database yet.</p>';
-}
-
-async function createAdminClinic() {
-  try {
-    const payload = {
-      name: document.getElementById('admin-clinic-name').value.trim(),
-      type: document.getElementById('admin-clinic-type').value,
-      location: document.getElementById('admin-clinic-location').value.trim() || null,
-      phone: document.getElementById('admin-clinic-phone').value.trim() || null,
-      nssf: document.getElementById('admin-clinic-nssf').value,
-    };
-    await adminApi('/clinics', { method: 'POST', body: JSON.stringify(payload) });
-    ['admin-clinic-name','admin-clinic-location','admin-clinic-phone'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    setAdminStatus('Clinic added successfully.');
-    await loadAdminClinics();
-    adminLoaded = false;
-  } catch (err) { setAdminStatus(err.message, true); }
-}
-
-async function deleteAdminClinic(id) {
-  if (!confirm('Delete this clinic?')) return;
-  try {
-    await adminApi(`/clinics/${id}`, { method: 'DELETE' });
-    setAdminStatus('Clinic deleted.');
-    await loadAdminClinics();
-  } catch (err) { setAdminStatus(err.message, true); }
-}
-
-async function loadAdminQuotes() {
-  if (!isAdminUser()) return;
-  const data = await adminApi('/quotes');
-  const el = document.getElementById('admin-quotes-body');
-  if (!el) return;
-  el.innerHTML = (data.quotes || []).length ? data.quotes.slice(0, 20).map(q => `
-    <div class="admin-mini-item quote">
-      <div><strong>${q.quote_text}</strong><small>${q.language} · ${q.category} · ${q.is_active ? 'active' : 'inactive'}</small></div>
-      <button onclick="deleteAdminQuote(${q.quote_id})">Delete</button>
-    </div>`).join('') : '<p class="admin-empty">No quotes yet.</p>';
-}
-
-async function createAdminQuote() {
-  try {
-    const payload = {
-      quote_text: document.getElementById('admin-quote-text').value.trim(),
-      language: document.getElementById('admin-quote-language').value,
-      category: document.getElementById('admin-quote-category').value.trim() || 'hope',
-      is_active: true,
-    };
-    await adminApi('/quotes', { method: 'POST', body: JSON.stringify(payload) });
-    document.getElementById('admin-quote-text').value = '';
-    setAdminStatus('Quote added successfully.');
-    await loadAdminQuotes();
-  } catch (err) { setAdminStatus(err.message, true); }
-}
-
-async function deleteAdminQuote(id) {
-  if (!confirm('Delete this quote?')) return;
-  try {
-    await adminApi(`/quotes/${id}`, { method: 'DELETE' });
-    setAdminStatus('Quote deleted.');
-    await loadAdminQuotes();
-  } catch (err) { setAdminStatus(err.message, true); }
-}
-
-document.addEventListener('DOMContentLoaded', updateAdminAccessUI);
