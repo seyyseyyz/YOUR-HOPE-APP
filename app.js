@@ -336,7 +336,7 @@ async function saveResultToBackend(res) {
   }));
 
   try {
-    const response = await fetch('http://localhost:5001/api/results', {
+    const response = await fetch(`${API_BASE}/results`, {
       method: 'POST',
       headers: {
         'Content-Type':  'application/json',

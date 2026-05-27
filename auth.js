@@ -1,10 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════════
    YOUR HOPE — auth.js
    Authentication: Sign Up, Sign In, Logout, Session Management
-   Connects to backend API at http://localhost:5001
+   Connects to backend API from config.js
    ═══════════════════════════════════════════════════════════════════ */
 
-const API_BASE    = 'http://localhost:5001/api';
+const API_BASE = (window.CONFIG && CONFIG.apiBase) || 'http://localhost:5001/api';
+if (typeof window !== 'undefined') window.API_BASE = API_BASE;
 const SESSION_KEY = 'hope_session';
 const TOKEN_KEY   = 'hope_token';
 

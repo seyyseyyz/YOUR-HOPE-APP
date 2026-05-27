@@ -12,10 +12,25 @@ import chatRoutes from './routes/chatRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 
 const app  = express();
-const PORT = process.env.PORT || 5001;   // fixed: was 3000, frontend calls 5001
+const PORT = process.env.PORT || 5001;
 
 /* ── MIDDLEWARE ───────────────────────────────────────────────────── */
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'https://symphonious-pegasus-d35df6.netlify.app',
+  ...(process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim()) : []),
+];
+
+app.use(cors({
+  origin(origin, callback) {
+    // Allow API tools, mobile apps, curl, and same-origin requests with no Origin header.
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(null, true); // keep flexible for Netlify preview URLs
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 /* ── ROUTES ───────────────────────────────────────────────────────── */
