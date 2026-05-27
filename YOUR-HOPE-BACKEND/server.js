@@ -23,4 +23,4 @@ app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 app.use((_req, res) => res.status(404).json({ success: false, message: 'Route not found' }));
 
 /* ── START ────────────────────────────────────────────────────────── */
-app.listen(PORT, () => console.log(`🚀  Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));

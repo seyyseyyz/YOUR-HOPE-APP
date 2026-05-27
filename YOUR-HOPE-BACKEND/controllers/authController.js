@@ -19,13 +19,13 @@ const signToken = user_id =>
 
 /* ── SIGNUP ────────────────────────────────────────────────────────
    POST /api/auth/signup
-   Body: { full_name, email, password, lang? }
+   Body: { full_name, email, password, job?, age?, gender?, lang? }
 
    Changes vs original:
    • Validates email format before hitting the DB
    • Validates password minimum length (6 chars)
    • SELECT only email column for the duplicate check (not SELECT *)
-   • Accepts optional lang field (stored in users table)
+   • Accepts optional job and lang fields (stored in users table)
    • Returns the created user object (no password_hash)
 ──────────────────────────────────────────────────────────────────── */
 export const signup = async (req, res) => {
@@ -34,6 +34,9 @@ export const signup = async (req, res) => {
             full_name,
             email,
             password,
+            job = null,
+            age = null,
+            gender = null,
             lang = 'eng'
         } = req.body;
 
@@ -66,6 +69,13 @@ export const signup = async (req, res) => {
             });
         }
 
+        const cleanJob = typeof job === 'string' && job.trim()
+            ? job.trim().slice(0, 120)
+            : null;
+
+        const cleanAge = Number.isInteger(age) && age >= 1 && age <= 120 ? age : null;
+        const cleanGender = ['male', 'female', 'other', 'prefer_not_to_say'].includes(gender) ? gender : null;
+
         // ── Duplicate email check ────────────────────────────────────
         // SELECT only the column we need — avoids fetching password_hash
         const [existing] = await pool.query(
@@ -84,9 +94,9 @@ export const signup = async (req, res) => {
         const password_hash = await bcrypt.hash(password, 12);  // 12 rounds (10 is fine but 12 is current best practice)
 
         const [result] = await pool.query(
-            `INSERT INTO users (full_name, email, password_hash, lang)
-             VALUES (?, ?, ?, ?)`,
-            [full_name.trim(), email.trim().toLowerCase(), password_hash, lang]
+            `INSERT INTO users (full_name, email, job, age, gender, password_hash, lang)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [full_name.trim(), email.trim().toLowerCase(), cleanJob, cleanAge, cleanGender, password_hash, lang]
         );
 
         return res.status(201).json({
@@ -96,6 +106,9 @@ export const signup = async (req, res) => {
                 user_id  : result.insertId,
                 full_name: full_name.trim(),
                 email    : email.trim().toLowerCase(),
+                job      : cleanJob,
+                age      : cleanAge,
+                gender   : cleanGender,
                 lang,
             }
         });
@@ -134,7 +147,7 @@ export const login = async (req, res) => {
 
         // ── Fetch user (only needed columns) ─────────────────────────
         const [rows] = await pool.query(
-            `SELECT user_id, full_name, email, password_hash, lang, status
+            `SELECT user_id, full_name, email, job, age, gender, password_hash, lang, status
              FROM users
              WHERE email = ?
              LIMIT 1`,
@@ -180,6 +193,9 @@ export const login = async (req, res) => {
                 user_id  : user.user_id,
                 full_name: user.full_name,
                 email    : user.email,
+                job      : user.job,
+                age      : user.age,
+                gender   : user.gender,
                 lang     : user.lang,
             }
         });
@@ -201,7 +217,7 @@ export const login = async (req, res) => {
 export const getMe = async (req, res) => {
     try {
         const [rows] = await pool.query(
-            `SELECT user_id, full_name, email, lang, status, last_login_at, created_at
+            `SELECT user_id, full_name, email, job, age, gender, lang, role, status, last_login_at, created_at
              FROM users
              WHERE user_id = ?
              LIMIT 1`,
