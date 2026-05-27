@@ -722,7 +722,7 @@
     <div class="admin-panel" id="admin-panel-users">
       <div class="admin-toolbar">
         <input id="admin-user-search" class="admin-input" placeholder="Search users by name, email, or job…">
-        <select id="admin-user-role" class="admin-input">
+        <select id="admin-user-role" class="admin-input" title="Filter by user role" aria-label="Filter by user role">
           <option value="">All roles</option><option value="user">User</option><option value="admin">Admin</option>
         </select>
         <button class="admin-action-btn" onclick="loadAdminUsers()">Search</button>
@@ -738,7 +738,7 @@
     <div class="admin-panel" id="admin-panel-results">
       <div class="admin-toolbar">
         <input id="admin-result-search" class="admin-input" placeholder="Search result by user or email…">
-        <select id="admin-result-level" class="admin-input">
+        <select id="admin-result-level" class="admin-input" title="Filter by result level" aria-label="Filter by result level">
           <option value="">All levels</option>
           <option value="Normal">Normal</option><option value="Mild">Mild</option><option value="Moderate">Moderate</option><option value="Severe">Severe</option><option value="Extremely Severe">Extremely Severe</option>
         </select>
@@ -757,10 +757,10 @@
         <div class="admin-card-title">Add Clinic / Service</div>
         <form class="admin-form" onsubmit="event.preventDefault(); createAdminClinic();">
           <input id="admin-clinic-name" class="admin-input" placeholder="Clinic name" required>
-          <select id="admin-clinic-type" class="admin-input"><option>Clinic</option><option>Hospital</option><option>NGO</option><option>Service</option></select>
+          <select id="admin-clinic-type" class="admin-input" title="Select clinic type" aria-label="Select clinic type"><option>Clinic</option><option>Hospital</option><option>NGO</option><option>Service</option></select>
           <input id="admin-clinic-location" class="admin-input" placeholder="Location / District">
           <input id="admin-clinic-phone" class="admin-input" placeholder="Phone number">
-          <select id="admin-clinic-nssf" class="admin-input"><option value="No">NSSF: No</option><option value="Yes">NSSF: Yes</option></select>
+          <select id="admin-clinic-nssf" class="admin-input" title="Select NSSF coverage" aria-label="Select NSSF coverage"><option value="No">NSSF: No</option><option value="Yes">NSSF: Yes</option></select>
           <button class="admin-action-btn" type="submit">Add Clinic</button>
         </form>
       </div>
@@ -775,7 +775,7 @@
         <div class="admin-card-title">Add Motivational Quote</div>
         <form class="admin-form quote-form" onsubmit="event.preventDefault(); createAdminQuote();">
           <input id="admin-quote-text" class="admin-input admin-input-wide" placeholder="Write a quote…" required>
-          <select id="admin-quote-language" class="admin-input"><option value="eng">English</option><option value="kh">Khmer</option></select>
+          <select id="admin-quote-language" class="admin-input" title="Select quote language" aria-label="Select quote language"><option value="eng">English</option><option value="kh">Khmer</option></select>
           <input id="admin-quote-category" class="admin-input" placeholder="Category" value="hope">
           <button class="admin-action-btn" type="submit">Add Quote</button>
         </form>

@@ -377,6 +377,7 @@ body::before {
   padding: 22px 30px;
   background: rgba(255,255,255,0.12);
   border: 1px solid rgba(255,255,255,0.28);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-radius: 20px;
   color: rgba(255,255,255,0.96);
@@ -1486,7 +1487,7 @@ html[lang="kh"] .about-promise-list li {
   }
 
   .about-info-card {
-    min-height: auto;
+    min-height: 0;
   }
 
   .about-mini-grid {
@@ -2300,7 +2301,7 @@ html[lang="kh"] .about-promise-list li {
   }
 
   .hero-main-panel {
-    min-height: auto;
+    min-height: 0;
   }
 
   .welcome-text {
@@ -2446,7 +2447,7 @@ html[lang="kh"] .about-promise-list li {
   }
 
   .hero-main-panel {
-    min-height: auto;
+    min-height: 0;
     padding: 2.3rem 1.2rem 2rem;
   }
 
