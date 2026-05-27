@@ -4,6 +4,14 @@
    Depends on: data.js (QUESTIONS, CLINICS, T, getLevel)
    ═══════════════════════════════════════════════════════════════════ */
 
+
+/* ── API CONFIG ────────────────────────────────────────────────────
+   Do not redeclare API_BASE here because auth.js already exposes it
+   globally as window.API_BASE. Use APP_API_BASE inside app.js.
+*/
+const APP_API_BASE = window.API_BASE || window.CONFIG?.apiBase || 'http://localhost:5001/api';
+const GEMINI_KEY = window.CONFIG?.geminiKey || '';
+
 /* ── APP STATE ──────────────────────────────────────────────────── */
 let curLang = 'eng';   // 'eng' | 'kh'
 let curPage = 0;      // current question page (0–2, 7 questions each)
@@ -336,7 +344,7 @@ async function saveResultToBackend(res) {
   }));
 
   try {
-    const response = await fetch('http://localhost:5001/api/results', {
+    const response = await fetch(`${APP_API_BASE}/results`, {
       method: 'POST',
       headers: {
         'Content-Type':  'application/json',
@@ -617,7 +625,7 @@ async function sendChat() {
     ? `The user completed DASS-21: Depression=${lastRes.dS}(${lastRes.dL}), Anxiety=${lastRes.aS}(${lastRes.aL}), Stress=${lastRes.sS}(${lastRes.sL}).`
     : 'User has not completed the DASS-21 test yet.';
 
-  const GEMINI_KEY = CONFIG.geminiKey;
+  // GEMINI_KEY is defined near the top from window.CONFIG
 
   try {
     const r = await fetch(
@@ -1034,7 +1042,7 @@ function updateAdminAccessUI() {
 
 function adminApi(path, options = {}) {
   const token = typeof getToken === 'function' ? getToken() : null;
-  return fetch(`${API_BASE}/admin${path}`, {
+  return fetch(`${APP_API_BASE}/admin${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -1192,7 +1200,7 @@ async function loadAdminResults() {
 
 async function loadAdminClinics() {
   if (!isAdminUser()) return;
-  const res = await fetch(`${API_BASE}/clinics?limit=8`);
+  const res = await fetch(`${APP_API_BASE}/clinics?limit=8`);
   const data = await res.json();
   const el = document.getElementById('admin-clinics-body');
   if (!el) return;

@@ -182,6 +182,10 @@ INSERT IGNORE INTO quotes (quote_text, language, category) VALUES
 
 
 
+DESCRIBE users;
+DESCRIBE dass_test_results;
+DESCRIBE dass_test_answers;
+
 select *from users;
 select *from dass_test_answers;
 select *from dass_test_results;
