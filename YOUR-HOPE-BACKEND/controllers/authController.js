@@ -110,6 +110,8 @@ export const signup = async (req, res) => {
                 age      : cleanAge,
                 gender   : cleanGender,
                 lang,
+                role     : 'user',
+                status   : 'active',
             }
         });
 
@@ -147,7 +149,7 @@ export const login = async (req, res) => {
 
         // ── Fetch user (only needed columns) ─────────────────────────
         const [rows] = await pool.query(
-            `SELECT user_id, full_name, email, job, age, gender, password_hash, lang, status
+            `SELECT user_id, full_name, email, job, age, gender, password_hash, lang, role, status
              FROM users
              WHERE email = ?
              LIMIT 1`,
@@ -197,6 +199,8 @@ export const login = async (req, res) => {
                 age      : user.age,
                 gender   : user.gender,
                 lang     : user.lang,
+                role     : user.role,
+                status   : user.status,
             }
         });
 

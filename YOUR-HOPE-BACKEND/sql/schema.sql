@@ -13,7 +13,6 @@ CREATE TABLE IF NOT EXISTS users (
     job           VARCHAR(120)  NULL,
     age           TINYINT       NULL CHECK (age IS NULL OR age BETWEEN 1 AND 120),
     gender        ENUM('male','female','other','prefer_not_to_say') NULL,
-    phone         VARCHAR(30)   NULL,
     password_hash VARCHAR(255)  NOT NULL,
 
     lang          ENUM('eng','kh')                    DEFAULT 'eng',
@@ -180,6 +179,7 @@ INSERT IGNORE INTO quotes (quote_text, language, category) VALUES
 ('ការជាសះស្បើយត្រូវការពេលវេលា ហើយការសុំជំនួយគឺជាជំហានដ៏ក្លាហាន។', 'kh', 'hope'),
 ('អារម្មណ៍របស់អ្នកមានតម្លៃ ហើយរឿងរ៉ាវរបស់អ្នកសំខាន់។', 'kh', 'support'),
 ('ការរីកចម្រើនតិចតួច ក៏នៅតែជាការរីកចម្រើន។', 'kh', 'growth');
+
 
 
 select *from users;
